@@ -2,7 +2,6 @@ package com.travel.to.travel_to.service;
 
 import com.travel.to.travel_to.entity.AuthUser;
 import com.travel.to.travel_to.entity.User;
-import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.form.UserSignUpForm;
 import com.travel.to.travel_to.repository.UserRepository;
 import com.travel.to.travel_to.security.JwtProvider;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

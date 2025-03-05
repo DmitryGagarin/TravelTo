@@ -36,15 +36,28 @@ function SignupPage() {
                     'Content-Type': 'application/json'
                 }
             });
+
             // Handle successful signup
             console.log(response.data);
             history('/dashboard');
         } catch (error) {
-            // Handle signup error
-            console.error('Signup failed:', error.response ? error.response.data : error.message);
-            setError(error.response ? error.response.data : error.message);
+            if (error.response && error.response.data) {
+                // error.response.data is the error map from backend
+                const errorMessages = error.response.data;
+                // Format errors as a string or display them one by one
+                setError(
+                    Object.entries(errorMessages)
+                        .map(([field, message]) => `${field}: ${message}`)
+                        .join(', ')
+                );
+            } else {
+                // Handle unexpected error
+                console.error('Signup failed:', error.message);
+                setError('Signup failed, please try again.');
+            }
         }
     };
+
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">

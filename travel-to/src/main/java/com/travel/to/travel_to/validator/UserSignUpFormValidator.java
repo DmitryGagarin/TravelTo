@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.validator;
 
-import com.travel.to.travel_to.constants.ValidationDefaultMessages;
+import com.travel.to.travel_to.constants.ValidationConstants;
+import com.travel.to.travel_to.constants.ValidationErrorCodes;
 import com.travel.to.travel_to.constants.ValidationFields;
 import com.travel.to.travel_to.form.UserSignUpForm;
 import com.travel.to.travel_to.service.UserService;
@@ -33,20 +34,35 @@ public class UserSignUpFormValidator implements Validator {
     public void validate(@NotNull Object target, @NotNull Errors errors) {
         UserSignUpForm userSignupForm = (UserSignUpForm) target;
 
-        if (Objects.isNull(userSignupForm.getUsername())) {
-            errors.reject(ValidationFields.USERNAME, ValidationDefaultMessages.USERNAME_IS_REQUIRED);
+        String password = userSignupForm.getPassword();
+        String username = userSignupForm.getUsername();
+
+        if (Objects.isNull(username)) {
+            errors.rejectValue(ValidationFields.USERNAME, ValidationErrorCodes.USERNAME_IS_REQUIRED);
+        }
+
+        if (Objects.nonNull(username) && username.length() > ValidationConstants.USER_USERNAME_MAX_LENGTH) {
+            errors.rejectValue(ValidationFields.USERNAME, ValidationErrorCodes.USERNAME_TOO_LONG);
+        }
+
+        if (userService.findUserByUsername(username).isPresent()) {
+            errors.rejectValue(ValidationFields.USERNAME, ValidationErrorCodes.USERNAME_ALREADY_EXISTS);
         }
 
         if (Objects.isNull(userSignupForm.getPassword())) {
-            errors.reject(ValidationFields.PASSWORD,  ValidationDefaultMessages.PASSWORD_IS_REQUIRED);
+            errors.rejectValue(ValidationFields.PASSWORD,  ValidationErrorCodes.PASSWORD_IS_REQUIRED);
+        }
+
+        if (Objects.nonNull(password) && password.length() < ValidationConstants.USER_PASSWORD_MIN_LENGTH) {
+            errors.rejectValue(ValidationFields.PASSWORD, ValidationErrorCodes.PASSWORD_TOO_SHORT);
         }
 
         if (Objects.isNull(userSignupForm.getEmail())) {
-            errors.reject(ValidationFields.EMAIL,  ValidationDefaultMessages.EMAIL_IS_REQUIRED);
+            errors.rejectValue(ValidationFields.EMAIL,  ValidationErrorCodes.EMAIL_IS_REQUIRED);
         }
 
-//        if (Objects.nonNull(userService.findUserByEmail(userSignupForm.getEmail()))) {
-//            errors.reject(ValidationFields.EMAIL,  ValidationDefaultMessages.EMAIL_ALREADY_EXISTS);
-//        }
+        if (userService.findUserByEmail(userSignupForm.getEmail()).isPresent()) {
+            errors.rejectValue(ValidationFields.EMAIL,  ValidationErrorCodes.EMAIL_ALREADY_EXISTS);
+        }
     }
 }
