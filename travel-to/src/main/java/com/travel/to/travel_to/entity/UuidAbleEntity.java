@@ -15,7 +15,7 @@ public abstract class UuidAbleEntity {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     public String getUuid() {

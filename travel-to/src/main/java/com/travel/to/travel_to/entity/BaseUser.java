@@ -1,11 +1,11 @@
 package com.travel.to.travel_to.entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
 
 import java.io.Serializable;
 
-@Entity
-public class BaseUser extends UuidAbleTimedEntity implements Serializable {
+@MappedSuperclass
+public abstract class BaseUser extends UuidAbleTimedEntity implements Serializable {
 
     String username;
     String password;

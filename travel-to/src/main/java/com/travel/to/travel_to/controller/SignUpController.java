@@ -9,10 +9,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/signup")
@@ -37,10 +34,12 @@ public class SignUpController {
 
     @PostMapping()
     public User signup(
-        @Validated UserSignUpForm userSignupForm,
+        @Validated @RequestBody UserSignUpForm userSignupForm,
         BindingResult bindingResult
     ) throws BindException {
-        System.out.println("User registration info: " + userSignupForm);
+        if (bindingResult.hasErrors()) {
+            throw new BindException(bindingResult);
+        }
         return userService.register(userSignupForm);
     }
 }

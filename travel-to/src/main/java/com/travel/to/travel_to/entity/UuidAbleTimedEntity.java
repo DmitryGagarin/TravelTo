@@ -1,18 +1,33 @@
 package com.travel.to.travel_to.entity;
 
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 public class UuidAbleTimedEntity extends UuidAbleEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
-    Date createdAt;
+    LocalDateTime createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
-    Date updatedAt;
+    LocalDateTime updatedAt;
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public UuidAbleTimedEntity setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public UuidAbleTimedEntity setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+        return this;
+    }
 }
