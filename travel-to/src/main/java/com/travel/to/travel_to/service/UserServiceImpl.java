@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.service;
 
 import com.travel.to.travel_to.entity.User;
+import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.form.UserSignUpForm;
 import com.travel.to.travel_to.repository.UserRepository;
 import jakarta.validation.constraints.NotNull;
@@ -30,6 +31,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(new BCryptPasswordEncoder().encode(userSignupForm.getPassword()));
         user.setEmail(userSignupForm.getEmail());
         return userRepository.save(user);
+    }
+
+    @Override
+    public User login(UserSignInForm userSignInForm) {
+        return null;
     }
 
     @Override

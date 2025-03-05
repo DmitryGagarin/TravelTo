@@ -5,6 +5,8 @@ import com.travel.to.travel_to.form.UserSignUpForm;
 import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.validator.UserSignUpFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -35,8 +37,10 @@ public class SignUpController {
 
     @PostMapping()
     public User signup(
-        @Validated UserSignUpForm userSignupForm
-    ) {
+        @Validated UserSignUpForm userSignupForm,
+        BindingResult bindingResult
+    ) throws BindException {
+        System.out.println("User registration info: " + userSignupForm);
         return userService.register(userSignupForm);
     }
 }
