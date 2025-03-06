@@ -1,6 +1,5 @@
-package com.travel.to.travel_to.configuration;
+package com.travel.to.travel_to.security;
 
-import com.travel.to.travel_to.security.JwtTokenValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

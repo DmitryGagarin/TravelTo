@@ -8,7 +8,6 @@ import {
 } from 'mdb-react-ui-kit';
 
 function SignupPage() {
-    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,7 +17,7 @@ function SignupPage() {
     const handleSignup = async () => {
         try {
             // Check for empty fields
-            if (!username || !email || !password || !confirmPassword) {
+            if (!email || !password || !confirmPassword) {
                 setError('Please fill in all fields.');
                 return;
             }
@@ -28,7 +27,6 @@ function SignupPage() {
             }
 
             const response = await axios.post('http://localhost:8080/signup', {
-                username,
                 email,
                 password
             }, {
@@ -66,8 +64,6 @@ function SignupPage() {
                     <h2 className="mb-4 text-center">Sign Up Page</h2>
                     {/* Render error message if exists */}
                     {error && <p className="text-danger">{error}</p>}
-                    <MDBInput wrapperClass='mb-3' id='username' placeholder={"Full Name"} value={username} type='text'
-                              onChange={(e) => setUsername(e.target.value)}/>
                     <MDBInput wrapperClass='mb-3' placeholder='Email Address' id='email' value={email} type='email'
                               onChange={(e) => setEmail(e.target.value)}/>
                     <MDBInput wrapperClass='mb-3' placeholder='Password' id='password' type='password' value={password}

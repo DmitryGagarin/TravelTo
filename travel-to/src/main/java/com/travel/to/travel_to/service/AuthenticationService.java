@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 public interface AuthenticationService {
 
     @NotNull
-    Authentication authenticate(@NotNull String username, @NotNull String password);
+    Authentication authenticate(@NotNull String email, @NotNull String password);
 
     @NotNull
     AuthUser login(@NotNull UserSignInForm userSignInForm);

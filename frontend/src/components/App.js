@@ -4,7 +4,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './SignInPage';
 import SignupPage from './SignUpPage';
-import Dashboard from "./Dashboard";
+import Dashboard from "./Main";
 
 function App() {
     return (

@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.controller;
 
+import com.travel.to.travel_to.entity.AuthUser;
 import com.travel.to.travel_to.entity.User;
 import com.travel.to.travel_to.form.UserSignUpForm;
 import com.travel.to.travel_to.service.UserService;
@@ -33,7 +34,7 @@ public class SignUpController {
     }
 
     @PostMapping()
-    public User signup(
+    public AuthUser signup(
         @Validated @RequestBody UserSignUpForm userSignupForm,
         BindingResult bindingResult
     ) throws BindException {

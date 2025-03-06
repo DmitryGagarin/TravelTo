@@ -35,19 +35,6 @@ public class UserSignUpFormValidator implements Validator {
         UserSignUpForm userSignupForm = (UserSignUpForm) target;
 
         String password = userSignupForm.getPassword();
-        String username = userSignupForm.getUsername();
-
-        if (Objects.isNull(username)) {
-            errors.rejectValue(ValidationFields.USERNAME, ValidationErrorCodes.USERNAME_IS_REQUIRED);
-        }
-
-        if (Objects.nonNull(username) && username.length() > ValidationConstants.USER_USERNAME_MAX_LENGTH) {
-            errors.rejectValue(ValidationFields.USERNAME, ValidationErrorCodes.USERNAME_TOO_LONG);
-        }
-
-        if (userService.findUserByUsername(username).isPresent()) {
-            errors.rejectValue(ValidationFields.USERNAME, ValidationErrorCodes.USERNAME_ALREADY_EXISTS);
-        }
 
         if (Objects.isNull(userSignupForm.getPassword())) {
             errors.rejectValue(ValidationFields.PASSWORD,  ValidationErrorCodes.PASSWORD_IS_REQUIRED);

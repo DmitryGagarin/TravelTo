@@ -5,6 +5,7 @@ import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.service.AuthenticationService;
 import com.travel.to.travel_to.validator.UserSignInFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -38,7 +39,8 @@ public class SignInController {
     @PostMapping
     public AuthUser signIn(
         @Validated UserSignInForm userSignInForm,
-        BindingResult bindingResult
+        BindingResult bindingResult,
+        @AuthenticationPrincipal AuthUser authUser
     ) throws BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);

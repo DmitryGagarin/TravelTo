@@ -7,18 +7,12 @@ import java.io.Serializable;
 @MappedSuperclass
 public abstract class BaseUser extends UuidAbleTimedEntity implements Serializable {
 
-    String username;
     String password;
     String email;
+    String name;
+    String surname;
+    String phone;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public BaseUser setUsername(String username) {
-        this.username = username;
-        return this;
-    }
 
     public String getPassword() {
         return password;
@@ -35,6 +29,33 @@ public abstract class BaseUser extends UuidAbleTimedEntity implements Serializab
 
     public BaseUser setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BaseUser setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public BaseUser setSurname(String surname) {
+        this.surname = surname;
+        return this;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public BaseUser setPhone(String phone) {
+        this.phone = phone;
         return this;
     }
 }
