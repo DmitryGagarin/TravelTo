@@ -49,7 +49,7 @@ public class UserSignUpFormValidator implements Validator {
         }
 
         if (userService.findUserByEmail(userSignupForm.getEmail()).isPresent()) {
-            errors.rejectValue(ValidationFields.EMAIL,  ValidationErrorCodes.EMAIL_ALREADY_EXISTS);
+            errors.rejectValue(ValidationFields.EMAIL, ValidationErrorCodes.EMAIL_ALREADY_EXISTS);
         }
     }
 }

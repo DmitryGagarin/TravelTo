@@ -1,7 +1,6 @@
 package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.entity.AuthUser;
-import com.travel.to.travel_to.entity.User;
 import com.travel.to.travel_to.form.UserSignUpForm;
 import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.validator.UserSignUpFormValidator;

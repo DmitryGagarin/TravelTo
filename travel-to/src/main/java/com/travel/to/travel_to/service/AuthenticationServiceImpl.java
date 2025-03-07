@@ -50,15 +50,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @NotNull
-    public Authentication authenticate(String username, String password) {
-        UserDetails userDetails = userService.loadUserByEmail(username);
+    public Authentication authenticate(String email, String password) {
+        UserDetails userDetails = userService.loadUserByEmail(email);
         if(Objects.isNull(userDetails)) {
             throw new BadCredentialsException("Invalid email and password");
         }
-        if(!passwordEncoder.matches(password,userDetails.getPassword())) {
+        if(!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
         return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
-
     }
 }
