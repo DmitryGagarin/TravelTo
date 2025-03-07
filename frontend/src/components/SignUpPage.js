@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useHistory hook
+import { useNavigate } from 'react-router-dom';
 import {
     MDBContainer,
-    MDBInput,
-    MDBBtn,
+    MDBInput
 } from 'mdb-react-ui-kit';
 
 function SignupPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState(''); // State to manage error messages
-    const history = useNavigate(); // Get the history object for redirection
+    const [error, setError] = useState('');
+    const history = useNavigate();
 
     const handleSignup = async () => {
+
         try {
             // Check for empty fields
             if (!email || !password || !confirmPassword) {
@@ -35,27 +35,23 @@ function SignupPage() {
                 }
             });
 
-            // Handle successful signup
             console.log(response.data);
-            history('/dashboard');
+            localStorage.setItem('user', JSON.stringify(response.data));
+            history('/home');
         } catch (error) {
             if (error.response && error.response.data) {
-                // error.response.data is the error map from backend
                 const errorMessages = error.response.data;
-                // Format errors as a string or display them one by one
                 setError(
                     Object.entries(errorMessages)
                         .map(([field, message]) => `${field}: ${message}`)
                         .join(', ')
                 );
             } else {
-                // Handle unexpected error
                 console.error('Signup failed:', error.message);
                 setError('Signup failed, please try again.');
             }
         }
     };
-
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">

@@ -39,11 +39,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = JwtProvider.generateToken(authentication);
-        AuthUser authUser = new AuthUser(userSignInForm.getEmail(), userSignInForm.getPassword(), List.of(), token);
+        AuthUser authUser = new AuthUser(userSignInForm.getPassword(), userSignInForm.getEmail(), List.of(), token);
 
         authUser.setMessage("Login success");
         authUser.setJwt(token);
         authUser.setStatus(true);
+        authUser.setUuid(userService.findUserByEmail(userSignInForm.getEmail()).get().getUuid());
 
         return authUser;
     }

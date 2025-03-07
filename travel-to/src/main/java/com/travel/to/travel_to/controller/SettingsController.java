@@ -27,7 +27,7 @@ public class SettingsController {
         this.userService = userService;
     }
 
-    @GetMapping("/{profile}")
+    @GetMapping("/profile")
     public UserModel information(
         @AuthenticationPrincipal AuthUser authUser
     ) {

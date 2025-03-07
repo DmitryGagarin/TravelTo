@@ -25,8 +25,14 @@ public class WebSecurityConfiguration {
                     management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/singin", "/signup", "/", "/logout")
+                .requestMatchers(
+                        "/singin",
+                        "/signup",
+                        "/",
+                        "/logout")
                 .permitAll()
+                .requestMatchers("/settings/profile")
+                .authenticated()
                 .anyRequest()
                 .authenticated()
             )

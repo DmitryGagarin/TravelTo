@@ -27,12 +27,15 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
     public UserServiceImpl(
-        UserRepository userRepository
+        UserRepository userRepository,
+        UserService userService
     ) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -54,10 +57,11 @@ public class UserServiceImpl implements UserService {
 
         String token = JwtProvider.generateToken(authentication);
 
-        AuthUser authUser = new AuthUser(userSignupForm.getEmail(), userSignupForm.getPassword(), List.of(), token);
+        AuthUser authUser = new AuthUser(userSignupForm.getPassword(), userSignupForm.getEmail(), List.of(), token);
         authUser.setJwt(token);
         authUser.setMessage("Register Success");
         authUser.setStatus(true);
+        authUser.setUuid(userService.findUserByEmail(userSignupForm.getEmail()).get().getUuid());
 
         return authUser;
     }

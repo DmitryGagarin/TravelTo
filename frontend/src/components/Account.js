@@ -1,54 +1,50 @@
-import React, {use, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
 import {
     MDBContainer,
     MDBInput,
-    MDBBtn
 } from "mdb-react-ui-kit";
+import {data, useNavigate} from "react-router-dom";
 
 function Account() {
 
-    const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-    const [surname, setSurname] = useState('');
+    const [user, setUser] = useState('')
+    const [name, setName] = useState('')
+    const [surname, setSurname] = useState('')
+    const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
     const [error, setError] = useState('')
 
+    const history = useNavigate();
 
     useEffect(() => {
-        // Fetch user data
-        const fetchUserData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8080/settings/{profile}', {
-                    header: {
-                        'Authorization' : `Bearer ${token}`
-                    }
-                })
-                const userData = response.data;
-                setName(userData.name);
-                setSurname(userData.surname);
-                setEmail(userData.email);
-                setPhone(userData.phone);
-            } catch (err) {
-                setError('Failed to load user data');
-            }
-        };
-
-        fetchUserData();
+        // Make the GET request to /settings/profile using axios
+        axios.get('http://localhost:8080/settings/profile')
+            .then(response => {
+                setUser(response.data); // Set the user data
+                setName(response.data.name)
+                setSurname(response.data.surname)
+                setEmail(response.data.email)
+                setPhone(response.data.phone)
+            })
+            .catch(error => {
+                console.error('Error fetching user profile:', error);
+            });
     }, []);
 
     const handleChange = async () => {
         try {
-            const response = await axios.post("http://localhost:8080/settings/save-changes", {
-                name,
-                surname,
-                email,
-                phone
-            })
+            const response = await
+                axios.post("http://localhost:8080/settings/save-changes", {
+                    name,
+                    surname,
+                    email,
+                    phone
+                }
+            )
             console.log("changed applied")
-            history('/')
+            localStorage.setItem('user', JSON.stringify(response.data));
+            history('/home');
         } catch (error) {
             setError("Failed to change data")
         }
@@ -67,3 +63,5 @@ function Account() {
         </div>
     );
 }
+
+export default Account
