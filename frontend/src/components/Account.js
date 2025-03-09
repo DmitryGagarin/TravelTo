@@ -8,54 +8,58 @@ import {data, useNavigate} from "react-router-dom";
 
 function Account() {
 
-    const [user, setUser] = useState('')
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
-    const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
+    const [uuid, setUuid] = useState('')
     const [error, setError] = useState('')
 
     const history = useNavigate();
+    const authUser = JSON.parse(localStorage.getItem('user'))
 
     useEffect(() => {
-        // Make the GET request to /settings/profile using axios
-        axios.get('http://localhost:8080/settings/profile')
-            .then(response => {
-                setUser(response.data); // Set the user data
-                setName(response.data.name)
-                setSurname(response.data.surname)
-                setEmail(response.data.email)
-                setPhone(response.data.phone)
-            })
-            .catch(error => {
-                console.error('Error fetching user profile:', error);
-            });
-    }, []);
+        setName(authUser.name)
+        setSurname(authUser.surname)
+        setPhone(authUser.phone)
+        setUuid(authUser.uuid)
+    }, [])
 
     const handleChange = async () => {
         try {
             const response = await
-                axios.post("http://localhost:8080/settings/save-changes", {
+                axios.post("http://localhost:8080/settings/save-changes",
+                {
                     name,
                     surname,
-                    email,
-                    phone
-                }
-            )
-            console.log("changed applied")
+                    phone,
+                    uuid
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authUser.token
+                    }
+                })
+            console.log("changes applied")
             localStorage.setItem('user', JSON.stringify(response.data));
             history('/home');
         } catch (error) {
+            console.log(authUser)
             setError("Failed to change data")
         }
+    }
+
+    const handleHome = () => {
+        history("/home")
     }
 
     return (
         <div>
             <MDBContainer>
+                <button onClick={handleHome}> Home </button>
+            </MDBContainer>
+            <MDBContainer>
                 <MDBInput wrapperClass='mb-4' placeholder='Name' id='name' value={name} type='text' onChange={(e) => setName(e.target.value)} />
                 <MDBInput wrapperClass='mb-4' placeholder='Surname' id='surname' value={surname} type='text' onChange={(e) => setSurname(e.target.value)} />
-                <MDBInput wrapperClass='mb-4' placeholder='Email' id='email' value={email} type='email' onChange={(e) => setEmail(e.target.value)} />
                 <MDBInput wrapperClass='mb-4' placeholder='Phone' id='phone' value={phone} type='tel' onChange={(e) => setPhone(e.target.value)} />
                 {error && <p className="text-danger">{error}</p>}
                 <button onClick={handleChange}> Save changes </button>

@@ -6,9 +6,11 @@ import com.travel.to.travel_to.entity.User;
 import com.travel.to.travel_to.form.UserProfileForm;
 import com.travel.to.travel_to.model.UserModel;
 import com.travel.to.travel_to.service.UserService;
+import com.travel.to.travel_to.validator.UserProfileFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,26 +19,27 @@ public class SettingsController {
 
     private final UserModelAssembler userModelAssembler;
     private final UserService userService;
+    private final UserProfileFormValidator userProfileFormValidator;
 
     @Autowired
     public SettingsController(
         UserModelAssembler userModelAssembler,
-        UserService userService
+        UserService userService,
+        UserProfileFormValidator userProfileFormValidator
     ) {
         this.userModelAssembler = userModelAssembler;
         this.userService = userService;
+        this.userProfileFormValidator = userProfileFormValidator;
     }
 
-    @GetMapping("/profile")
-    public UserModel information(
-        @AuthenticationPrincipal AuthUser authUser
-    ) {
-        return userModelAssembler.toModel(authUser.getUuid());
+    @InitBinder
+    public void userProfileFormValidatorBinder(WebDataBinder binder) {
+        binder.addValidators(userProfileFormValidator);
     }
 
     @PostMapping("/save-changes")
     public User saveChanges(
-        @Validated UserProfileForm userProfileForm,
+        @Validated @RequestBody UserProfileForm userProfileForm,
         @AuthenticationPrincipal AuthUser authUser
     ) {
         return userService.saveChanges(userProfileForm, authUser);

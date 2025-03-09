@@ -1,11 +1,21 @@
 package com.travel.to.travel_to.entity;
 
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.MappedSuperclass;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @MappedSuperclass
-public abstract class BaseUser extends UuidAbleTimedEntity implements Serializable {
+public class BaseUser extends UuidAbleTimedEntity implements Serializable {
 
     String password;
     String email;
@@ -58,4 +68,6 @@ public abstract class BaseUser extends UuidAbleTimedEntity implements Serializab
         this.phone = phone;
         return this;
     }
+
+
 }

@@ -15,7 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,15 +27,15 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(
         UserRepository userRepository,
-        UserService userService
+        PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
-        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -44,24 +44,31 @@ public class UserServiceImpl implements UserService {
         @NotNull UserSignUpForm userSignupForm
     ) {
         User user = new User();
+        String encodedPassword = passwordEncoder.encode(userSignupForm.getPassword());
+
         user
-            .setPassword(new BCryptPasswordEncoder().encode(userSignupForm.getPassword()))
+            .setPassword(encodedPassword)
             .setEmail(userSignupForm.getEmail())
             .setCreatedAt(LocalDateTime.now())
             .setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(userSignupForm.getEmail(), userSignupForm.getPassword());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userSignupForm.getEmail(),
+                encodedPassword
+        );
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = JwtProvider.generateToken(authentication);
+        User savedUser = userRepository.findByEmail(userSignupForm.getEmail()).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
 
-        AuthUser authUser = new AuthUser(userSignupForm.getPassword(), userSignupForm.getEmail(), List.of(), token);
-        authUser.setJwt(token);
-        authUser.setMessage("Register Success");
-        authUser.setStatus(true);
-        authUser.setUuid(userService.findUserByEmail(userSignupForm.getEmail()).get().getUuid());
+        AuthUser authUser = new AuthUser();
+        authUser.setUuid(savedUser.getUuid());
+        authUser.setEmail(savedUser.getEmail());
+        authUser.setPassword(encodedPassword);
+        authUser.setUuid(savedUser.getUuid());
+        authUser.setToken(JwtProvider.generateToken(authentication));
 
         return authUser;
     }
@@ -70,7 +77,7 @@ public class UserServiceImpl implements UserService {
     public User findUserByUuid(
         @NotNull String userUuid
     ) {
-        return userRepository.findUserByUuid(userUuid);
+        return userRepository.findByUuid(userUuid);
     }
 
     @Override
@@ -80,7 +87,7 @@ public class UserServiceImpl implements UserService {
         @NotNull UserProfileForm userProfileForm,
         @NotNull AuthUser authUser
     ) {
-        User user = findUserByUuid(authUser.getUuid());
+        User user = findUserByUuid(userProfileForm.getUuid());
         user
             .setEmail(userProfileForm.getEmail())
             .setName(userProfileForm.getName())
@@ -108,6 +115,6 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findUserByEmail(
         @NotNull String email
     ) {
-        return userRepository.findUserByEmail(email);
+        return userRepository.findByEmail(email);
     }
 }

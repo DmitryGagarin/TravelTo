@@ -31,7 +31,9 @@ public class UserSignInFormValidator implements Validator {
     public void validate(@NotNull Object target, @NotNull Errors errors) {
         UserSignInForm userSignInForm = (UserSignInForm) target;
 
-        if (userService.findUserByEmail(userSignInForm.getEmail()).isEmpty()) {
+        String email = userSignInForm.getEmail();
+
+        if (userService.findUserByEmail(email).isEmpty()) {
             errors.rejectValue(ValidationFields.USER, ValidationErrorCodes.USER_NOT_EXISTS);
         }
 

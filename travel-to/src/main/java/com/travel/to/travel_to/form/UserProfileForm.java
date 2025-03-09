@@ -5,6 +5,7 @@ public class UserProfileForm {
     private String surname;
     private String email;
     private String phone;
+    private String uuid;
 
     public String getName() {
         return name;
@@ -40,5 +41,13 @@ public class UserProfileForm {
     public UserProfileForm setPhone(String phone) {
         this.phone = phone;
         return this;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }
