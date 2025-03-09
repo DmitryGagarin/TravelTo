@@ -17,9 +17,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BindException.class)
     public ResponseEntity<Map<String, String>> handleBindException(BindException ex) {
         Map<String, String> errorMessages = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
-            errorMessages.put(error.getField(), error.getDefaultMessage());
-        });
+        ex.getBindingResult().getFieldErrors().forEach(
+    error -> errorMessages.put(error.getField(), error.getDefaultMessage())
+        );
 
         return ResponseEntity.badRequest().body(errorMessages);
     }

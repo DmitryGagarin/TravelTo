@@ -1,6 +1,8 @@
 package com.travel.to.travel_to.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 import java.time.LocalDateTime;
 

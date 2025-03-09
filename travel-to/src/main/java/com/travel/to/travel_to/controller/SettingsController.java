@@ -1,10 +1,8 @@
 package com.travel.to.travel_to.controller;
 
-import com.travel.to.travel_to.assemblers.UserModelAssembler;
 import com.travel.to.travel_to.entity.AuthUser;
 import com.travel.to.travel_to.entity.User;
 import com.travel.to.travel_to.form.UserProfileForm;
-import com.travel.to.travel_to.model.UserModel;
 import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.validator.UserProfileFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +15,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/settings")
 public class SettingsController {
 
-    private final UserModelAssembler userModelAssembler;
     private final UserService userService;
     private final UserProfileFormValidator userProfileFormValidator;
 
     @Autowired
     public SettingsController(
-        UserModelAssembler userModelAssembler,
         UserService userService,
         UserProfileFormValidator userProfileFormValidator
     ) {
-        this.userModelAssembler = userModelAssembler;
         this.userService = userService;
         this.userProfileFormValidator = userProfileFormValidator;
     }
@@ -44,5 +39,4 @@ public class SettingsController {
     ) {
         return userService.saveChanges(userProfileForm, authUser);
     }
-
 }

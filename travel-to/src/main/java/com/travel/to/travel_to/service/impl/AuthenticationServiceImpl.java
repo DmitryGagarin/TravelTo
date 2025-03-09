@@ -1,8 +1,11 @@
-package com.travel.to.travel_to.service;
+package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.entity.AuthUser;
 import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.security.JwtProvider;
+import com.travel.to.travel_to.service.AuthenticationService;
+import com.travel.to.travel_to.service.CustomUserDetailsService;
+import com.travel.to.travel_to.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,8 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -47,7 +50,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String token = JwtProvider.generateToken(authentication);
 
         AuthUser authUser = new AuthUser();
-        authUser.setUuid(userService.findUserByEmail(userSignInForm.getEmail()).get().getUuid());
+
+        authUser.setUuid(
+            userService.findUserByEmail(userSignInForm.getEmail()).isPresent()
+            ? userService.findUserByEmail(userSignInForm.getEmail()).get().getUuid()
+            : UUID.randomUUID().toString()
+        );
+
         authUser.setEmail(userSignInForm.getEmail());
         authUser.setPassword(passwordEncoder.encode(userSignInForm.getPassword()));
         authUser.setToken(token);
@@ -65,18 +74,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         System.out.println("Sig in in user details"+ userDetails);
 
-        if(userDetails == null) {
-            System.out.println("Sign in details - null" + userDetails);
-
+        if(Objects.isNull(userDetails)) {
             throw new BadCredentialsException("Invalid username and password");
         }
         if(!passwordEncoder.matches(password,userDetails.getPassword())) {
             System.out.println("Sign in userDetails - password mismatch"+userDetails);
-
             throw new BadCredentialsException("Invalid password");
-
         }
         return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-
     }
 }

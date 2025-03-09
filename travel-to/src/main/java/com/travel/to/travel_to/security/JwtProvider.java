@@ -1,13 +1,15 @@
 package com.travel.to.travel_to.security;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.crypto.SecretKey;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class JwtProvider {
     static SecretKey key = Keys.hmacShaKeyFor(JwtConstants.SECRET_KEY.getBytes());
@@ -16,8 +18,8 @@ public class JwtProvider {
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
         String roles = populateAuthorities(authorities);
         String jwt = Jwts.builder()
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime()+86400000))
+                .issuedAt(new Date())
+                .expiration(new Date(new Date().getTime()+86400000))
                 .claim("email", auth.getName())
                 .claim( "authorities",roles)
                 .signWith(key)
@@ -34,26 +36,25 @@ public class JwtProvider {
         return String.join(",",auths);
     }
 
-    @SuppressWarnings("deprecation")
-    public static String getEmailFromJwtToken(String jwt) {
-        if (Objects.isNull(jwt) && jwt.startsWith("Bearer ")) {
-            jwt = jwt.substring(7);
-        }
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(jwt)
-                    .getBody();
-
-            String email = String.valueOf(claims.get("email"));
-            System.out.println("Email extracted from JWT: " + claims);
-            return email;
-        } catch (Exception e) {
-            System.err.println("Error extracting email from JWT: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    @SuppressWarnings("deprecation")
+//    public static String getEmailFromJwtToken(String jwt) {
+//        if (Objects.nonNull(jwt) && jwt.startsWith("Bearer ")) {
+//            jwt = jwt.substring(7);
+//        }
+//        try {
+//            Claims claims = Jwts.parser()
+//                    .setSigningKey(key)
+//                    .build()
+//                    .parseClaimsJws(jwt)
+//                    .getBody();
+//
+//            String email = String.valueOf(claims.get("email"));
+//            System.out.println("Email extracted from JWT: " + claims);
+//            return email;
+//        } catch (Exception e) {
+//            System.err.println("Error extracting email from JWT: " + e.getMessage());
+//            return null;
+//        }
+//    }
 
 }
