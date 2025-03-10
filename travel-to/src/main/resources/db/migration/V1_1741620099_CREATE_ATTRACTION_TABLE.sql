@@ -4,9 +4,9 @@ CREATE TABLE attraction (
     name         varchar not null,
     description  varchar not null,
     address      varchar not null,
-    image        varchar not null,
-    phone        varchar not null,
-    website      varchar not null,
+    image        varchar,
+    phone        varchar,
+    website      varchar,
     type         varchar not null,
     open_time    timestamp,
     close_time   timestamp

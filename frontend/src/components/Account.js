@@ -28,17 +28,17 @@ function Account() {
         try {
             const response = await
                 axios.post("http://localhost:8080/settings/save-changes",
-                {
-                    name,
-                    surname,
-                    phone,
-                    uuid
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + authUser.token
-                    }
-                })
+                    {
+                        name,
+                        surname,
+                        phone,
+                        uuid
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + authUser.token
+                        }
+                    })
             console.log("changes applied")
             localStorage.setItem('user', JSON.stringify(response.data));
             history('/home');
@@ -55,14 +55,17 @@ function Account() {
     return (
         <div>
             <MDBContainer>
-                <button onClick={handleHome}> Home </button>
+                <button onClick={handleHome}> Home</button>
             </MDBContainer>
             <MDBContainer>
-                <MDBInput wrapperClass='mb-4' placeholder='Name' id='name' value={name} type='text' onChange={(e) => setName(e.target.value)} />
-                <MDBInput wrapperClass='mb-4' placeholder='Surname' id='surname' value={surname} type='text' onChange={(e) => setSurname(e.target.value)} />
-                <MDBInput wrapperClass='mb-4' placeholder='Phone' id='phone' value={phone} type='tel' onChange={(e) => setPhone(e.target.value)} />
+                <MDBInput wrapperClass='mb-4' placeholder='Name' id='name' value={name} type='text'
+                          onChange={(e) => setName(e.target.value)}/>
+                <MDBInput wrapperClass='mb-4' placeholder='Surname' id='surname' value={surname} type='text'
+                          onChange={(e) => setSurname(e.target.value)}/>
+                <MDBInput wrapperClass='mb-4' placeholder='Phone' id='phone' value={phone} type='tel'
+                          onChange={(e) => setPhone(e.target.value)}/>
                 {error && <p className="text-danger">{error}</p>}
-                <button onClick={handleChange}> Save changes </button>
+                <button onClick={handleChange}>Save changes</button>
             </MDBContainer>
         </div>
     );

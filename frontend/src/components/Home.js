@@ -17,8 +17,8 @@ function Home({ email }) {
         history('/');
     };
 
-    const handleAccount = () => {
-        history('/settings/profile')
+    const handleSettings = () => {
+        history('/settings')
     }
 
     return (
@@ -31,7 +31,7 @@ function Home({ email }) {
                     <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>Logout</button>
                 </div>
                 <div className="text-center">
-                    <button type="button" className="btn btn-primary mt-3" onClick={handleAccount}>Account</button>
+                    <button type="button" className="btn btn-primary mt-3" onClick={handleSettings}>Settings</button>
                 </div>
             </div>
         </div>
