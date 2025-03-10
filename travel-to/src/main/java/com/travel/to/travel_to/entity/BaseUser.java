@@ -7,11 +7,13 @@ import java.io.Serializable;
 @MappedSuperclass
 public class BaseUser extends UuidAbleTimedEntity implements Serializable {
 
-    String password;
-    String email;
-    String name;
-    String surname;
-    String phone;
+    private String password;
+    private String email;
+    private String name;
+    private String surname;
+    private String phone;
+    private UserType userType;
+
 
     public String getPassword() {
         return password;
