@@ -35,7 +35,6 @@ function SignupPage() {
                 }
             });
 
-            console.log(response.data);
             localStorage.setItem('user', JSON.stringify(response.data));
             history('/home');
         } catch (error) {

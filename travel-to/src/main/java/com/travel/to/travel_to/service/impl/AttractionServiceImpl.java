@@ -5,12 +5,12 @@ import com.travel.to.travel_to.entity.AttractionType;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.repository.AttractionRepository;
 import com.travel.to.travel_to.service.AttractionService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -33,6 +33,11 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
+    public Page<Attraction> findAll(Pageable pageable) {
+        return attractionRepository.findAll(pageable);
+    }
+
+    @Override
     @NotNull
     @Transactional
     public Attraction createAttraction(AttractionCreateForm attractionCreateForm) {
@@ -47,7 +52,7 @@ public class AttractionServiceImpl implements AttractionService {
                 .setType(attractionCreateForm.getAttractionType())
                 .setOpenTime(attractionCreateForm.getOpenTime())
                 .setCloseTime(attractionCreateForm.getCloseTime());
-        return attraction;
+        return attractionRepository.save(attraction);
     }
 
     @Override

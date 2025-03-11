@@ -1,4 +1,4 @@
-CREATE TABLE users
+create table users
 (
     id         serial PRIMARY KEY                                   not null,
     uuid       varchar             default gen_random_uuid()        not null,

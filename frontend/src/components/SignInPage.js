@@ -3,8 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
     MDBContainer,
-    MDBInput,
-    MDBBtn,
+    MDBInput
 } from 'mdb-react-ui-kit';
 
 function LoginPage() {
@@ -15,14 +14,14 @@ function LoginPage() {
     const history = useNavigate();
 
     const handleLogin = async () => {
-        // const authUser = JSON.parse(localStorage.getItem('user'))
-        // console.log("user: " + authUser)
         try {
             if (!email || !password) {
                 setError('Please enter both email and password.');
                 return;
             }
 
+            const token = JSON.parse(localStorage.getItem('user'))?.token; // Retrieve the token from localStorage
+            console.log(JSON.parse(localStorage.getItem('user')))
             const response = await
                 axios.post('http://localhost:8080/signin',
                 {
@@ -31,16 +30,12 @@ function LoginPage() {
                 }, {
                     headers: {
                         'Content-Type': 'application/json',
-                        // 'Authorization': 'Bearer ' + authUser.token
+                        'Authorization': `Bearer ${token}`
                     }
                 });
-            console.log('Login successful:', response.data);
             history('/home');
-            localStorage.setItem('user', JSON.stringify())
-            console.log(JSON.parse(localStorage.getItem('user')))
         } catch (error) {
             console.log(error)
-            console.error('Login failed:', error.response ? error.response.data : error.message);
             setError('Invalid email or password.');
         }
     };

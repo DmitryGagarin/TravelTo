@@ -35,26 +35,4 @@ public class JwtProvider {
         }
         return String.join(",",auths);
     }
-
-//    @SuppressWarnings("deprecation")
-//    public static String getEmailFromJwtToken(String jwt) {
-//        if (Objects.nonNull(jwt) && jwt.startsWith("Bearer ")) {
-//            jwt = jwt.substring(7);
-//        }
-//        try {
-//            Claims claims = Jwts.parser()
-//                    .setSigningKey(key)
-//                    .build()
-//                    .parseClaimsJws(jwt)
-//                    .getBody();
-//
-//            String email = String.valueOf(claims.get("email"));
-//            System.out.println("Email extracted from JWT: " + claims);
-//            return email;
-//        } catch (Exception e) {
-//            System.err.println("Error extracting email from JWT: " + e.getMessage());
-//            return null;
-//        }
-//    }
-
 }

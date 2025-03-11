@@ -15,6 +15,9 @@ public interface AttractionService {
     Page<Attraction> getAllByType(@NotNull AttractionType type, Pageable pageable);
 
     @NotNull
+    Page<Attraction> findAll(Pageable pageable);
+
+    @NotNull
     Attraction createAttraction(@NotNull AttractionCreateForm attractionCreateForm);
 
     Optional<Attraction> findById(@NotNull Long id);

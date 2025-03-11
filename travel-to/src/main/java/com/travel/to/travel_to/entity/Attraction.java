@@ -5,8 +5,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "attraction")
 public class Attraction extends UuidAbleEntity{
@@ -19,8 +17,9 @@ public class Attraction extends UuidAbleEntity{
     private String website;
     @Enumerated(EnumType.STRING)
     private AttractionType type;
-    private LocalDateTime openTime;
-    private LocalDateTime closeTime;
+    private String openTime;
+    private String closeTime;
+    private Double rating;
 
     public String getName() {
         return name;
@@ -85,21 +84,30 @@ public class Attraction extends UuidAbleEntity{
         return this;
     }
 
-    public LocalDateTime getOpenTime() {
+    public String getOpenTime() {
         return openTime;
     }
 
-    public Attraction setOpenTime(LocalDateTime openTime) {
+    public Attraction setOpenTime(String openTime) {
         this.openTime = openTime;
         return this;
     }
 
-    public LocalDateTime getCloseTime() {
+    public String getCloseTime() {
         return closeTime;
     }
 
-    public Attraction setCloseTime(LocalDateTime closeTime) {
+    public Attraction setCloseTime(String closeTime) {
         this.closeTime = closeTime;
+        return this;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public Attraction setRating(Double rating) {
+        this.rating = rating;
         return this;
     }
 }

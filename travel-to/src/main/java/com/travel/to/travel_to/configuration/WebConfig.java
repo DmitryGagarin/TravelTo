@@ -7,11 +7,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 @Configuration
@@ -66,6 +70,19 @@ public class WebConfig implements WebMvcConfigurer {
         System.out.println("LocalValidatorFactoryBean initialized with message source: " + bean.getValidationPropertyMap());
         System.out.println("MessageSource class: " + messageSource.getClass().getName());
         return bean;
+    }
+
+    public CorsConfigurationSource corsConfigurationSource() {
+        return request -> {
+            CorsConfiguration corsConfiguration = new CorsConfiguration();
+            corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+            corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
+            corsConfiguration.setAllowCredentials(true);
+            corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
+            corsConfiguration.setExposedHeaders(List.of("Authorization"));
+            corsConfiguration.setMaxAge(3600L);
+            return corsConfiguration;
+        };
     }
 }
 

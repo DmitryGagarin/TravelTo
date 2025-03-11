@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {MDBInput, MDBContainer} from "mdb-react-ui-kit";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 function RegisterBusiness() {
 
@@ -14,6 +15,8 @@ function RegisterBusiness() {
     const [openTime, setOpenTime] = useState('')
     const [closeTime, setCloseTime] = useState('')
     const [error, setError] = useState('')
+
+    const history = useNavigate()
 
     const authUser = JSON.parse(localStorage.getItem('user'))
 
@@ -44,8 +47,13 @@ function RegisterBusiness() {
         }
     }
 
+    const handleHome = () => {
+        return history('/home')
+    }
+
     return (
         <div>
+            <button onClick={handleHome}>Back</button>
             <MDBContainer>
                 <MDBInput wrapperClass='mb-4' placeholder='Name' id='name' value={name} type='text'
                           onChange={(e) => setName(e.target.value)}/>
@@ -59,8 +67,19 @@ function RegisterBusiness() {
                           onChange={(e) => setPhone(e.target.value)}/>
                 <MDBInput wrapperClass='mb-4' placeholder='Website' id='website' value={website} type='url'
                           onChange={(e) => setWebsite(e.target.value)}/>
-                <MDBInput wrapperClass='mb-4' placeholder='Type' id='type' value={type} type='text'
-                          onChange={(e) => setType(e.target.value)}/>
+                <select
+                    className='mb-4'
+                    id='type'
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                >
+                    <option value="" disabled>
+                        Type
+                    </option>
+                    <option value="museum">Museum</option>
+                    <option value="park">Park</option>
+                    <option value="religious">Religious</option>
+                </select>
                 <MDBInput wrapperClass='mb-4' placeholder='OpenTime' id='openTime' value={openTime} type='time'
                           onChange={(e) => setOpenTime(e.target.value)}/>
                 <MDBInput wrapperClass='mb-4' placeholder='CloseTime' id='closeTime' value={closeTime} type='time'

@@ -2,6 +2,7 @@ package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.entity.AuthUser;
 import com.travel.to.travel_to.entity.User;
+import com.travel.to.travel_to.entity.UserType;
 import com.travel.to.travel_to.form.UserProfileForm;
 import com.travel.to.travel_to.form.UserSignUpForm;
 import com.travel.to.travel_to.repository.UserRepository;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = passwordEncoder.encode(userSignupForm.getPassword());
 
         user
+            .setUserType(UserType.VISITOR)
             .setPassword(encodedPassword)
             .setEmail(userSignupForm.getEmail())
             .setCreatedAt(LocalDateTime.now())
@@ -53,18 +55,21 @@ public class UserServiceImpl implements UserService {
                 userSignupForm.getEmail(),
                 encodedPassword
         );
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         User savedUser = userRepository.findByEmail(userSignupForm.getEmail()).orElseThrow(
                 () -> new RuntimeException("User not found")
         );
 
+        String jwtToken = JwtProvider.generateToken(authentication);
+
         AuthUser authUser = new AuthUser();
         authUser.setUuid(savedUser.getUuid());
         authUser.setEmail(savedUser.getEmail());
         authUser.setPassword(encodedPassword);
         authUser.setUuid(savedUser.getUuid());
-        authUser.setToken(JwtProvider.generateToken(authentication));
+        authUser.setToken(jwtToken);
 
         return authUser;
     }

@@ -14,4 +14,7 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
     @NotNull
     Page<Attraction> getAllByType(@NotNull AttractionType type, @NotNull Pageable pageable);
 
+    @NotNull
+    Page<Attraction> findAll(@NotNull Pageable pageable);
+
 }

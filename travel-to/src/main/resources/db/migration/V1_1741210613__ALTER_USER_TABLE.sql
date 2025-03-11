@@ -1,5 +1,5 @@
-ALTER TABLE users
-    ADD COLUMN name varchar,
-    ADD COLUMN surname varchar,
-    ADD COLUMN phone varchar,
-    DROP COLUMN username;
+alter table users
+    add column name varchar,
+    add column surname varchar,
+    add column phone varchar,
+    drop column username;

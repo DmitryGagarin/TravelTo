@@ -1,5 +1,7 @@
 package com.travel.to.travel_to.entity;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 
 import java.io.Serializable;
@@ -12,8 +14,8 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
     private String name;
     private String surname;
     private String phone;
+    @Enumerated(EnumType.STRING)
     private UserType userType;
-
 
     public String getPassword() {
         return password;
@@ -60,5 +62,12 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
         return this;
     }
 
+    public UserType getUserType() {
+        return userType;
+    }
 
+    public BaseUser setUserType(UserType userType) {
+        this.userType = userType;
+        return this;
+    }
 }

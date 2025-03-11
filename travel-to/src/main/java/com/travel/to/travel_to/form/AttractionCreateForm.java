@@ -2,8 +2,6 @@ package com.travel.to.travel_to.form;
 
 import com.travel.to.travel_to.entity.AttractionType;
 
-import java.time.LocalDateTime;
-
 public class AttractionCreateForm {
     private String name;
     private String description;
@@ -12,8 +10,8 @@ public class AttractionCreateForm {
     private String phone;
     private String website;
     private AttractionType attractionType;
-    private LocalDateTime openTime;
-    private LocalDateTime closeTime;
+    private String openTime;
+    private String closeTime;
 
     public String getName() {
         return name;
@@ -43,11 +41,11 @@ public class AttractionCreateForm {
         return attractionType;
     }
 
-    public LocalDateTime getOpenTime() {
+    public String getOpenTime() {
         return openTime;
     }
 
-    public LocalDateTime getCloseTime() {
+    public String getCloseTime() {
         return closeTime;
     }
 }

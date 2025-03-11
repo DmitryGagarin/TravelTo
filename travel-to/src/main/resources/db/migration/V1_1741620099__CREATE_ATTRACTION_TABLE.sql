@@ -1,4 +1,4 @@
-CREATE TABLE attraction (
+create table attraction (
     id           serial  primary key,
     uuid         varchar not null       default gen_random_uuid(),
     name         varchar not null,
@@ -8,6 +8,6 @@ CREATE TABLE attraction (
     phone        varchar,
     website      varchar,
     type         varchar not null,
-    open_time    timestamp,
-    close_time   timestamp
+    open_time    varchar,
+    close_time   varchar
 )
