@@ -9,7 +9,7 @@ public class AttractionCreateForm {
     private String image;
     private String phone;
     private String website;
-    private AttractionType attractionType;
+    private String attractionType;
     private String openTime;
     private String closeTime;
 
@@ -37,7 +37,7 @@ public class AttractionCreateForm {
         return website;
     }
 
-    public AttractionType getAttractionType() {
+    public String getAttractionType() {
         return attractionType;
     }
 

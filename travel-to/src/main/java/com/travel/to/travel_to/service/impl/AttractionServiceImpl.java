@@ -42,16 +42,15 @@ public class AttractionServiceImpl implements AttractionService {
     @Transactional
     public Attraction createAttraction(AttractionCreateForm attractionCreateForm) {
         Attraction attraction = new Attraction();
-        attraction
-                .setName(attractionCreateForm.getName())
-                .setDescription(attractionCreateForm.getDescription())
-                .setAddress(attractionCreateForm.getAddress())
-                .setImage(attractionCreateForm.getImage())
-                .setPhone(attractionCreateForm.getPhone())
-                .setWebsite(attractionCreateForm.getWebsite())
-                .setType(attractionCreateForm.getAttractionType())
-                .setOpenTime(attractionCreateForm.getOpenTime())
-                .setCloseTime(attractionCreateForm.getCloseTime());
+        attraction.setName(attractionCreateForm.getName());
+        attraction.setDescription(attractionCreateForm.getDescription());
+        attraction.setAddress(attractionCreateForm.getAddress());
+        attraction.setImage(attractionCreateForm.getImage());
+        attraction.setPhone(attractionCreateForm.getPhone());
+        attraction.setWebsite(attractionCreateForm.getWebsite());
+        attraction.setOpenTime(attractionCreateForm.getOpenTime());
+        attraction.setCloseTime(attractionCreateForm.getCloseTime());
+        attraction.setType(AttractionType.RELIGIOUS.name());
         return attractionRepository.save(attraction);
     }
 

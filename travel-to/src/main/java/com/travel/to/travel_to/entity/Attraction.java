@@ -15,8 +15,7 @@ public class Attraction extends UuidAbleEntity{
     private String image;
     private String phone;
     private String website;
-    @Enumerated(EnumType.STRING)
-    private AttractionType type;
+    private String type;
     private String openTime;
     private String closeTime;
     private Double rating;
@@ -75,11 +74,11 @@ public class Attraction extends UuidAbleEntity{
         return this;
     }
 
-    public AttractionType getType() {
+    public String getType() {
         return type;
     }
 
-    public Attraction setType(AttractionType type) {
+    public Attraction setType(String type) {
         this.type = type;
         return this;
     }

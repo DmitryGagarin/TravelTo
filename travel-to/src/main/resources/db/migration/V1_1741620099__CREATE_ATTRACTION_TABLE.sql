@@ -7,7 +7,7 @@ create table attraction (
     image        varchar,
     phone        varchar,
     website      varchar,
-    type         varchar not null,
+    type         varchar,
     open_time    varchar,
     close_time   varchar
 )
