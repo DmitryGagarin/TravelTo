@@ -18,7 +18,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/settings")
 public class SettingsController {
 
     private final UserService userService;

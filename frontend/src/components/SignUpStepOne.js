@@ -6,7 +6,7 @@ import {
     MDBInput
 } from 'mdb-react-ui-kit';
 
-function SignupPage() {
+function SignUpStepOne() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -16,16 +16,6 @@ function SignupPage() {
     const handleSignup = async () => {
 
         try {
-            // Check for empty fields
-            if (!email || !password || !confirmPassword) {
-                setError('Please fill in all fields.');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                throw new Error("Passwords do not match");
-            }
-
             const response = await axios.post('http://localhost:8080/signup', {
                 email,
                 password
@@ -35,8 +25,8 @@ function SignupPage() {
                 }
             });
 
-            localStorage.setItem('user', JSON.stringify(response.data));
-            history('/home');
+            localStorage.setItem('user', JSON.stringify(response.data))
+            history('/signup/name');
         } catch (error) {
             if (error.response && error.response.data) {
                 const errorMessages = error.response.data;
@@ -82,4 +72,4 @@ function SignupPage() {
     );
 }
 
-export default SignupPage;
+export default SignUpStepOne;

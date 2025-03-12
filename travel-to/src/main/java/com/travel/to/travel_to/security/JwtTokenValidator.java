@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.security;
 
+import com.travel.to.travel_to.entity.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -19,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class JwtTokenValidator extends OncePerRequestFilter {
 
@@ -40,11 +42,21 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                 Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
                 System.out.print(claims);
 
-                String email = String.valueOf(claims.get("email"));
-                System.out.print(email);
+                // Deserialize the 'auth' claim to a Map
+                Map<String, Object> authUserMap = (Map<String, Object>) claims.get("auth");
+
+                // Create the AuthUser manually from the Map
+                AuthUser authUser = new AuthUser();
+                authUser.setUuid((String) authUserMap.get("uuid"));
+                authUser.setEmail((String) authUserMap.get("email"));
+                authUser.setName((String) authUserMap.get("name"));
+                authUser.setSurname((String) authUserMap.get("username"));
+                authUser.setPassword((String) authUserMap.get("password"));
+
                 String authorities = String.valueOf(claims.get("authorities"));
                 List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, auth);
+
+                Authentication authentication = new UsernamePasswordAuthenticationToken(authUser, null, auth);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (Exception e) {

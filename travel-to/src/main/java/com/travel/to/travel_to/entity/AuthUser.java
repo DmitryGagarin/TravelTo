@@ -12,6 +12,8 @@ public class AuthUser implements UserDetails {
     private String email;
     private String password;
     private String token;
+    private String name;
+    private String surname;
 
     public String getUuid() {
         return uuid;
@@ -32,6 +34,22 @@ public class AuthUser implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     @Override

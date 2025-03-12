@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @RequestMapping("/signin")
@@ -30,11 +31,6 @@ public class SignInController {
     @InitBinder
     private void userSignInFormBinder(WebDataBinder binder) {
         binder.setValidator(userSignInFormValidator);
-    }
-
-    @GetMapping()
-    public String signin() {
-        return "signin";
     }
 
     @PostMapping()
