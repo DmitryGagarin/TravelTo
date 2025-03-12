@@ -22,8 +22,7 @@ function RegisterBusiness() {
 
     const handleRegistration = async () => {
         try {
-            const response = await
-                axios.post(
+            await axios.post(
                     "http://localhost:8080/settings/register-business",
                     {
                         name,
@@ -43,7 +42,17 @@ function RegisterBusiness() {
                     }
                 )
         } catch (error) {
-            console.log("Failed to registred new attraction")
+            if (error.response && error.response.data) {
+                const errorMessages = error.response.data;
+                setError(
+                    Object.entries(errorMessages)
+                        .map(([field, message]) => `${field}: ${message}`)
+                        .join(', ')
+                );
+            } else {
+                console.error('Signup failed:', error.message);
+                setError('Signup failed, please try again.');
+            }
         }
     }
 

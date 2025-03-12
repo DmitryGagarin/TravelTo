@@ -1,13 +1,72 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.attractions-container {
+  padding: 80px;
+  text-align: center;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.cards-container {
+  display: grid;
+  grid-template-columns: 1fr; /* One card per row */
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.attraction-card {
+  background-color: white;
+  border: 1px solid #d1d1d1; /* Grey border */
+  border-radius: 8px;
+  overflow: hidden; /* Prevents image overflow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px; /* Reduced padding for smaller cards */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align content from the top */
+  transition: transform 0.2s;
+  height: auto; /* Remove fixed height and let the card expand with content */
+  min-height: 300px; /* Minimum height for the card to ensure readability */
+}
+
+.attraction-card:hover {
+  transform: translateY(-5px); /* Adds a subtle hover effect */
+}
+
+.image-container {
+  width: 100%;
+  height: 200px; /* Set a fixed height for image */
+  position: relative;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+}
+
+.attraction-type {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.rating, .opening-time, .contact-info, .name-description {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.name-description h5 {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.contact-info a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  text-decoration: underline;
 }

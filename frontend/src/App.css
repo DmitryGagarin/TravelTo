@@ -1,38 +1,68 @@
-.App {
+.attractions-container {
+  padding: 20px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Creates a responsive grid */
+  gap: 20px; /* Adds space between cards */
+  margin-top: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.attraction-card {
+  background-color: white;
+  border: 1px solid #d1d1d1; /* Grey border */
+  border-radius: 8px;
+  overflow: hidden; /* Prevents image overflow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: space-between;
+  transition: transform 0.2s;
+}
+
+.attraction-card:hover {
+  transform: translateY(-5px); /* Adds a subtle hover effect */
+}
+
+.image-container {
+  position: relative;
+}
+
+.card-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.attraction-type {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
-.App-link {
-  color: #61dafb;
+.rating, .opening-time, .contact-info, .name-description {
+  margin-top: 10px;
+  font-size: 14px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.name-description h5 {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.contact-info a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  text-decoration: underline;
 }

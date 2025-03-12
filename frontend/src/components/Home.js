@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import Header from './Header'; // Import the Header component
 
 function Home() {
     const [user, setUser] = useState(null);
@@ -48,47 +49,61 @@ function Home() {
         }
     }, [user]); // Dependency on user to avoid unnecessary fetches
 
-    // Handle loading state
     if (loading) {
         return <div>Loading...</div>;
     }
 
-    // Handle error state
     if (error) {
         return <div>Error: {error}</div>;
     }
 
-    const handleLogout = () => {
-        history('/'); // Redirect to login page
-    };
-
-    const handleSettings = () => {
-        history('/settings'); // Redirect to settings page
-    };
-
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100">
-            <div className="border rounded-lg p-4" style={{ width: '500px', height: '400px' }}>
-                <h2 className="mb-4 text-center">Welcome to Dashboard</h2>
-                <p className="mb-4 text-center">Hello, {user?.username}!</p>
-                <p className="text-center">You are logged in successfully.</p>
-                <div className="text-center">
-                    <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>Logout</button>
-                </div>
-                <div className="text-center">
-                    <button type="button" className="btn btn-primary mt-3" onClick={handleSettings}>Settings</button>
-                </div>
-            </div>
-            <div>
+        <div>
+            <Header />
+            <div className="attractions-container">
                 <h1>Attractions</h1>
-                <ul>
+                <div className="cards-container">
                     {attractions.map((attraction) => (
-                        <li key={attraction.id}>{attraction.name}</li> // Adjust based on actual property names
+                        <div key={attraction.id} className="attraction-card">
+                            <div className="image-container">
+                                <img
+                                    src={attraction.image}
+                                    alt={attraction.name}
+                                    className="card-image"
+                                />
+                                <div className="attraction-type">{attraction.type}</div>
+                            </div>
+                            <div className="rating">
+                                Rating: {attraction.rating} {/* Assuming you want to show the rating */}
+                            </div>
+                            <div className="opening-time">
+                                <p>Opening Time: {attraction.openTime}</p>
+                                <p>Closing Time: {attraction.closeTime}</p>
+                            </div>
+                            <div className="contact-info">
+                                <p>
+                                    Website:{" "}
+                                    <a
+                                        href={attraction.website}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Visit
+                                    </a>
+                                </p>
+                                <p>Phone: {attraction.phone}</p>
+                            </div>
+                            <div className="name-description">
+                                <h5>{attraction.name}</h5>
+                                <p>{attraction.description}</p>
+                            </div>
+                        </div>
                     ))}
-                </ul>
+                </div>
             </div>
         </div>
     );
+
 }
 
 export default Home;

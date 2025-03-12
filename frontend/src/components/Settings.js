@@ -17,6 +17,10 @@ function Settings() {
         history('/home')
     }
 
+    const handleLogout = () => {
+        history('/'); // Redirect to login page
+    };
+
     return (
         <div>
             <div className="text-center">
@@ -27,6 +31,9 @@ function Settings() {
             </div>
             <div className="text-center">
                 <button type="button" className="btn btn-primary mt-3" onClick={handleHome}>Home</button>
+            </div>
+            <div className="text-center">
+                <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>Logout</button>
             </div>
         </div>
     )
