@@ -33,7 +33,7 @@ public class UserSignInFormValidator implements Validator {
 
         String email = userSignInForm.getEmail();
 
-        if (userService.findUserByEmail(email).isEmpty()) {
+        if (userService.findByEmail(email).isEmpty()) {
             errors.rejectValue(ValidationFields.USER, ValidationErrorCodes.USER_NOT_EXISTS);
         }
 

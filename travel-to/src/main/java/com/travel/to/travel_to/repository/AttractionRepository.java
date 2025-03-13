@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AttractionRepository extends JpaRepository<Attraction, Long> {
 
@@ -15,6 +17,6 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
     Page<Attraction> getAllByType(@NotNull AttractionType type, @NotNull Pageable pageable);
 
     @NotNull
-    Page<Attraction> findAll(@NotNull Pageable pageable);
+    List<Attraction> findAll();
 
 }

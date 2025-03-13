@@ -1,14 +1,13 @@
 package com.travel.to.travel_to.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "attraction")
-public class Attraction extends UuidAbleEntity{
-
+public class Attraction extends UuidAbleEntity {
     private String name;
     private String description;
     private String address;
@@ -19,6 +18,10 @@ public class Attraction extends UuidAbleEntity{
     private String openTime;
     private String closeTime;
     private Double rating;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
     public String getName() {
         return name;
@@ -109,4 +112,14 @@ public class Attraction extends UuidAbleEntity{
         this.rating = rating;
         return this;
     }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public Attraction setOwner(User ownerUser) {
+        this.owner = ownerUser;
+        return this;
+    }
+
 }

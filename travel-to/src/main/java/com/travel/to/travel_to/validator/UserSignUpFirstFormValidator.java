@@ -48,7 +48,7 @@ public class UserSignUpFirstFormValidator implements Validator {
             errors.rejectValue(ValidationFields.EMAIL,  ValidationErrorCodes.EMAIL_IS_REQUIRED);
         }
 
-        if (userService.findUserByEmail(userSignupFormFirst.getEmail()).isPresent()) {
+        if (userService.findByEmail(userSignupFormFirst.getEmail()).isPresent()) {
             errors.rejectValue(ValidationFields.EMAIL, ValidationErrorCodes.EMAIL_ALREADY_EXISTS);
         }
     }

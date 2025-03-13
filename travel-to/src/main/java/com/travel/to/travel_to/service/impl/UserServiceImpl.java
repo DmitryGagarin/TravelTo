@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
         @NotNull UserSignUpSecondForm userSignupFormSecond,
         @NotNull AuthUser authUser
     ) {
-        User user = findUserByUuid(authUser.getUuid());
+        User user = findByUuid(authUser.getUuid());
 
         user
             .setName(userSignupFormSecond.getName())
@@ -106,12 +106,11 @@ public class UserServiceImpl implements UserService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
         return authUser;
     }
 
     @Override
-    public User findUserByUuid(
+    public User findByUuid(
         @NotNull String userUuid
     ) {
         return userRepository.findByUuid(userUuid);
@@ -124,7 +123,7 @@ public class UserServiceImpl implements UserService {
         @NotNull UserProfileForm userProfileForm,
         @NotNull AuthUser authUser
     ) {
-        User user = findUserByUuid(userProfileForm.getUuid());
+        User user = findByUuid(userProfileForm.getUuid());
         user
             .setEmail(userProfileForm.getEmail())
             .setName(userProfileForm.getName())
@@ -135,7 +134,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findUserByEmail(
+    public Optional<User> findByEmail(
         @NotNull String email
     ) {
         return userRepository.findByEmail(email);

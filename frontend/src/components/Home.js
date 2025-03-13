@@ -6,6 +6,10 @@ import Header from './Header'; // Import the Header component
 function Home() {
     const [user, setUser] = useState(null);
     const [attractions, setAttractions] = useState([]);
+    const [totalElements, setTotalElements] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -21,7 +25,6 @@ function Home() {
         }
     }, [history]);
 
-    // Fetch attractions only once
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
@@ -36,7 +39,11 @@ function Home() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                setAttractions(response.data.content); // Assuming response.data.content is the list
+                console.log("Full Response: ", response.data);
+                console.log(typeof response.data)
+                setAttractions(response.data); // Attractions list
+                setTotalElements(response.data.total); // Total number of elements
+                setTotalPages(1); // Total number of pages
             } catch (err) {
                 setError(err.message || "An error occurred while fetching attractions");
             } finally {

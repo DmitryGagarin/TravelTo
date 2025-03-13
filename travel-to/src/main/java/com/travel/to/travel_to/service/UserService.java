@@ -18,11 +18,11 @@ public interface UserService {
     AuthUser addUserInformation(@NotNull UserSignUpSecondForm userSignupFormSecond, @NotNull AuthUser authUser);
 
     @NotNull
-    User findUserByUuid(@NotNull String userUuid);
+    User findByUuid(@NotNull String userUuid);
 
     @NotNull
     User saveChanges(@NotNull UserProfileForm userProfileForm, AuthUser authUser);
 
-    Optional<User> findUserByEmail(@NotNull String email);
+    Optional<User> findByEmail(@NotNull String email);
 
 }

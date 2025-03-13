@@ -23,7 +23,7 @@ function RegisterBusiness() {
     const handleRegistration = async () => {
         try {
             await axios.post(
-                    "http://localhost:8080/settings/register-business",
+                    "http://localhost:8080/attraction/register-business",
                     {
                         name,
                         description,
@@ -41,6 +41,7 @@ function RegisterBusiness() {
                         }
                     }
                 )
+            history('/home')
         } catch (error) {
             if (error.response && error.response.data) {
                 const errorMessages = error.response.data;

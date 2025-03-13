@@ -8,7 +8,6 @@ import com.travel.to.travel_to.validator.UserSignUpFirstFormValidator;
 import com.travel.to.travel_to.validator.UserSignUpSecondFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -63,15 +62,12 @@ public class SignUpController {
     @PostMapping("/name")
     public AuthUser signupNames(
         @Validated @RequestBody UserSignUpSecondForm userSignupSecondForm,
-        BindingResult bindingResult
+        BindingResult bindingResult,
+        @AuthenticationPrincipal AuthUser authUser
     ) throws BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-
-        AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         return userService.addUserInformation(userSignupSecondForm, authUser);
     }
