@@ -89,6 +89,8 @@ function RegisterBusiness() {
                     <option value="museum">Museum</option>
                     <option value="park">Park</option>
                     <option value="religious">Religious</option>
+                    <option value="cafe">Cafe</option>
+                    <option value="restraunt">Restaurant</option>
                 </select>
                 <MDBInput wrapperClass='mb-4' placeholder='OpenTime' id='openTime' value={openTime} type='time'
                           onChange={(e) => setOpenTime(e.target.value)}/>

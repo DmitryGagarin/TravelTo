@@ -7,6 +7,7 @@ import LoginPage from './SignIn';
 import SignUpStepOne from './SignUpStepOne';
 import SignUpStepTwo from './SignUpStepTwo'
 import Home from './Home';
+import Attraction from './Attraction'
 import Settings from './Settings';
 import Account from './Account'
 import RegisterBusiness from './RegisterBusiness'
@@ -17,9 +18,10 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>
+                    <Route path="/home" element={<Home/>}/>
                     <Route path="/signup" element={<SignUpStepOne/>}/>
                     <Route path="/signup/name" element={<SignUpStepTwo/>}/>
-                    <Route path="/home" element={<Home/>}/>
+                    <Route path="/attraction" element={<Attraction/>}/>
                     <Route path="/settings" element={<Settings/>}/>
                     <Route path="/settings/account" element={<Account/>}/>
                     <Route path="/settings/business" element={<RegisterBusiness/>}/>

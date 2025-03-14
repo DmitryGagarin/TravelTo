@@ -14,6 +14,14 @@ function Header() {
         navigate('/settings'); // Redirect to the settings page
     };
 
+    const handleAttractionsClick = () => {
+        navigate('/attraction')
+    }
+
+    const handleHomeClick = () => {
+        navigate('/home')
+    }
+
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'))
         setUser(user)
@@ -22,7 +30,12 @@ function Header() {
     return (
         <header className="d-flex justify-content-between align-items-center p-3 shadow-sm" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, backgroundColor: 'white' }}>
             <div></div> {/* Empty div to maintain balance on the left side */}
-
+            <button onClick={handleAttractionsClick} className="btn btn-light me-3">
+                Attractions
+            </button>
+            <button onClick={handleHomeClick} className="btn btn-light me-3">
+                Home
+            </button>
             <div className="d-flex align-items-center">
                 {user && <p className="mb-0 me-3">Hello, {user.email}</p>} {/* Display user email */}
                 <button onClick={handleAccountClick} className="btn btn-light me-3">
