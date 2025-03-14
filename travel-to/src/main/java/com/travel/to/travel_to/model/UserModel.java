@@ -1,13 +1,15 @@
 package com.travel.to.travel_to.model;
 
+import org.springframework.hateoas.PagedModel;
+
 import java.time.LocalDateTime;
 
-public class UserModel {
-    String name;
-    String surname;
-    String email;
-    String phone;
-    LocalDateTime createdAt;
+public class UserModel extends PagedModel<UserModel> {
+    private String name;
+    private String surname;
+    private String email;
+    private String phone;
+    private LocalDateTime createdAt;
 
     public String getName() {
         return name;

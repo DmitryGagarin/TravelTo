@@ -5,5 +5,7 @@ public enum AttractionType {
     PARK,
     RELIGIOUS,
     CAFE,
-    RESTAURANT
+    RESTAURANT,
+    HOTEL,
+    HOSTEL
 }

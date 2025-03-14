@@ -3,7 +3,6 @@ package com.travel.to.travel_to.assembler;
 import com.travel.to.travel_to.entity.Attraction;
 import com.travel.to.travel_to.model.AttractionModel;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
@@ -26,11 +25,5 @@ public class AttractionModelAssembler implements RepresentationModelAssembler<At
             .setCloseTime(entity.getCloseTime())
             .setRating(entity.getRating());
         return attractionModel;
-    }
-
-    @Override
-    @NotNull
-    public PagedModel<AttractionModel> toCollectionModel(@NotNull Iterable<? extends Attraction> entities) {
-        return (PagedModel<AttractionModel>) RepresentationModelAssembler.super.toCollectionModel(entities);
     }
 }

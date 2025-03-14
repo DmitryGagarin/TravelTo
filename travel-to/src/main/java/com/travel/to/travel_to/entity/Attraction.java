@@ -3,7 +3,6 @@ package com.travel.to.travel_to.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -13,8 +12,6 @@ public class Attraction extends UuidAbleEntity {
     private String name;
     private String description;
     private String address;
-//    @Lob
-//    @Column(length = 1000000)
     @Column(name = "image")
     private byte[] image;
     private String phone;

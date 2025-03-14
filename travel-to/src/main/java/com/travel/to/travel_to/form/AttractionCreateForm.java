@@ -1,7 +1,5 @@
 package com.travel.to.travel_to.form;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class AttractionCreateForm {
     private String name;
     private String description;
@@ -11,6 +9,26 @@ public class AttractionCreateForm {
     private String attractionType;
     private String openTime;
     private String closeTime;
+
+    public AttractionCreateForm(
+        String name,
+        String description,
+        String address,
+        String phone,
+        String website,
+        String attractionType,
+        String openTime,
+        String closeTime
+    ) {
+        this.name = name;
+        this.description = description;
+        this.address = address;
+        this.phone = phone;
+        this.website = website;
+        this.attractionType = attractionType;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+    }
 
     public String getName() {
         return name;

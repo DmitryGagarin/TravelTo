@@ -38,14 +38,13 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             System.out.println("JWT Token in JwtTokenValidator: " + jwt);
             try {
                 SecretKey key = Keys.hmacShaKeyFor(JwtConstants.SECRET_KEY.getBytes());
+
                 @SuppressWarnings("deprecation")
                 Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
                 System.out.print(claims);
 
-                // Deserialize the 'auth' claim to a Map
                 Map<String, Object> authUserMap = (Map<String, Object>) claims.get("auth");
 
-                // Create the AuthUser manually from the Map
                 AuthUser authUser = new AuthUser();
                 authUser.setUuid((String) authUserMap.get("uuid"));
                 authUser.setEmail((String) authUserMap.get("email"));

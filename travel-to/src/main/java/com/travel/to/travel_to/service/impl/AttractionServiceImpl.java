@@ -2,7 +2,6 @@ package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.constants.DefaultInitialValues;
 import com.travel.to.travel_to.entity.Attraction;
-import com.travel.to.travel_to.entity.AttractionType;
 import com.travel.to.travel_to.entity.AuthUser;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.repository.AttractionRepository;
@@ -11,12 +10,9 @@ import com.travel.to.travel_to.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,23 +42,26 @@ public class AttractionServiceImpl implements AttractionService {
         @NotNull AuthUser authUser,
         @NotNull MultipartFile image
     ) {
-        byte[] imageBytes = null;
+        byte[] imageBytes;
         try {
             imageBytes = image.getBytes();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+            throw new RuntimeException("Can't get bytes of image");
+        }
 
         Attraction attraction = new Attraction();
-        attraction.setName(attractionCreateForm.getName());
-        attraction.setDescription(attractionCreateForm.getDescription());
-        attraction.setAddress(attractionCreateForm.getAddress());
-        attraction.setImage(imageBytes);
-        attraction.setPhone(attractionCreateForm.getPhone());
-        attraction.setWebsite(attractionCreateForm.getWebsite());
-        attraction.setOpenTime(attractionCreateForm.getOpenTime());
-        attraction.setCloseTime(attractionCreateForm.getCloseTime());
-        attraction.setType(AttractionType.RELIGIOUS.name());
-        attraction.setOwner(userService.findByUuid(authUser.getUuid()));
-        attraction.setRating(DefaultInitialValues.INITIAL_ATTRACTION_RATING);
+        attraction
+            .setName(attractionCreateForm.getName())
+            .setDescription(attractionCreateForm.getDescription())
+            .setAddress(attractionCreateForm.getAddress())
+            .setImage(imageBytes)
+            .setPhone(attractionCreateForm.getPhone())
+            .setWebsite(attractionCreateForm.getWebsite())
+            .setOpenTime(attractionCreateForm.getOpenTime())
+            .setCloseTime(attractionCreateForm.getCloseTime())
+            .setType(attractionCreateForm.getAttractionType())
+            .setRating(DefaultInitialValues.INITIAL_ATTRACTION_RATING)
+            .setOwner(userService.findByUuid(authUser.getUuid()));
         return attractionRepository.save(attraction);
     }
 

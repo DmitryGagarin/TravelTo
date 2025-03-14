@@ -4,7 +4,6 @@ import com.travel.to.travel_to.entity.AuthUser;
 import com.travel.to.travel_to.entity.User;
 import com.travel.to.travel_to.repository.UserRepository;
 import com.travel.to.travel_to.service.CustomUserDetailsService;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 

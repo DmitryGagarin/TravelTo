@@ -16,11 +16,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,21 +64,20 @@ public class AttractionController {
 
         PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(pageSize, currentPage, totalElements, totalPages);
 
-        PagedModel<AttractionModel> pagedModel = PagedModel.of(attractionModels, pageMetadata);
-
-        return pagedModel;
+        return PagedModel.of(attractionModels, pageMetadata);
     }
 
     @PostMapping("/register-business")
     public Attraction registerBusiness(
         @Validated @RequestPart("attractionCreateForm") AttractionCreateForm attractionCreateForm,
         BindingResult bindingResult,
-        @RequestPart(value = "image", required = false) MultipartFile image,
+        @RequestPart(value = "image") MultipartFile image,
         @AuthenticationPrincipal AuthUser authUser
     ) throws BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
+        // TODO: validate image format
         return attractionService.createAttraction(attractionCreateForm, authUser, image);
     }
 
