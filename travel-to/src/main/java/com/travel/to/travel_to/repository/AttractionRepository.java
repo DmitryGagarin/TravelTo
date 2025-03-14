@@ -9,14 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AttractionRepository extends JpaRepository<Attraction, Long> {
 
     @NotNull
-    Page<Attraction> getAllByType(@NotNull AttractionType type, @NotNull Pageable pageable);
-
-    @NotNull
     List<Attraction> findAll();
+
+    Optional<Attraction> findByName(@NotNull String name);
 
 }

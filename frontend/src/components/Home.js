@@ -6,9 +6,6 @@ import Header from './Header'; // Import the Header component
 function Home() {
     const [user, setUser] = useState(null);
     const [attractions, setAttractions] = useState([]);
-    const [totalElements, setTotalElements] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -41,9 +38,8 @@ function Home() {
                 });
                 console.log("Full Response: ", response.data);
                 console.log(typeof response.data)
-                setAttractions(response.data); // Attractions list
-                setTotalElements(response.data.total); // Total number of elements
-                setTotalPages(1); // Total number of pages
+                setAttractions(response.data._embedded.attractionModelList); // Attractions list
+                console.log("part of response: ", response.data._embedded.attractionModelList)
             } catch (err) {
                 setError(err.message || "An error occurred while fetching attractions");
             } finally {

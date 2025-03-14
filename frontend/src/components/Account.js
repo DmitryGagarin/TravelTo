@@ -4,14 +4,14 @@ import {
     MDBContainer,
     MDBInput,
 } from "mdb-react-ui-kit";
-import {data, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function Account() {
 
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
     const [phone, setPhone] = useState('')
-    const [uuid, setUuid] = useState('')
+    const [email, setEmail] = useState('')
     const [error, setError] = useState('')
 
     const history = useNavigate();
@@ -21,7 +21,7 @@ function Account() {
         setName(authUser.name)
         setSurname(authUser.surname)
         setPhone(authUser.phone)
-        setUuid(authUser.uuid)
+        setEmail(authUser.email)
     }, [])
 
     const handleChange = async () => {
@@ -32,14 +32,13 @@ function Account() {
                         name,
                         surname,
                         phone,
-                        uuid
+                        email
                     }, {
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer ' + authUser.token
                         }
                     })
-            console.log("changes applied")
             localStorage.setItem('user', JSON.stringify(response.data));
             history('/home');
         } catch (error) {
@@ -64,6 +63,8 @@ function Account() {
                           onChange={(e) => setSurname(e.target.value)}/>
                 <MDBInput wrapperClass='mb-4' placeholder='Phone' id='phone' value={phone} type='tel'
                           onChange={(e) => setPhone(e.target.value)}/>
+                <MDBInput wrapperClass='mb-4' placeholder='Email' id='email' value={email} type='email'
+                          onChange={(e) => setEmail(e.target.value)}/>
                 {error && <p className="text-danger">{error}</p>}
                 <button onClick={handleChange}>Save changes</button>
             </MDBContainer>

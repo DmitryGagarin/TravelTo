@@ -10,8 +10,6 @@ import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,12 +28,6 @@ public class AttractionServiceImpl implements AttractionService {
         UserService userService) {
         this.attractionRepository = attractionRepository;
         this.userService = userService;
-    }
-
-    @Override
-    @NotNull
-    public Page<Attraction> getAllByType(@NotNull AttractionType type, @NotNull Pageable pageable) {
-        return attractionRepository.getAllByType(type, pageable);
     }
 
     @Override
@@ -66,7 +58,7 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public Optional<Attraction> findById(Long id) {
-        return attractionRepository.findById(id);
+    public Optional<Attraction> findByName(@NotNull String attractionName) {
+        return attractionRepository.findByName(attractionName);
     }
 }

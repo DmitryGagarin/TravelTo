@@ -68,7 +68,6 @@ public class SignUpController {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-
         return userService.addUserInformation(userSignupSecondForm, authUser);
     }
 }

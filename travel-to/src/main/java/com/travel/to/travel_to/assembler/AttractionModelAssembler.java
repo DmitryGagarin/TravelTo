@@ -2,20 +2,38 @@ package com.travel.to.travel_to.assembler;
 
 import com.travel.to.travel_to.entity.Attraction;
 import com.travel.to.travel_to.model.AttractionModel;
-import org.springframework.hateoas.CollectionModel;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 public class AttractionModelAssembler implements RepresentationModelAssembler<Attraction, AttractionModel> {
 
     @Override
-    public AttractionModel toModel(Attraction entity) {
-        return null;
+    @NotNull
+    public AttractionModel toModel(@NotNull Attraction entity) {
+        AttractionModel attractionModel = new AttractionModel();
+        attractionModel
+                .setName(entity.getName())
+                .setDescription(entity.getDescription())
+                .setAddress(entity.getAddress())
+                .setImage(entity.getImage())
+                .setPhone(entity.getPhone())
+                .setWebsite(entity.getWebsite())
+                .setType(entity.getType())
+                .setOpenTime(entity.getOpenTime())
+                .setCloseTime(entity.getCloseTime())
+                .setRating(entity.getRating());
+        return attractionModel;
     }
 
     @Override
-    public CollectionModel<AttractionModel> toCollectionModel(Iterable<? extends Attraction> entities) {
-        return RepresentationModelAssembler.super.toCollectionModel(entities);
+    @NotNull
+    public PagedModel<AttractionModel> toCollectionModel(@NotNull Iterable<? extends Attraction> entities) {
+        return (PagedModel<AttractionModel>) RepresentationModelAssembler.super.toCollectionModel(entities);
     }
 }

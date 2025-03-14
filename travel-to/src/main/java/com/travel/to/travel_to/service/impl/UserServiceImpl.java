@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
         @NotNull UserProfileForm userProfileForm,
         @NotNull AuthUser authUser
     ) {
-        User user = findByUuid(userProfileForm.getUuid());
+        User user = findByUuid(authUser.getUuid());
         user
             .setEmail(userProfileForm.getEmail())
             .setName(userProfileForm.getName())
