@@ -1,6 +1,24 @@
+/* TODO: card should be fix sized and image should be changeable
+
+/* Main container holding both attraction cards and the search bar */
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 80px 40px 0 40px;
+  align-items: flex-start; /* Aligns the children to the top */
+  flex-wrap: wrap; /* Allow wrapping when space is limited */
+}
+
 .attractions-container {
-  padding: 80px;
+  flex: 3; /* Takes up 75% of the container width */
   text-align: center;
+}
+
+.filter-container {
+  flex: 1; /* Takes up 25% of the container width */
+  padding-top: 18px;
+  padding-left: 20px;
+  max-width: 300px; /* Optional: Set a max width for the search bar container */
 }
 
 .cards-container {
@@ -16,10 +34,11 @@
   border-radius: 8px;
   overflow: hidden; /* Prevents image overflow */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 10px; /* Reduced padding for smaller cards */
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Align content from the top */
+  justify-content: space-between; /* Ensures space is distributed correctly */
+  position: relative;
   transition: transform 0.2s;
   height: auto; /* Remove fixed height and let the card expand with content */
   min-height: 300px; /* Minimum height for the card to ensure readability */
@@ -31,7 +50,8 @@
 
 .image-container {
   width: 100%;
-  height: 200px; /* Set a fixed height for image */
+  height: 100%;
+  object-fit: contain;
   position: relative;
 }
 
@@ -53,13 +73,36 @@
 }
 
 .rating, .opening-time, .contact-info, .name-description {
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 30px;
+  padding-bottom: 20px; /* Makes space for the bottom section */
+  flex: 1; /* Allow this section to grow and fill the available space */
 }
 
 .name-description h5 {
   margin: 10px 0;
   font-size: 16px;
+}
+
+.opening-time {
+  position: absolute;
+  bottom: 30px;
+  left: 10px;
+  font-size: 12px;
+  color: #333;
+  text-align: left;
+}
+
+.rating, .contact-info {
+  position: absolute;
+  bottom: 10px;
+  right: 10px; /* Align to the right bottom */
+  font-size: 12px;
+  color: #333;
+  text-align: right; /* Ensures text aligns to the right */
+}
+
+.opening-time p {
+  margin: 0;
 }
 
 .contact-info a {
@@ -68,5 +111,36 @@
 }
 
 .contact-info a:hover {
+  text-decoration: underline;
+}
+
+/* Filter Search Bar Styling */
+#filterInput {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+#list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+  text-align: right;
+  font-size: 16px;
+}
+
+li, a {
+  text-decoration: none;
+  font-size: 14px;
+}
+
+li {
+  padding: 5px 0;
+}
+
+li a {
+  color: #007bff;
+}
+
+li a:hover {
   text-decoration: underline;
 }

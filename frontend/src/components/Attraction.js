@@ -1,30 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from "axios";
-import Header from './Header'; // Import the Header component
+import Header from './Header';
+import {MDBInput} from "mdb-react-ui-kit"; // Import the Header component
 
 function Attraction() {
-    const [user, setUser] = useState(null);
     const [attractions, setAttractions] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [filter, setFilter] = useState('');
     const [error, setError] = useState(null);
     const history = useNavigate();
-
-    // Set the user state based on the stored user in localStorage
-    useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        } else {
-            history('/'); // If there's no user, redirect to login page
-        }
-    }, [history]);
 
     // Fetch attractions
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
-                setLoading(true);
                 const token = JSON.parse(localStorage.getItem('user'))?.token;
                 if (!token) {
                     setError("No token found. Please log in again.");
@@ -35,72 +24,82 @@ function Attraction() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                // console.log("Full Response: ", response.data);
-                // console.log("image: ", response.data._embedded.attractionModelList[0].image)
-                // console.log(typeof response.data._embedded.attractionModelList[0].image)
                 setAttractions(response.data._embedded.attractionModelList); // Attractions list
-                console.log("image: ", response.data._embedded.attractionModelList[0].image);
-                console.log("Image type: ", typeof response.data._embedded.attractionModelList[0].image);
-                console.log("First 100 characters of image: ", response.data._embedded.attractionModelList[0].image.slice(0, 100));
             } catch (err) {
                 setError(err.message || "An error occurred while fetching attractions");
-            } finally {
-                setLoading(false);
             }
         };
 
-        if (user) { // Only fetch attractions if the user exists
-            fetchAttractions();
-        }
-    }, [user]);
+        fetchAttractions();
+    }, []);
 
-    // Handle error
-    if (error) {
-        return <div>Error: {error}</div>;
+    const handleSearch = () => {
+
     }
 
     return (
         <div>
             <Header />
-            <div className="attractions-container">
-                <h1>Attractions</h1>
-                <div className="cards-container">
-                    {attractions.map((attraction) => (
-                        <div key={attraction.id} className="attraction-card">
-                            <div className="image-container">
-                                <img
-                                    src={`data:image/png;base64,${attraction.image}`}
-                                    alt={attraction.name}
-                                    className="card-image"
-                                />
-                                <div className="attraction-type">{attraction.type}</div>
+            <div className="main-container">
+                {/* Attraction Cards Container */}
+                <div className="attractions-container">
+                    <div className="cards-container">
+                        {attractions.map((attraction) => (
+                            <div key={attraction.id} className="attraction-card">
+                                <div className="image-container">
+                                    <img
+                                        src={`data:image/png;base64,${attraction.image}`}
+                                        alt={attraction.name}
+                                        className="card-image"
+                                    />
+                                    <div className="attraction-type">{attraction.type}</div>
+                                </div>
+                                <div className="rating">
+                                    Rating: {attraction.rating}
+                                </div>
+                                <div className="contact-info">
+                                    <p>
+                                        Website:{" "}
+                                        <a
+                                            href={attraction.website}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Visit
+                                        </a>
+                                    </p>
+                                    <p>Phone: {attraction.phone}</p>
+                                </div>
+                                <div className="name-description">
+                                    <h5>{attraction.name}</h5>
+                                    <p>{attraction.description}</p>
+                                </div>
+                                <div className="opening-time">
+                                    <p>Opening Time: {attraction.openTime}</p>
+                                    <p>Closing Time: {attraction.closeTime}</p>
+                                </div>
                             </div>
-                            <div className="rating">
-                                Rating: {attraction.rating}
-                            </div>
-                            <div className="opening-time">
-                                <p>Opening Time: {attraction.openTime}</p>
-                                <p>Closing Time: {attraction.closeTime}</p>
-                            </div>
-                            <div className="contact-info">
-                                <p>
-                                    Website:{" "}
-                                    <a
-                                        href={attraction.website}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        Visit
-                                    </a>
-                                </p>
-                                <p>Phone: {attraction.phone}</p>
-                            </div>
-                            <div className="name-description">
-                                <h5>{attraction.name}</h5>
-                                <p>{attraction.description}</p>
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
+                </div>
+
+                {/* Search Bar Container */}
+                <div className="filter-container">
+                    <MDBInput
+                        type="text"
+                        id="filterInput"
+                        onKeyUp={handleSearch}
+                        placeholder="Search"
+                    />
+                    <ul id="list">
+                        {attractions.map((attraction) => (
+                            <li key={attraction.id}>
+                                <a>
+                                    {attraction.name}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         </div>

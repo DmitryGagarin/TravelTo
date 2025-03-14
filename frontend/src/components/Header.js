@@ -37,7 +37,7 @@ function Header() {
                 Home
             </button>
             <div className="d-flex align-items-center">
-                {user && <p className="mb-0 me-3">Hello, {user.email}</p>} {/* Display user email */}
+                {user && <p className="mb-0 me-3">Hello, {user.name}!</p>} {/* Display user email */}
                 <button onClick={handleAccountClick} className="btn btn-light me-3">
                     <FaUserAlt size={24} />
                 </button>
