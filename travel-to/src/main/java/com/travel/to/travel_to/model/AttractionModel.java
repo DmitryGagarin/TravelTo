@@ -6,7 +6,7 @@ public class AttractionModel extends PagedModel<AttractionModel> {
     private String name;
     private String description;
     private String address;
-    private String image;
+    private byte[] image;
     private String phone;
     private String website;
     private String type;
@@ -41,11 +41,11 @@ public class AttractionModel extends PagedModel<AttractionModel> {
         return this;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public AttractionModel setImage(String image) {
+    public AttractionModel setImage(byte[] image) {
         this.image = image;
         return this;
     }

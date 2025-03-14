@@ -1,15 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import Header from './Header'; // Import the Header component
 
 function Attraction() {
     const [user, setUser] = useState(null);
     const [attractions, setAttractions] = useState([]);
-
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     const history = useNavigate();
 
     // Set the user state based on the stored user in localStorage
@@ -22,6 +20,7 @@ function Attraction() {
         }
     }, [history]);
 
+    // Fetch attractions
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
@@ -36,10 +35,13 @@ function Attraction() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                console.log("Full Response: ", response.data);
-                console.log(typeof response.data)
+                // console.log("Full Response: ", response.data);
+                // console.log("image: ", response.data._embedded.attractionModelList[0].image)
+                // console.log(typeof response.data._embedded.attractionModelList[0].image)
                 setAttractions(response.data._embedded.attractionModelList); // Attractions list
-                console.log("part of response: ", response.data._embedded.attractionModelList)
+                console.log("image: ", response.data._embedded.attractionModelList[0].image);
+                console.log("Image type: ", typeof response.data._embedded.attractionModelList[0].image);
+                console.log("First 100 characters of image: ", response.data._embedded.attractionModelList[0].image.slice(0, 100));
             } catch (err) {
                 setError(err.message || "An error occurred while fetching attractions");
             } finally {
@@ -50,8 +52,9 @@ function Attraction() {
         if (user) { // Only fetch attractions if the user exists
             fetchAttractions();
         }
-    }, [user]); // Dependency on user to avoid unnecessary fetches
+    }, [user]);
 
+    // Handle error
     if (error) {
         return <div>Error: {error}</div>;
     }
@@ -66,14 +69,14 @@ function Attraction() {
                         <div key={attraction.id} className="attraction-card">
                             <div className="image-container">
                                 <img
-                                    src={attraction.image}
+                                    src={`data:image/png;base64,${attraction.image}`}
                                     alt={attraction.name}
                                     className="card-image"
                                 />
                                 <div className="attraction-type">{attraction.type}</div>
                             </div>
                             <div className="rating">
-                                Rating: {attraction.rating} {/* Assuming you want to show the rating */}
+                                Rating: {attraction.rating}
                             </div>
                             <div className="opening-time">
                                 <p>Opening Time: {attraction.openTime}</p>
@@ -102,7 +105,6 @@ function Attraction() {
             </div>
         </div>
     );
-
 }
 
 export default Attraction;

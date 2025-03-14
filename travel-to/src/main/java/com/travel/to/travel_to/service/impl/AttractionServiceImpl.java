@@ -12,7 +12,11 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,16 +41,21 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     @NotNull
-    @Transactional
     public Attraction createAttraction(
         @NotNull AttractionCreateForm attractionCreateForm,
-        @NotNull AuthUser authUser
+        @NotNull AuthUser authUser,
+        @NotNull MultipartFile image
     ) {
+        byte[] imageBytes = null;
+        try {
+            imageBytes = image.getBytes();
+        } catch (IOException ignored) {}
+
         Attraction attraction = new Attraction();
         attraction.setName(attractionCreateForm.getName());
         attraction.setDescription(attractionCreateForm.getDescription());
         attraction.setAddress(attractionCreateForm.getAddress());
-        attraction.setImage(attractionCreateForm.getImage());
+        attraction.setImage(imageBytes);
         attraction.setPhone(attractionCreateForm.getPhone());
         attraction.setWebsite(attractionCreateForm.getWebsite());
         attraction.setOpenTime(attractionCreateForm.getOpenTime());
