@@ -15,7 +15,7 @@ function Header() {
     };
 
     const handleAttractionsClick = () => {
-        navigate('/attraction')
+        navigate('/attractions')
     }
 
     const handleHomeClick = () => {

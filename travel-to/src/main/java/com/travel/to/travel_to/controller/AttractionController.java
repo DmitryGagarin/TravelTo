@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -50,8 +51,7 @@ public class AttractionController {
     }
 
     @GetMapping
-    public PagedModel<AttractionModel> getAttraction(
-    ) {
+    public PagedModel<AttractionModel> getAttraction() {
         List<Attraction> attractions = attractionService.findAll();
         List<AttractionModel> attractionModels = attractions.stream()
             .map(attractionModelAssembler::toModel)
@@ -77,8 +77,15 @@ public class AttractionController {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        // TODO: validate image format
+        // TODO: validate file format (only jpeg, jpg, png, img)
         return attractionService.createAttraction(attractionCreateForm, authUser, image);
+    }
+
+    @GetMapping("/{name}")
+    public AttractionModel getAttraction(
+        @PathVariable String name
+    ) {
+        return attractionModelAssembler.toModel(attractionService.getByName(name));
     }
 
 }

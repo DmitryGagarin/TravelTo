@@ -7,6 +7,7 @@ import LoginPage from './SignIn';
 import SignUpStepOne from './SignUpStepOne';
 import SignUpStepTwo from './SignUpStepTwo'
 import Home from './Home';
+import Attractions from './Attractions'
 import Attraction from './Attraction'
 import Settings from './Settings';
 import Account from './Account'
@@ -21,7 +22,8 @@ function App() {
                     <Route path="/home" element={<Home/>}/>
                     <Route path="/signup" element={<SignUpStepOne/>}/>
                     <Route path="/signup/name" element={<SignUpStepTwo/>}/>
-                    <Route path="/attraction" element={<Attraction/>}/>
+                    <Route path="/attractions" element={<Attractions/>}/>
+                    <Route path="/attraction/:name" element={<Attraction/>}/>
                     <Route path="/settings" element={<Settings/>}/>
                     <Route path="/settings/account" element={<Account/>}/>
                     <Route path="/settings/business" element={<RegisterBusiness/>}/>

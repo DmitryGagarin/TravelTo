@@ -14,6 +14,7 @@ public class AttractionModelAssembler implements RepresentationModelAssembler<At
     public AttractionModel toModel(@NotNull Attraction entity) {
         AttractionModel attractionModel = new AttractionModel();
         attractionModel
+            .setUuid(entity.getUuid())
             .setName(entity.getName())
             .setDescription(entity.getDescription())
             .setAddress(entity.getAddress())

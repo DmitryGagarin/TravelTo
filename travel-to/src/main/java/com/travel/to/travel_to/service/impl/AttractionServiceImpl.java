@@ -69,4 +69,10 @@ public class AttractionServiceImpl implements AttractionService {
     public Optional<Attraction> findByName(@NotNull String attractionName) {
         return attractionRepository.findByName(attractionName);
     }
+
+    @Override
+    public Attraction getByName(String attractionName) {
+        return attractionRepository.getByName(attractionName);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.travel.to.travel_to.model;
 import org.springframework.hateoas.PagedModel;
 
 public class AttractionModel extends PagedModel<AttractionModel> {
+    private String uuid;
     private String name;
     private String description;
     private String address;
@@ -13,6 +14,15 @@ public class AttractionModel extends PagedModel<AttractionModel> {
     private String openTime;
     private String closeTime;
     private Double rating;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public AttractionModel setUuid(String uuid) {
+        this.uuid = uuid;
+        return this;
+    }
 
     public String getName() {
         return name;

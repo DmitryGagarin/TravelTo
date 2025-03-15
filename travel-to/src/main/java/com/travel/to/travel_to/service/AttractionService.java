@@ -22,4 +22,8 @@ public interface AttractionService {
     );
 
     Optional<Attraction> findByName(@NotNull String name);
+
+    @NotNull
+    Attraction getByName(@NotNull String name);
+
 }
