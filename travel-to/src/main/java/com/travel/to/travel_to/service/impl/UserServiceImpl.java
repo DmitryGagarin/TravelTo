@@ -54,26 +54,20 @@ public class UserServiceImpl implements UserService {
                 () -> new RuntimeException("User not found")
         );
 
-        // Create the AuthUser instance
         AuthUser authUser = new AuthUser();
         authUser.setUuid(savedUser.getUuid());
         authUser.setEmail(savedUser.getEmail());
         authUser.setPassword(encodedPassword);
 
-        // Set the AuthUser in the SecurityContext
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 authUser,
                 encodedPassword,
                 authUser.getAuthorities()
         );
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("Authentication set: " + SecurityContextHolder.getContext().getAuthentication());
-        System.out.println("Principal in authentication: " + authentication.getPrincipal());
 
-        // Generate the token using the Authentication object from the SecurityContext
         String jwtToken = JwtProvider.generateToken(authentication);
-
-        // Set the token in the AuthUser
         authUser.setToken(jwtToken);
 
         return authUser;

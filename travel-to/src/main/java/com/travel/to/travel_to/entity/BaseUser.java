@@ -17,7 +17,6 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
     private String phone;
     @Enumerated(EnumType.STRING)
     private UserType userType;
-
     @OneToMany(mappedBy = "owner")
     private List<Attraction> ownerAttractions;
 

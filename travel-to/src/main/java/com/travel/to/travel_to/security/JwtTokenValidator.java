@@ -26,22 +26,18 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            @NotNull HttpServletRequest request,
-            @NotNull HttpServletResponse response,
-            @NotNull FilterChain filterChain
+        @NotNull HttpServletRequest request,
+        @NotNull HttpServletResponse response,
+        @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
         String jwt = request.getHeader(JwtConstants.JWT_HEADER);
-        System.out.println("JWT Token in JwtTokenValidator: " + jwt);
-        if (jwt != null && jwt.startsWith("Bearer ")) {
+        if (jwt != null && jwt.startsWith(JwtConstants.TOKEN_PREFIX)) {
             jwt = jwt.substring(7);
-
-            System.out.println("JWT Token in JwtTokenValidator: " + jwt);
             try {
                 SecretKey key = Keys.hmacShaKeyFor(JwtConstants.SECRET_KEY.getBytes());
 
                 @SuppressWarnings("deprecation")
                 Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-                System.out.print(claims);
 
                 Map<String, Object> authUserMap = (Map<String, Object>) claims.get("auth");
 

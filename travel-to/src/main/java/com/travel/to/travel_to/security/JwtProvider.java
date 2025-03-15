@@ -28,7 +28,7 @@ public class JwtProvider {
         authUserMap.put("surname", ((AuthUser) auth.getPrincipal()).getSurname());
         authUserMap.put("password", ((AuthUser) auth.getPrincipal()).getPassword());
 
-        String jwt = Jwts.builder()
+        return Jwts.builder()
                 .issuedAt(new Date())
                 .expiration(new Date(new Date().getTime() + 86400000))
                 .claim("auth", authUserMap) // Store the Map as "auth"
@@ -36,9 +36,8 @@ public class JwtProvider {
                 .claim("authorities", roles)
                 .signWith(key)
                 .compact();
-        System.out.println("Token for parsing in JwtProvider: " + jwt);
-        return jwt;
     }
+
     private static String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
         Set<String> auths = new HashSet<>();
         for(GrantedAuthority authority: authorities) {
