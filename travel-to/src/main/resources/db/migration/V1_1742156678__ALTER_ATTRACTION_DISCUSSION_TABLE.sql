@@ -1,0 +1,3 @@
+-- alter table attraction_discussion
+--     ALTER COLUMN images SET DATA TYPE bytea
+--         USING images::bytea;

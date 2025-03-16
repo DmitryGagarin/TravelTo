@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.exception;
 
+import com.travel.to.travel_to.exception.exception.FileExtensionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -13,6 +14,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // 400
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     public ResponseEntity<Map<String, String>> handleBindException(BindException ex) {
@@ -21,6 +23,15 @@ public class GlobalExceptionHandler {
     error -> errorMessages.put(error.getField(), error.getDefaultMessage())
         );
 
+        return ResponseEntity.badRequest().body(errorMessages);
+    }
+
+    // 415
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    @ExceptionHandler(FileExtensionException.class)
+    public ResponseEntity<Map<String, String>> handleFileExtensionException(FileExtensionException ex) {
+        Map<String, String> errorMessages = new HashMap<>();
+        errorMessages.put("error", ex.getMessage());
         return ResponseEntity.badRequest().body(errorMessages);
     }
 }

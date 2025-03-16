@@ -43,7 +43,12 @@ function RegisterBusiness() {
             };
 
             // Append the form data as JSON
-            formData.append('attractionCreateForm', new Blob([JSON.stringify(formJson)], { type: 'application/json' }));
+            formData.append('attractionCreateForm',
+                new Blob(
+                    [JSON.stringify(formJson)],
+                    { type: 'application/json' }
+                )
+            );
 
             // Append the image file as a separate part
             if (image) {
@@ -57,12 +62,12 @@ function RegisterBusiness() {
                 {
                     headers: {
                         'Authorization': 'Bearer ' + authUser.token,
-                        'Content-Type': 'multipart/form-data', // Required for file upload
-                    },
+                        'Content-Type': 'multipart/form-data'
+                    }
                 }
-            );
+            )
 
-            history('/home');
+            history('/home')
         } catch (error) {
             if (error.response && error.response.data) {
                 const errorMessages = error.response.data;
@@ -72,8 +77,7 @@ function RegisterBusiness() {
                         .join(', ')
                 );
             } else {
-                console.error('Registration failed:', error.message);
-                setError('Registration failed, please try again.');
+                setError('Business registration failed, please try again.');
             }
         }
     };

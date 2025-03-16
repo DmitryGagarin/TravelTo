@@ -11,6 +11,8 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AttractionDiscussionServiceImpl implements AttractionDiscussionService {
 
@@ -57,6 +59,13 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
     @Override
     public AttractionDiscussion getByUuid(String attractionUuid) {
         return attractionDiscussionRepository.getByUuid(attractionUuid);
+    }
+
+    @Override
+    public List<AttractionDiscussion> findAllByAttractionUuid(String attractionUuid) {
+        return attractionDiscussionRepository.findAllByAttractionId(
+            attractionService.getByUuid(attractionUuid).getId()
+        );
     }
 
 }

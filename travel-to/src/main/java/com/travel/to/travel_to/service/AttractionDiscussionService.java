@@ -5,6 +5,8 @@ import com.travel.to.travel_to.entity.AuthUser;
 import com.travel.to.travel_to.form.CreateAttractionDiscussionForm;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 public interface AttractionDiscussionService {
 
     AttractionDiscussion create(
@@ -20,4 +22,7 @@ public interface AttractionDiscussionService {
 
     @NotNull
     AttractionDiscussion getByUuid(String attractionUuid);
+
+    @NotNull
+    List<AttractionDiscussion> findAllByAttractionUuid(String attractionUuid);
 }

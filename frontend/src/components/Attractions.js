@@ -6,7 +6,7 @@ import {MDBInput} from "mdb-react-ui-kit"; // Import the Header component
 
 function Attractions() {
     const [attractions, setAttractions] = useState([]);
-    const [filter, setFilter] = useState('');
+    // const [filter, setFilter] = useState('');
 
     useEffect(() => {
         const fetchAttractions = async () => {
@@ -21,7 +21,7 @@ function Attractions() {
                 setAttractions(response.data._embedded.attractionModelList); // Attractions list
             } catch (err) {}
         };
-        fetchAttractions();
+        fetchAttractions().then(r => {console.log(r)});
     }, []);
 
     const handleSearch = () => {
@@ -30,8 +30,7 @@ function Attractions() {
     return (
         <div>
             <Header />
-            <div className="main-container">
-                {/* Attractions Cards Container */}
+            <div className="attractions-main-container">
                 <div className="attractions-container">
                     <div className="cards-container">
                         {attractions.map((attraction) => (

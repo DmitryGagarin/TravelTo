@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.form;
 
+@SuppressWarnings("FieldMayBeFinal")
 public class AttractionCreateForm {
     private String name;
     private String description;

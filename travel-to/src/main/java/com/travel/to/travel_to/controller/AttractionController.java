@@ -3,10 +3,12 @@ package com.travel.to.travel_to.controller;
 import com.travel.to.travel_to.assembler.AttractionModelAssembler;
 import com.travel.to.travel_to.entity.Attraction;
 import com.travel.to.travel_to.entity.AuthUser;
+import com.travel.to.travel_to.exception.exception.FileExtensionException;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.validator.AttractionCreateFormValidator;
+import com.travel.to.travel_to.validator.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,16 +34,19 @@ public class AttractionController {
 
     private final AttractionService attractionService;
     private final AttractionCreateFormValidator attractionCreateFormValidator;
+    private final ValidationUtils validationUtils;
     private final AttractionModelAssembler attractionModelAssembler;
 
     @Autowired
     public AttractionController(
         AttractionService attractionService,
         AttractionCreateFormValidator attractionCreateFormValidator,
+        ValidationUtils validationUtils,
         AttractionModelAssembler attractionModelAssembler
     ) {
         this.attractionService = attractionService;
         this.attractionCreateFormValidator = attractionCreateFormValidator;
+        this.validationUtils = validationUtils;
         this.attractionModelAssembler = attractionModelAssembler;
     }
 
@@ -77,7 +82,9 @@ public class AttractionController {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        // TODO: validate file format (only jpeg, jpg, png, img)
+        if (!validationUtils.validateImageFileFormat(image, bindingResult)) {
+            throw new FileExtensionException("This image format not allowed");
+        }
         return attractionService.createAttraction(attractionCreateForm, authUser, image);
     }
 

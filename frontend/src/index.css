@@ -1,26 +1,54 @@
-/* TODO: card should be fix sized and image should be changeable
-
 /* Main container holding both attraction cards and the search bar */
-.main-container {
+.attractions-main-container {
   display: flex;
   justify-content: space-between;
   padding: 80px 40px 0 40px;
-  align-items: flex-start; /* Aligns the children to the top */
-  flex-wrap: wrap; /* Allow wrapping when space is limited */
+  align-items: flex-start; /* Aligns the children to the left */
+  height: 100vh; /* Ensures the main container takes full viewport height */
+}
+
+.attraction-main-container {
+  justify-content: space-between;
+  padding: 80px 40px 0 40px;
+  align-items: flex-start; /* Aligns the children to the left */
+  height: 100vh; /* Ensures the main container takes full viewport height */
 }
 
 .attractions-container {
   flex: 3; /* Takes up 75% of the container width */
   text-align: center;
+  overflow-y: auto; /* Ensures content is scrollable if it overflows vertically */
 }
 
-.filter-container {
-  flex: 1; /* Takes up 25% of the container width */
-  padding-top: 18px;
-  padding-left: 20px;
-  max-width: 300px; /* Optional: Set a max width for the search bar container */
+.attraction-container {
+  flex: 3; /* Takes up 75% of the container width */
+  text-align: center;
+  overflow-y: auto; /* Ensures content is scrollable if it overflows vertically */
 }
 
+.leave-discussion-container {
+  margin-top: 8px; /* Adds spacing between the card and the button */
+  width: 100%;
+  display: flex;
+  justify-content: right; /* Centers the button horizontally */
+  margin-bottom: 20px; /* Adds spacing to the bottom of the container */
+}
+
+.leave-discussion {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.leave-discussion:hover {
+  background-color: #0056b3; /* Adds hover effect */
+}
+
+/* Attraction card container with proper height and structure */
 .cards-container {
   display: grid;
   grid-template-columns: 1fr; /* One card per row */
@@ -73,6 +101,7 @@
   font-size: 14px;
 }
 
+/* Additional styling for other elements */
 .rating, .opening-time, .name-description, .learn-more {
   margin-top: 30px;
   flex: 1; /* Allow this section to grow and fill the available space */
@@ -111,36 +140,5 @@
 }
 
 .contact-info a:hover {
-  text-decoration: underline;
-}
-
-/* Filter Search Bar Styling */
-#filterInput {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-#list {
-  list-style-type: none;
-  padding: 0;
-  margin-top: 20px;
-  text-align: right;
-  font-size: 16px;
-}
-
-li, a {
-  text-decoration: none;
-  font-size: 14px;
-}
-
-li {
-  padding: 5px 0;
-}
-
-li a {
-  color: #007bff;
-}
-
-li a:hover {
   text-decoration: underline;
 }
