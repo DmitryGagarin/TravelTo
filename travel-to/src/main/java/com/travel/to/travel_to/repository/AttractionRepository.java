@@ -14,10 +14,12 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
     @NotNull
     List<Attraction> findAll();
 
-    @NotNull
-    Attraction getByName(@NotNull String name);
-
     Optional<Attraction> findByName(@NotNull String name);
 
+    @NotNull
+    Attraction getByUuid(@NotNull String uuid);
+
+    @NotNull
+    Attraction getByName(@NotNull String name);
 
 }

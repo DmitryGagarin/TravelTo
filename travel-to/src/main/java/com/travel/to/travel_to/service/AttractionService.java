@@ -24,6 +24,9 @@ public interface AttractionService {
     Optional<Attraction> findByName(@NotNull String name);
 
     @NotNull
+    Attraction getByUuid(@NotNull String uuid);
+
+    @NotNull
     Attraction getByName(@NotNull String name);
 
 }

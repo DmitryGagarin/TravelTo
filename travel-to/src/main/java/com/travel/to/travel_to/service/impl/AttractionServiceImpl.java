@@ -71,6 +71,11 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
+    public Attraction getByUuid(@NotNull String uuid) {
+        return attractionRepository.getByUuid(uuid);
+    }
+
+    @Override
     public Attraction getByName(String attractionName) {
         return attractionRepository.getByName(attractionName);
     }

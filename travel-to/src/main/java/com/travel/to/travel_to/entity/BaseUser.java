@@ -15,10 +15,15 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
     private String name;
     private String surname;
     private String phone;
+
     @Enumerated(EnumType.STRING)
     private UserType userType;
+
     @OneToMany(mappedBy = "owner")
     private List<Attraction> ownerAttractions;
+
+    @OneToMany(mappedBy = "author")
+    private List<AttractionDiscussion> authorAttractionDiscussions;
 
     public String getPassword() {
         return password;
