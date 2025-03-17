@@ -2,12 +2,16 @@ package com.travel.to.travel_to.model;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import java.time.LocalDateTime;
+
 public class AttractionDiscussionModel extends RepresentationModel<AttractionDiscussionModel> {
     private String title;
     private String contentLike;
     private String contentDislike;
     private String content;
     private Double rating;
+    private String author;
+    private LocalDateTime createdAt;
 
     public String getTitle() {
         return title;
@@ -51,6 +55,24 @@ public class AttractionDiscussionModel extends RepresentationModel<AttractionDis
 
     public AttractionDiscussionModel setRating(Double rating) {
         this.rating = rating;
+        return this;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public AttractionDiscussionModel setAuthor(String author) {
+        this.author = author;
+        return this;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public AttractionDiscussionModel setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
         return this;
     }
 }

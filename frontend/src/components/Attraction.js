@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import Header from "./Header";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {MDBInput, MDBTextArea} from "mdb-react-ui-kit";
 
 function Attraction() {
@@ -20,8 +20,6 @@ function Attraction() {
     // const [images, setImages] = useState([])
 
     const [showCreateDiscussionForm, setShowCreateDiscussionForm] = useState(false)
-
-    const history = useNavigate()
 
     useEffect(() => {
         const fetchAttraction = async () => {
@@ -48,7 +46,8 @@ function Attraction() {
                             'Authorization': `Bearer ${token}`
                         }
                 })
-                setDiscussions(response.data)
+                console.log(response.data)
+                setDiscussions(response.data._embedded.attractionDiscussionModelList)
             } catch (err) {}
         }
         fetchAttraction().then(r => {console.log(r)})
@@ -87,6 +86,7 @@ function Attraction() {
             //     formData.append('images', images)
             // }
 
+            console.log(`http://localhost:8080/attraction-discussion/create/${attractionUuid}`)
             await axios.post(
                 `http://localhost:8080/attraction-discussion/create/${attractionUuid}`,
                 formData,
@@ -97,8 +97,8 @@ function Attraction() {
                     }
                 }
             )
-
-            history(`/attraction/${name}`)
+            console.log(discussions)
+            window.location.reload();
         } catch (error) {
             if (error.response && error.response.data) {
                 const errorMessages = error.response.data;
@@ -223,6 +223,9 @@ function Attraction() {
                     <div className="discussion-container">
                         {discussions.map((discussion) => (
                             <div key={discussion.id} className="discussion-card">
+                                <div className="discussion-author">
+                                    Title: {discussion.author}
+                                </div>
                                 <div className="discussion-title">
                                     Title: {discussion.title}
                                 </div>
@@ -237,6 +240,9 @@ function Attraction() {
                                 </div>
                                 <div className="discussion-ration">
                                     Overall: {discussion.rating}
+                                </div>
+                                <div className="discussion-created_at">
+                                    Created at: {discussion.createdAt}
                                 </div>
                             </div>
                         ))}

@@ -25,4 +25,6 @@ public interface UserService {
 
     Optional<User> findByEmail(@NotNull String email);
 
+    Optional<User> findById(@NotNull Long id);
+
 }

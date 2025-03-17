@@ -25,4 +25,5 @@ public interface AttractionDiscussionService {
 
     @NotNull
     List<AttractionDiscussion> findAllByAttractionUuid(String attractionUuid);
+
 }

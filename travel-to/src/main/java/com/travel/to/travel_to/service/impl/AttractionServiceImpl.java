@@ -66,6 +66,16 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
+    public Attraction updateRating(
+        @NotNull String attractionUuid,
+        @NotNull Double totalRating
+    ) {
+        Attraction attraction = getByUuid(attractionUuid);
+        attraction.setRating(totalRating);
+        return attractionRepository.save(attraction);
+    }
+
+    @Override
     public Optional<Attraction> findByName(@NotNull String attractionName) {
         return attractionRepository.findByName(attractionName);
     }
@@ -78,6 +88,12 @@ public class AttractionServiceImpl implements AttractionService {
     @Override
     public Attraction getByName(String attractionName) {
         return attractionRepository.getByName(attractionName);
+    }
+
+    @Override
+    @NotNull
+    public List<Double> findAllAttractionRatingByAttractionId(Long attractionId) {
+        return attractionRepository.findAllAttractionRatingsById(attractionId);
     }
 
 }

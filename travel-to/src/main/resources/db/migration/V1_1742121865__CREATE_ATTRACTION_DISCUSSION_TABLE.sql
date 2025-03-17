@@ -9,6 +9,5 @@ create table attraction_discussion
     title varchar not null default '',
     author_id bigint not null,
     constraint fk_user foreign key (author_id) references "users" (id),
-    attraction_id bigint not null,
-    constraint fk_attraction foreign key (attraction_id) references "attraction" (id)
+    attraction_id bigint not null default 0
 )

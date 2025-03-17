@@ -13,7 +13,8 @@ public interface AttractionDiscussionRepository extends JpaRepository<Attraction
     @NotNull
     AttractionDiscussion getByUuid(String attractionUuid);
 
-    @Query(value = "SELECT * FROM attraction_discussion WHERE attraction_id =: attractionId",
+    @Query(value = "SELECT * FROM attraction_discussion WHERE attraction_id =:attractionId",
     nativeQuery = true)
     List<AttractionDiscussion> findAllByAttractionId(Long attractionId);
+
 }

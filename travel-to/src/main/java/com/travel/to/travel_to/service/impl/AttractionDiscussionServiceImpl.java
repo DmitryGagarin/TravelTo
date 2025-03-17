@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,6 +38,8 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
         @NotNull AuthUser authUser,
         @NotNull String attractionUuid
     ) {
+        Long attractionId = attractionService.getByUuid(attractionUuid).getId();
+
         AttractionDiscussion attractionDiscussion = new AttractionDiscussion();
         attractionDiscussion
             .setTitle(createAttractionDiscussionForm.getTitle())
@@ -45,9 +48,17 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
             .setContent(createAttractionDiscussionForm.getContent())
             .setRating(createAttractionDiscussionForm.getRating())
             .setAuthorId(userService.findByUuid(authUser.getUuid()))
-            .setAttractionId(attractionService.getByUuid(attractionUuid));
+            .setAttractionId(attractionId)
+            .setCreatedAt(LocalDateTime.now())
+            .setUpdatedAt(LocalDateTime.now());
 
-        return attractionDiscussion;
+        // TODO: подсчет рейтинга не совсем правильно работает
+        List<Double> ratings = attractionService.findAllAttractionRatingByAttractionId(attractionId);
+        ratings.add(attractionDiscussion.getRating());
+        double totalRating = ratings.stream().mapToDouble(i -> i).sum();
+        attractionService.updateRating(attractionUuid, totalRating / attractionDiscussionRepository.findAll().size());
+
+        return attractionDiscussionRepository.save(attractionDiscussion);
     }
 
     @Override

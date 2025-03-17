@@ -72,7 +72,8 @@ public class AttractionDiscussionController {
     public AttractionDiscussionModel createAttractionDiscussion(
         @Validated @RequestPart("attractionDiscussionCreateForm") CreateAttractionDiscussionForm createAttractionDiscussionForm,
         BindingResult bindingResult,
-        @RequestPart("images") MultipartFile[] images,
+        @RequestPart(value = "images", required = false) MultipartFile[] images,
+        // TODO: AuthUser не меняется в зависимости от реально залогиненого пользователя
         @AuthenticationPrincipal AuthUser authUser,
         @PathVariable String attractionUuid
     ) throws BindException {

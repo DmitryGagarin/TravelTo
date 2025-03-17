@@ -26,7 +26,14 @@ public class CreateAttractionDiscussionFormValidator implements Validator {
             || form.getContentDislike().length() < ValidationConstants.ATTRACTION_DISCUSSION_MIN_LENGTH
         ) {
             errors.rejectValue(
-                ValidationFields.ATTRACTION_DISCUSSION,
+                ValidationFields.ATTRACTION_CONTENT,
+                ValidationErrorCodes.ATTRACTION_DISCUSSION_CONTENT_TOO_SHORT
+            );
+        }
+
+        if (form.getTitle().length() < ValidationConstants.ATTRACTION_DISCUSSION_MIN_LENGTH) {
+            errors.rejectValue(
+                ValidationFields.ATTRACTION_DISCUSSION_TITLE,
                 ValidationErrorCodes.ATTRACTION_DISCUSSION_CONTENT_TOO_SHORT
             );
         }

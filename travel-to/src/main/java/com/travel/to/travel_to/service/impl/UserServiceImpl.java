@@ -133,4 +133,11 @@ public class UserServiceImpl implements UserService {
     ) {
         return userRepository.findByEmail(email);
     }
+
+    @Override
+    public Optional<User> findById(
+        @NotNull Long id
+    ) {
+        return userRepository.findById(id);
+    }
 }

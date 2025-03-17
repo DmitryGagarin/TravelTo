@@ -7,20 +7,17 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "attraction_discussion")
-public class AttractionDiscussion extends UuidAbleEntity {
+public class AttractionDiscussion extends UuidAbleTimedEntity {
     private String title;
     private String contentLike;
     private String contentDislike;
     private String content;
     private Double rating;
+    private Long attractionId;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
-
-    @ManyToOne
-    @JoinColumn(name = "attraction_id")
-    private Attraction attractionId;
 
     public String getContentLike() {
         return contentLike;
@@ -76,11 +73,11 @@ public class AttractionDiscussion extends UuidAbleEntity {
         return this;
     }
 
-    public Attraction getAttractionId() {
+    public Long getAttractionId() {
         return attractionId;
     }
 
-    public AttractionDiscussion setAttractionId(Attraction attractionId) {
+    public AttractionDiscussion setAttractionId(Long attractionId) {
         this.attractionId = attractionId;
         return this;
     }

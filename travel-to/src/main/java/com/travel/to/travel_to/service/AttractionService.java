@@ -21,6 +21,12 @@ public interface AttractionService {
         @NotNull MultipartFile image
     );
 
+    @NotNull
+    Attraction updateRating(
+        @NotNull String attractionUuid,
+        @NotNull Double totalRating
+    );
+
     Optional<Attraction> findByName(@NotNull String name);
 
     @NotNull
@@ -29,4 +35,6 @@ public interface AttractionService {
     @NotNull
     Attraction getByName(@NotNull String name);
 
+    @NotNull
+    List<Double> findAllAttractionRatingByAttractionId(Long attractionId);
 }
