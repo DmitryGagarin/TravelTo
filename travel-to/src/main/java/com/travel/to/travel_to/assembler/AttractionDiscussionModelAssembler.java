@@ -40,6 +40,7 @@ public class AttractionDiscussionModelAssembler implements RepresentationModelAs
             .setContent(entity.getContent())
             .setRating(entity.getRating())
             .setAuthor(authorName)
+            // TODO: return normalized time
             .setCreatedAt(entity.getCreatedAt());
         return attractionDiscussionModel;
     }

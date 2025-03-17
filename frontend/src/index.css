@@ -11,7 +11,17 @@
   justify-content: space-between;
   padding: 80px 40px 0 40px;
   align-items: flex-start; /* Aligns the children to the left */
-  height: 100vh; /* Ensures the main container takes full viewport height */
+  max-height: 100vh; /* Ensures the main container takes full viewport height */
+}
+
+.discussion-main-container {
+  padding: 0 40px 0 40px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.discussion-card {
+  margin: 0 0 20px 0;
 }
 
 .attractions-container {
@@ -27,14 +37,13 @@
 }
 
 .leave-discussion-container {
-  margin-top: 8px; /* Adds spacing between the card and the button */
   width: 100%;
   display: flex;
   justify-content: right; /* Centers the button horizontally */
-  margin-bottom: 20px; /* Adds spacing to the bottom of the container */
 }
 
 .leave-discussion {
+  margin: 0 0 20px 0;
   padding: 10px 20px;
   font-size: 16px;
   background-color: #007bff;
@@ -46,6 +55,7 @@
 
 .leave-discussion:hover {
   background-color: #0056b3; /* Adds hover effect */
+  transition-delay: 0.2s;
 }
 
 /* Attraction card container with proper height and structure */
@@ -56,7 +66,7 @@
   margin-top: 20px;
 }
 
-.attraction-card {
+.attraction-card, .discussion-card {
   background-color: white;
   border: 1px solid #d1d1d1; /* Grey border */
   border-radius: 8px;

@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.validator;
 
+import com.travel.to.travel_to.constants.RegExConstants;
 import com.travel.to.travel_to.constants.ValidationErrorCodes;
 import com.travel.to.travel_to.constants.ValidationFields;
 import com.travel.to.travel_to.form.AttractionCreateForm;
@@ -35,6 +36,10 @@ public class AttractionCreateFormValidator implements Validator {
 
         if (attractionService.findByName(attractionCreateForm.getName()).isPresent()) {
             errors.rejectValue(ValidationFields.ATTRACTION_NAME, ValidationErrorCodes.ATTRACTION_ALREADY_EXISTS);
+        }
+
+        if (!attractionCreateForm.getPhone().matches(RegExConstants.PHONE_NUMBER_PATTERN)) {
+            errors.rejectValue(ValidationFields.PHONE_NUMBER, ValidationErrorCodes.PHONE_NUMBER_INCORRECT);
         }
     }
 }

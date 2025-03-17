@@ -82,11 +82,12 @@ function Attraction() {
                 )
             );
 
+            // TODO: загрузка картинок к отзывам
+
             // if (images) {
             //     formData.append('images', images)
             // }
 
-            console.log(`http://localhost:8080/attraction-discussion/create/${attractionUuid}`)
             await axios.post(
                 `http://localhost:8080/attraction-discussion/create/${attractionUuid}`,
                 formData,
@@ -97,7 +98,6 @@ function Attraction() {
                     }
                 }
             )
-            console.log(discussions)
             window.location.reload();
         } catch (error) {
             if (error.response && error.response.data) {
@@ -155,9 +155,11 @@ function Attraction() {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="discussion-main-container">
                 <div className="leave-discussion-container">
                     <button className="leave-discussion" onClick={handleLeaveDiscussion}>
-                        You were here? Leave you comment!
+                        Were here? Leave your comment!
                     </button>
                 </div>
                 {error && <p className="text-danger">{error}</p>}
@@ -219,12 +221,12 @@ function Attraction() {
                         </div>
                     </div>
                 )}
-                <div className="discussions-container">
+                <div className="discussions-main-container">
                     <div className="discussion-container">
                         {discussions.map((discussion) => (
                             <div key={discussion.id} className="discussion-card">
                                 <div className="discussion-author">
-                                    Title: {discussion.author}
+                                    Author: {discussion.author}
                                 </div>
                                 <div className="discussion-title">
                                     Title: {discussion.title}

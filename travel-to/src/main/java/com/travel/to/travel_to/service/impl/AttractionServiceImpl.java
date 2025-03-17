@@ -49,6 +49,7 @@ public class AttractionServiceImpl implements AttractionService {
             throw new RuntimeException("Can't get bytes of image");
         }
 
+        // TODO: менять тип юзера при создании им достопремечательности
         Attraction attraction = new Attraction();
         attraction
             .setName(attractionCreateForm.getName())
