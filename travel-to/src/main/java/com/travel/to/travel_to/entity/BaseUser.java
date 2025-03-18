@@ -21,7 +21,8 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
 
     @OneToMany(mappedBy = "owner")
     private List<Attraction> ownerAttractions;
-
+    @OneToMany(mappedBy = "likedBy")
+    private List<Attraction> likedAttractions;
     @OneToMany(mappedBy = "author")
     private List<AttractionDiscussion> authorAttractionDiscussions;
 
@@ -85,6 +86,24 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
 
     public BaseUser setOwnerAttractions(List<Attraction> ownedAttractions) {
         this.ownerAttractions = ownedAttractions;
+        return this;
+    }
+
+    public List<Attraction> getLikedAttractions() {
+        return likedAttractions;
+    }
+
+    public BaseUser setLikedAttractions(List<Attraction> likedAttractions) {
+        this.likedAttractions = likedAttractions;
+        return this;
+    }
+
+    public List<AttractionDiscussion> getAuthorAttractionDiscussions() {
+        return authorAttractionDiscussions;
+    }
+
+    public BaseUser setAuthorAttractionDiscussions(List<AttractionDiscussion> authorAttractionDiscussions) {
+        this.authorAttractionDiscussions = authorAttractionDiscussions;
         return this;
     }
 }

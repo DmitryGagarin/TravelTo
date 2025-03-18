@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void delete(AuthUser authUser) {
+        userRepository.delete(findByUuid(authUser.getUuid()));
+    }
+
+    @Override
     @NotNull
     public AuthUser registration(@NotNull UserSignUpFirstForm userSignupFormFirst) {
         User user = new User();

@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface UserService {
 
+    void delete(@NotNull AuthUser authUser);
+
     @NotNull
     AuthUser registration(@NotNull UserSignUpFirstForm userSignupFormFirst);
 

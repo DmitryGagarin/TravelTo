@@ -25,6 +25,10 @@ public class Attraction extends UuidAbleEntity {
     @JoinColumn(name = "owner_id")
     private User owner;
 
+    @ManyToOne
+    @JoinColumn(name = "liked_by")
+    private User likedBy;
+
     public String getName() {
         return name;
     }
@@ -124,4 +128,12 @@ public class Attraction extends UuidAbleEntity {
         return this;
     }
 
+    public User getLikedBy() {
+        return likedBy;
+    }
+
+    public Attraction setLikedBy(User likedBy) {
+        this.likedBy = likedBy;
+        return this;
+    }
 }

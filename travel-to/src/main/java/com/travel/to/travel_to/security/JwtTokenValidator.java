@@ -21,6 +21,7 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class JwtTokenValidator extends OncePerRequestFilter {
 
@@ -31,7 +32,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
         @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
         String jwt = request.getHeader(JwtConstants.JWT_HEADER);
-        if (jwt != null && jwt.startsWith(JwtConstants.TOKEN_PREFIX)) {
+        if (Objects.nonNull(jwt) && jwt.startsWith(JwtConstants.TOKEN_PREFIX)) {
             jwt = jwt.substring(7);
             try {
                 SecretKey key = Keys.hmacShaKeyFor(JwtConstants.SECRET_KEY.getBytes());
@@ -44,8 +45,6 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                 AuthUser authUser = new AuthUser();
                 authUser.setUuid((String) authUserMap.get("uuid"));
                 authUser.setEmail((String) authUserMap.get("email"));
-                authUser.setName((String) authUserMap.get("name"));
-                authUser.setSurname((String) authUserMap.get("username"));
                 authUser.setPassword((String) authUserMap.get("password"));
 
                 String authorities = String.valueOf(claims.get("authorities"));

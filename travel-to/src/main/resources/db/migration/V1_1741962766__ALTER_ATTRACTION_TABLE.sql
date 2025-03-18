@@ -1,3 +1,3 @@
-ALTER TABLE attraction
-    ALTER COLUMN image SET DATA TYPE bytea
-        USING image::bytea;
+alter table attraction
+    alter column image set data type bytea
+        using image::bytea;

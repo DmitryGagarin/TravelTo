@@ -24,8 +24,6 @@ public class JwtProvider {
         Map<String, Object> authUserMap = new HashMap<>();
         authUserMap.put("uuid", ((AuthUser) auth.getPrincipal()).getUuid());
         authUserMap.put("email", ((AuthUser) auth.getPrincipal()).getEmail());
-        authUserMap.put("name", ((AuthUser) auth.getPrincipal()).getName());
-        authUserMap.put("surname", ((AuthUser) auth.getPrincipal()).getSurname());
         authUserMap.put("password", ((AuthUser) auth.getPrincipal()).getPassword());
 
         return Jwts.builder()

@@ -47,6 +47,25 @@ function Account() {
         }
     }
 
+    const handleDelete = async () => {
+        try {
+            console.log(authUser.token)
+            console.log(`Bearer ${authUser.token}`)
+            await axios.post("http://localhost:8080/user/delete",
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authUser.token}`
+                    }
+                })
+            localStorage.removeItem('user')
+            history('/')
+        } catch (error) {
+            // console.log(authUser)
+            setError("Failed to change data")
+        }
+    }
+
     const handleHome = () => {
         history("/home")
     }
@@ -67,7 +86,9 @@ function Account() {
                           onChange={(e) => setEmail(e.target.value)}/>
                 {error && <p className="text-danger">{error}</p>}
                 <button onClick={handleChange}>Save changes</button>
+                <button onClick={handleDelete}>Delete account</button>
             </MDBContainer>
+
         </div>
     );
 }
