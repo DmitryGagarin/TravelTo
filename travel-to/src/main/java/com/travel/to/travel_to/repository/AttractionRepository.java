@@ -15,6 +15,11 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
     @NotNull
     List<Attraction> findAll();
 
+    @NotNull
+    @Query(value = "SELECT * FROM Attraction a WHERE a.owner_id = :ownerId",
+    nativeQuery = true)
+    List<Attraction> findAllByOwnerId(@NotNull Long ownerId);
+
     Optional<Attraction> findByName(@NotNull String name);
 
     @NotNull
@@ -23,6 +28,7 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
     @NotNull
     Attraction getByName(@NotNull String name);
 
+    @NotNull
     @Query(value = "SELECT a.rating FROM Attraction a WHERE a.id = :attractionId",
     nativeQuery = true)
     List<Double> findAllAttractionRatingsById(Long attractionId);

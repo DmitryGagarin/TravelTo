@@ -7,6 +7,7 @@ import LoginPage from './SignIn';
 import SignUpStepOne from './SignUpStepOne';
 import SignUpStepTwo from './SignUpStepTwo'
 import Home from './Home';
+import MyAttractions from './MyAttractions'
 import Attractions from './Attractions'
 import Attraction from './Attraction'
 import Settings from './Settings';
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/settings" element={<Settings/>}/>
                     <Route path="/settings/account" element={<Account/>}/>
                     <Route path="/settings/business" element={<RegisterBusiness/>}/>
+                    <Route path="/settings/my" element={<MyAttractions/>}/>
                 </Routes>
             </Router>
         </div>

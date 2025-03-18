@@ -36,6 +36,11 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
+    public List<Attraction> findAllByOwner(AuthUser authUser) {
+        return attractionRepository.findAllByOwnerId(userService.findByUuid(authUser.getUuid()).getId());
+    }
+
+    @Override
     @NotNull
     public Attraction createAttraction(
         @NotNull AttractionCreateForm attractionCreateForm,

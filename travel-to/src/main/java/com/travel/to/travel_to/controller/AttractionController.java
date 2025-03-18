@@ -56,8 +56,27 @@ public class AttractionController {
     }
 
     @GetMapping
-    public PagedModel<AttractionModel> getAttraction() {
+    public PagedModel<AttractionModel> getAttractions() {
         List<Attraction> attractions = attractionService.findAll();
+        List<AttractionModel> attractionModels = attractions.stream()
+            .map(attractionModelAssembler::toModel)
+            .collect(Collectors.toList());
+
+        int pageSize = attractionModels.size();
+        int currentPage = 0;
+        int totalElements = attractionModels.size();
+        int totalPages = (int) Math.ceil((double) totalElements / pageSize);
+
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(pageSize, currentPage, totalElements, totalPages);
+
+        return PagedModel.of(attractionModels, pageMetadata);
+    }
+
+    @GetMapping("/my")
+    public PagedModel<AttractionModel> getMyAttractions(
+        @AuthenticationPrincipal AuthUser authUser
+    ) {
+        List<Attraction> attractions = attractionService.findAllByOwner(authUser);
         List<AttractionModel> attractionModels = attractions.stream()
             .map(attractionModelAssembler::toModel)
             .collect(Collectors.toList());

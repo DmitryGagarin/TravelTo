@@ -15,6 +15,9 @@ public interface AttractionService {
     List<Attraction> findAll();
 
     @NotNull
+    List<Attraction> findAllByOwner(@NotNull AuthUser authUser);
+
+    @NotNull
     Attraction createAttraction(
         @NotNull AttractionCreateForm attractionCreateForm,
         @NotNull AuthUser authUser,
