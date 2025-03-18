@@ -14,6 +14,13 @@
   max-height: 100vh; /* Ensures the main container takes full viewport height */
 }
 
+.map {
+  display: flex;
+  justify-content: center; /* Центрирует по горизонтали */
+  align-items: center; /* Центрирует по вертикали */
+  height: 100%; /* Убедитесь, что у контейнера есть высота */
+}
+
 .discussion-main-container {
   padding: 0 40px 0 40px;
   justify-content: space-between;

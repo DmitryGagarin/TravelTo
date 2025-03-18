@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@pbe/react-yandex-maps": "^1.2.5",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
@@ -11,6 +12,7 @@
     "axioss": "^0.0.1-security",
     "bootstrap": "^5.3.3",
     "component_name": "^1.0.1",
+    "dotenv": "^16.4.7",
     "mdb-react-ui-kit": "^9.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

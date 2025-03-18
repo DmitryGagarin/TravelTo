@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react'
+import {YMaps, Map, Placemark} from '@pbe/react-yandex-maps';
 import axios from 'axios'
 import Header from "./Header";
 import {useParams} from "react-router-dom";
 import {MDBInput, MDBTextArea} from "mdb-react-ui-kit";
 
 function Attraction() {
+    const API_KEY = process.env.REACT_APP_YANDEX_MAP_API_KEY
+
     const {name} = useParams()
     const [error, setError] = useState('')
 
@@ -18,6 +21,11 @@ function Attraction() {
     const [content, setContent] = useState('')
     const [rating, setRating] = useState('')
     // const [images, setImages] = useState([])
+    const [balloon, setBalloon] = useState('')
+    const [latitude, setLatitude] = useState('')
+    const [longitude, setLongitude] = useState('')
+
+    const domain = "https://geocode-maps.yandex.ru/v1/"
 
     const [showCreateDiscussionForm, setShowCreateDiscussionForm] = useState(false)
 
@@ -33,8 +41,7 @@ function Attraction() {
                     })
                 setAttraction(response.data)
                 setAttractionUuid(response.data.uuid)
-            } catch (err) {
-            }
+            } catch (err) {}
         }
 
         const fetchDiscussions = async () => {
@@ -46,13 +53,35 @@ function Attraction() {
                             'Authorization': `Bearer ${token}`
                         }
                 })
-                console.log(response.data)
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
             } catch (err) {}
         }
-        fetchAttraction().then(r => {console.log(r)})
-        fetchDiscussions().then(r => {console.log(r)})
+
+        // const fetchAddress = async() => {
+        //     let coords = []
+        //     try {
+        //         coords = await axios.get(
+        //         `${domain}?apikey=${API_KEY}&geocode=Москва, улица Амурская, 1Ак1&format=json`
+        //         )
+        //     }
+        //     catch (err) {}
+        //     setBalloon(coords.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos)
+        // }
+
+        fetchAttraction()
+        fetchDiscussions()
+        // fetchAddress()
     }, [attractionUuid, name]);
+
+    useEffect(() => {
+        if (balloon) {
+            const lon = balloon.substring(0, balloon.indexOf(' '))
+            const lat = balloon.substring(balloon.indexOf(' ') + 1)
+            setLatitude(lat)
+            setLongitude(lon)
+        }
+    }, [balloon]) // This effect runs whenever 'balloon' changes
+
 
     const handleLeaveDiscussion = () => {
         setShowCreateDiscussionForm(true); // Open the pop-up
@@ -83,7 +112,6 @@ function Attraction() {
             );
 
             // TODO: загрузка картинок к отзывам
-
             // if (images) {
             //     formData.append('images', images)
             // }
@@ -156,6 +184,13 @@ function Attraction() {
                     </div>
                 </div>
             </div>
+            {/*<YMaps>*/}
+            {/*    <div className="map">*/}
+            {/*        <Map defaultState={{ center: [latitude, longitude], zoom: 15}} width="93%" height="40vh">*/}
+            {/*            <Placemark geometry={[latitude, longitude]}/>*/}
+            {/*        </Map>*/}
+            {/*    </div>*/}
+            {/*</YMaps>*/}
             <div className="discussion-main-container">
                 <div className="leave-discussion-container">
                     <button className="leave-discussion" onClick={handleLeaveDiscussion}>

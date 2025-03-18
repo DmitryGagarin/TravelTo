@@ -44,9 +44,10 @@ public class UserSignUpFirstFormValidator implements Validator {
             errors.rejectValue(ValidationFields.EMAIL,  ValidationErrorCodes.EMAIL_IS_REQUIRED);
         }
 
-        if (!ValidationConstants.ALLOWED_EMAIL_DOMAINS.contains(userSignupFormFirst.getEmail())) {
-            errors.rejectValue(ValidationFields.EMAIL, ValidationErrorCodes.EMAIL_PROHIBITED_DOMAIN);
-        }
+        // TODO: неправильная валидация, нужно обрезать до точки
+//        if (!ValidationConstants.ALLOWED_EMAIL_DOMAINS.contains(userSignupFormFirst.getEmail())) {
+//            errors.rejectValue(ValidationFields.EMAIL, ValidationErrorCodes.EMAIL_PROHIBITED_DOMAIN);
+//        }
 
         if (Objects.nonNull(password) && password.length() < ValidationConstants.USER_PASSWORD_MIN_LENGTH) {
             errors.rejectValue(ValidationFields.PASSWORD, ValidationErrorCodes.PASSWORD_TOO_SHORT);

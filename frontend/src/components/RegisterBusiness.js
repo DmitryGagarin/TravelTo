@@ -7,7 +7,9 @@ function RegisterBusiness() {
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [address, setAddress] = useState('');
+    const [city, setCity] = useState('');
+    const [street, setStreet] = useState('');
+    const [household, setHousehold] = useState('');
     const [image, setImage] = useState('');
     const [phone, setPhone] = useState('');
     const [website, setWebsite] = useState('');
@@ -34,7 +36,7 @@ function RegisterBusiness() {
             const formJson = {
                 name,
                 description,
-                address,
+                address: city + ", " + street + ", " + household,
                 phone,
                 website,
                 attractionType: type,
@@ -108,11 +110,27 @@ function RegisterBusiness() {
                 />
                 <MDBInput
                     wrapperClass='mb-4'
-                    placeholder='Address'
-                    id='address'
-                    value={address}
+                    placeholder='City'
+                    id='city'
+                    value={city}
                     type='text'
-                    onChange={(e) => setAddress(e.target.value)}
+                    onChange={(e) => setCity(e.target.value)}
+                />
+                <MDBInput
+                    wrapperClass='mb-4'
+                    placeholder='Street'
+                    id='street'
+                    value={street}
+                    type='text'
+                    onChange={(e) => setStreet(e.target.value)}
+                />
+                <MDBInput
+                    wrapperClass='mb-4'
+                    placeholder='Household'
+                    id='household'
+                    value={household}
+                    type='text'
+                    onChange={(e) => setHousehold(e.target.value)}
                 />
                 <MDBInput
                     wrapperClass='mb-4'
