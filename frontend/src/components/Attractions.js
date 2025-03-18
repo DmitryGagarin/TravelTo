@@ -3,16 +3,17 @@ import axios from "axios"
 import { Link } from 'react-router-dom'
 import Header from './Header'
 import { MDBInput } from "mdb-react-ui-kit"
-import {FaHeart} from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 
 function Attractions() {
     const [attractions, setAttractions] = useState([])
     const [types, setTypes] = useState([])
     const [selectedTypes, setSelectedTypes] = useState([])
+    const [likedAttraction, setLikedAttraction] = useState(null) // State to store the attraction to be liked
     const token = JSON.parse(localStorage.getItem('user'))?.token
-
     const authUser = JSON.parse(localStorage.getItem('user'))
 
+    // Fetch the attractions and types
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
@@ -29,8 +30,30 @@ function Attractions() {
                 console.error(err)
             }
         }
-        fetchAttractions().then(r => console.log(r))
-    }, [])
+        fetchAttractions()
+    }, [token])
+
+    // Trigger the like API call when likedAttraction changes
+    useEffect(() => {
+        if (likedAttraction) {
+            const handleLike = async (name) => {
+                try {
+                    console.log('Authorization', `Bearer ${authUser.token}`)
+                    await axios.post(`http://localhost:8080/like/add/${name}`, {}, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authUser.token}`,
+                        },
+                    })
+                } catch (err) {
+                    console.error('Error liking attraction:', err)
+                }
+            }
+
+            // Call handleLike when likedAttraction changes
+            handleLike(likedAttraction)
+        }
+    }, [likedAttraction]) // Only run when likedAttraction changes
 
     // Handle the change in selected types
     const handleTypeChange = (event) => {
@@ -42,6 +65,7 @@ function Attractions() {
         )
     }
 
+    // Handle the search functionality
     const handleSearch = () => {
         const searchText = document.getElementById('filterInput').value.toLowerCase()
         const filteredAttractions = attractions.filter(attraction =>
@@ -54,19 +78,6 @@ function Attractions() {
     const filteredAttractions = attractions.filter(attraction =>
         selectedTypes.length === 0 || selectedTypes.includes(attraction.type)
     )
-
-    const handleLike = async(name) => {
-        try {
-            console.log('Authorization', `Bearer ${authUser.token}`)
-            console.log(authUser.token)
-            await axios.post(`http://localhost:8080/like/add/${name}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + authUser.token
-                }
-            })
-        } catch (err) {}
-    }
 
     return (
         <div>
@@ -84,7 +95,7 @@ function Attractions() {
                                     />
                                     <div className="attraction-type">{attraction.type}</div>
                                     <div className="like">
-                                        <FaHeart onClick={() => handleLike(attraction.name)}>U+2665;</FaHeart>
+                                        <FaHeart onClick={() => setLikedAttraction(attraction.name)} />
                                     </div>
                                 </div>
                                 <div className="rating">

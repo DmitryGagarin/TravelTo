@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,14 +38,18 @@ public class LikesServiceImpl implements LikesService {
         @NotNull AuthUser authUser
     ) {
         Likes like = new Likes();
-        like.setAttractionId(attractionService.getByName(attractionName).getId());
-        like.setUserId(userService.findByUuid(authUser.getUuid()).getId());
+        like
+            .setCreatedAt(LocalDateTime.now())
+            .setUpdatedAt(LocalDateTime.now());
+        like
+            .setAttractionId(attractionService.getByName(attractionName).getId())
+            .setUserId(userService.findByUuid(authUser.getUuid()).getId());
         return likesRepository.save(like);
     }
 
     @Override
     public List<Likes> getAllByUser(AuthUser authUser) {
         Long id = userService.findByUuid(authUser.getUuid()).getId();
-        return likesRepository.findAllById(Collections.singleton(id));
+        return likesRepository.findAllByUserId(id);
     }
 }

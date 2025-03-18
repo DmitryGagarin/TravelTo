@@ -14,7 +14,7 @@ function Liked() {
                     'Authorization': `Bearer ${token}`
                 }
             })
-            console.log(response.data)
+            console.log(response)
             setLikes(response.data._embedded.likesModelList || [])
         }
         fetchLikes()
