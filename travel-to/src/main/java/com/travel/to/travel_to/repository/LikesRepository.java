@@ -1,10 +1,10 @@
 package com.travel.to.travel_to.repository;
 
-import com.travel.to.travel_to.entity.Attraction;
 import com.travel.to.travel_to.entity.Likes;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
