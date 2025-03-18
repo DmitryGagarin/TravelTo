@@ -15,6 +15,9 @@ public interface AttractionService {
     List<Attraction> findAll();
 
     @NotNull
+    List<Attraction> findAllByAttractionId(@NotNull Long attractionId);
+
+    @NotNull
     List<Attraction> findAllByOwner(@NotNull AuthUser authUser);
 
     @NotNull

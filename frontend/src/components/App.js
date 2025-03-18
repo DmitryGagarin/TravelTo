@@ -13,6 +13,7 @@ import Attraction from './Attraction'
 import Settings from './Settings';
 import Account from './Account'
 import RegisterBusiness from './RegisterBusiness'
+import Liked from './Liked'
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>
+                    <Route path="/likes" element={<Liked/>}/>
                     <Route path="/home" element={<Home/>}/>
                     <Route path="/signup" element={<SignUpStepOne/>}/>
                     <Route path="/signup/name" element={<SignUpStepTwo/>}/>

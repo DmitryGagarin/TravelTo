@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,11 @@ public class AttractionServiceImpl implements AttractionService {
     @Override
     public List<Attraction> findAll() {
         return attractionRepository.findAll();
+    }
+
+    @Override
+    public List<Attraction> findAllByAttractionId(Long attractionId) {
+        return attractionRepository.findAllById(Collections.singleton(attractionId));
     }
 
     @Override

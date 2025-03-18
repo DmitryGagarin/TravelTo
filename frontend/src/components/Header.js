@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaUserAlt, FaCog } from 'react-icons/fa'; // Importing icons for Account and Settings
+import React, {useEffect, useState} from 'react'
+import { useNavigate } from 'react-router-dom'
+import {FaUserAlt, FaCog, FaHeart} from 'react-icons/fa'
 
 function Header() {
     const [user, setUser] = useState('')
@@ -13,6 +13,10 @@ function Header() {
     const handleSettingsClick = () => {
         navigate('/settings'); // Redirect to the settings page
     };
+
+    const handleLiked = () => {
+        navigate('/likes')
+    }
 
     const handleAttractionsClick = () => {
         navigate('/attractions')
@@ -43,6 +47,9 @@ function Header() {
                 </button>
                 <button onClick={handleSettingsClick} className="btn btn-light">
                     <FaCog size={24} />
+                </button>
+                <button onClick={handleLiked} className="btn btn-light">
+                    <FaHeart size={24} />
                 </button>
             </div>
         </header>

@@ -1,6 +1,6 @@
 create table users
 (
-    id         serial PRIMARY KEY                                   not null,
+    id         serial primary key                                   not null,
     uuid       varchar             default gen_random_uuid()        not null,
     created_at timestamp           default now()                    not null,
     updated_at timestamp           default now()                    not null,

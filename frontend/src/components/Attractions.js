@@ -3,16 +3,19 @@ import axios from "axios"
 import { Link } from 'react-router-dom'
 import Header from './Header'
 import { MDBInput } from "mdb-react-ui-kit"
+import {FaHeart} from "react-icons/fa";
 
 function Attractions() {
     const [attractions, setAttractions] = useState([])
     const [types, setTypes] = useState([])
     const [selectedTypes, setSelectedTypes] = useState([])
+    const token = JSON.parse(localStorage.getItem('user'))?.token
+
+    const authUser = JSON.parse(localStorage.getItem('user'))
 
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
-                const token = JSON.parse(localStorage.getItem('user'))?.token
                 const response = await axios.get("http://localhost:8080/attraction", {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -52,6 +55,19 @@ function Attractions() {
         selectedTypes.length === 0 || selectedTypes.includes(attraction.type)
     )
 
+    const handleLike = async(name) => {
+        try {
+            console.log('Authorization', `Bearer ${authUser.token}`)
+            console.log(authUser.token)
+            await axios.post(`http://localhost:8080/like/add/${name}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + authUser.token
+                }
+            })
+        } catch (err) {}
+    }
+
     return (
         <div>
             <Header />
@@ -67,6 +83,9 @@ function Attractions() {
                                         className="card-image"
                                     />
                                     <div className="attraction-type">{attraction.type}</div>
+                                    <div className="like">
+                                        <FaHeart onClick={() => handleLike(attraction.name)}>U+2665;</FaHeart>
+                                    </div>
                                 </div>
                                 <div className="rating">
                                     Rating: {attraction.rating}
