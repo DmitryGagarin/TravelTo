@@ -14,4 +14,5 @@ public class ValidationErrorCodes {
 
     public static final String ATTRACTION_ALREADY_EXISTS = "attraction.already-exists";
     public static final String ATTRACTION_DISCUSSION_CONTENT_TOO_SHORT = "attraction.discussion.content.too-short";
+    public static final String ATTRACTION_DESCRIPTION_TOO_LONG = "attraction.description.too-long";
 }

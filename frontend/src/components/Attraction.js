@@ -41,7 +41,8 @@ function Attraction() {
                     })
                 setAttraction(response.data)
                 setAttractionUuid(response.data.uuid)
-            } catch (err) {}
+            } catch (err) {
+            }
         }
 
         const fetchDiscussions = async () => {
@@ -52,9 +53,10 @@ function Attraction() {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
-                })
+                    })
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
-            } catch (err) {}
+            } catch (err) {
+            }
         }
 
         // const fetchAddress = async() => {
@@ -84,14 +86,21 @@ function Attraction() {
 
 
     const handleLeaveDiscussion = () => {
-        setShowCreateDiscussionForm(true); // Open the pop-up
+        if (showCreateDiscussionForm) {
+            setShowCreateDiscussionForm(false); // Close the pop-up
+        } else {
+            setShowCreateDiscussionForm(true);
+        }// Close the pop-up
     };
 
     const handleClosePopup = () => {
-        setShowCreateDiscussionForm(false); // Close the pop-up
+        if (showCreateDiscussionForm) {
+            setShowCreateDiscussionForm(false); // Close the pop-up
+        }
+        // setShowCreateDiscussionForm(true); // Close the pop-up
     };
 
-    const handleSendDiscussion = async(e) => {
+    const handleSendDiscussion = async (e) => {
         e.preventDefault()
 
         try {
@@ -107,7 +116,7 @@ function Attraction() {
             formData.append('attractionDiscussionCreateForm',
                 new Blob(
                     [JSON.stringify(formJson)],
-                    { type: 'application/json' }
+                    {type: 'application/json'}
                 )
             );
 
@@ -202,55 +211,50 @@ function Attraction() {
                 {showCreateDiscussionForm && (
                     <div className="popup">
                         <div className="popup-content">
-                            <button className="close-popup" onClick={handleClosePopup}>X</button>
-                            <h2>Leave a Comment</h2>
+                            {/*<button className="close-popup" onClick={handleClosePopup}>X</button>*/}
+                            <h2>Leave Comment</h2>
                             <form onSubmit={handleSendDiscussion}>
-                                <div>
-                                    <label>Title:</label>
-                                    <MDBInput
-                                        type="text"
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label>What did you like?</label>
-                                    <MDBInput
-                                        type="text"
-                                        value={contentLike}
-                                        onChange={(e) => setContentLike(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label>What did you dislike?</label>
-                                    <MDBInput
-                                        type="text"
-                                        value={contentDislike}
-                                        onChange={(e) => setContentDislike(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label>Overall thoughts:</label>
-                                    <MDBTextArea
-                                        value={content}
-                                        onChange={(e) => setContent(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label>Rating:</label>
-                                    <MDBInput
-                                        type="number"
-                                        min="1"
-                                        max="5"
-                                        value={rating}
-                                        onChange={(e) => setRating(e.target.value)}
-                                        required
-                                    />
-                                </div>
+                                <MDBInput
+                                    placeholder="Title"
+                                    type="text"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    required
+                                    style={{ marginBottom: '10px' }}
+                                />
+                                <MDBInput
+                                    placeholder="What you liked?"
+                                    type="text"
+                                    value={contentLike}
+                                    onChange={(e) => setContentLike(e.target.value)}
+                                    required
+                                    style={{ marginBottom: '10px' }}
+                                />
+                                <MDBInput
+                                    placeholder="What you disliked?"
+                                    type="text"
+                                    value={contentDislike}
+                                    onChange={(e) => setContentDislike(e.target.value)}
+                                    required
+                                    style={{ marginBottom: '10px' }}
+                                />
+                                <MDBTextArea
+                                    placeholder="Overall"
+                                    value={content}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    required
+                                    style={{ marginBottom: '10px' }}
+                                />
+                                <MDBInput
+                                    placeholder="Mark"
+                                    type="number"
+                                    min="1"
+                                    max="5"
+                                    value={rating}
+                                    onChange={(e) => setRating(e.target.value)}
+                                    required
+                                    style={{ marginBottom: '10px' }}
+                                />
                                 <button type="submit">Submit Comment</button>
                             </form>
                         </div>
@@ -260,25 +264,25 @@ function Attraction() {
                     <div className="discussion-container">
                         {discussions.map((discussion) => (
                             <div key={discussion.id} className="discussion-card">
-                                <div className="discussion-author">
+                                <div className="discussion-author discussion-part">
                                     Author: {discussion.author}
                                 </div>
-                                <div className="discussion-title">
+                                <div className="discussion-title discussion-part">
                                     Title: {discussion.title}
                                 </div>
-                                <div className="discussion-like">
+                                <div className="discussion-like discussion-part">
                                     Liked: {discussion.contentLike}
                                 </div>
-                                <div className="discussion-dislike">
+                                <div className="discussion-dislike discussion-part">
                                     Disliked: {discussion.contentDislike}
                                 </div>
-                                <div className="discussion-content">
+                                <div className="discussion-content discussion-part">
                                     Review: {discussion.content}
                                 </div>
-                                <div className="discussion-ration">
+                                <div className="discussion-ration discussion-part">
                                     Overall: {discussion.rating}
                                 </div>
-                                <div className="discussion-created_at">
+                                <div className="discussion-created_at discussion-part">
                                     Created at: {discussion.createdAt}
                                 </div>
                             </div>

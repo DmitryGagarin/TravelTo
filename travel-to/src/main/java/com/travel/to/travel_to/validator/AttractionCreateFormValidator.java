@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.validator;
 
 import com.travel.to.travel_to.constants.RegExConstants;
+import com.travel.to.travel_to.constants.ValidationConstants;
 import com.travel.to.travel_to.constants.ValidationErrorCodes;
 import com.travel.to.travel_to.constants.ValidationFields;
 import com.travel.to.travel_to.form.AttractionCreateForm;
@@ -40,6 +41,10 @@ public class AttractionCreateFormValidator implements Validator {
 
         if (!attractionCreateForm.getPhone().matches(RegExConstants.PHONE_NUMBER_PATTERN)) {
             errors.rejectValue(ValidationFields.PHONE_NUMBER, ValidationErrorCodes.PHONE_NUMBER_INCORRECT);
+        }
+
+        if (attractionCreateForm.getDescription().length() > ValidationConstants.ATTRACTION_DISCUSSION_DESCRIPTION_MAX_LENGTH) {
+            errors.rejectValue(ValidationFields.ATTRACTION_DESCRIPTION, ValidationErrorCodes.ATTRACTION_DESCRIPTION_TOO_LONG);
         }
     }
 }

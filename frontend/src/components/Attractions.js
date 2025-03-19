@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from "axios"
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Header from './Header'
-import { MDBInput } from "mdb-react-ui-kit"
-import { FaHeart } from "react-icons/fa";
+import {MDBInput} from "mdb-react-ui-kit"
+import {FaHeart} from "react-icons/fa";
 
 function Attractions() {
     const [attractions, setAttractions] = useState([])
@@ -11,7 +11,6 @@ function Attractions() {
     const [selectedTypes, setSelectedTypes] = useState([])
     const [likedAttraction, setLikedAttraction] = useState(null) // State to store the attraction to be liked
     const token = JSON.parse(localStorage.getItem('user'))?.token
-    const authUser = JSON.parse(localStorage.getItem('user'))
 
     // Fetch the attractions and types
     useEffect(() => {
@@ -38,11 +37,10 @@ function Attractions() {
         if (likedAttraction) {
             const handleLike = async (name) => {
                 try {
-                    console.log('Authorization', `Bearer ${authUser.token}`)
                     await axios.post(`http://localhost:8080/like/add/${name}`, {}, {
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${authUser.token}`,
+                            'Authorization': `Bearer ${token}`,
                         },
                     })
                 } catch (err) {
@@ -81,7 +79,7 @@ function Attractions() {
 
     return (
         <div>
-            <Header />
+            <Header/>
             <div className="attractions-main-container">
                 <div className="attractions-container">
                     <div className="cards-container">
@@ -93,39 +91,43 @@ function Attractions() {
                                         alt={attraction.name}
                                         className="card-image"
                                     />
-                                    <div className="attraction-type">{attraction.type}</div>
-                                    <div className="like">
-                                        <FaHeart onClick={() => setLikedAttraction(attraction.name)} />
+                                </div>
+                                <div className="attraction-data">
+                                    <div className="attraction-type">
+                                        {attraction.type}
                                     </div>
-                                </div>
-                                <div className="rating">
-                                    Rating: {attraction.rating}
-                                </div>
-                                <div className="contact-info">
-                                    <p>
-                                        Website:{" "}
-                                        <a
-                                            href={attraction.website}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            Visit
-                                        </a>
-                                    </p>
-                                    <p>Phone: {attraction.phone}</p>
-                                </div>
-                                <div className="learn-more">
-                                    <button className="learn-more-button">
-                                        <Link to={`/attraction/${attraction.name}`}>Learn More</Link>
-                                    </button>
-                                </div>
-                                <div className="name-description">
-                                    <h5>{attraction.name}</h5>
-                                    <p>{attraction.description}</p>
-                                </div>
-                                <div className="opening-time">
-                                    <p>Opening Time: {attraction.openTime}</p>
-                                    <p>Closing Time: {attraction.closeTime}</p>
+                                    <div className="like">
+                                        <FaHeart onClick={() => setLikedAttraction(attraction.name)}/>
+                                    </div>
+                                    <div className="rating">
+                                        Rating: {attraction.rating}
+                                    </div>
+                                    <div className="contact-info">
+                                        <p>
+                                            Website:{" "}
+                                            <a
+                                                href={attraction.website}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Visit
+                                            </a>
+                                        </p>
+                                        <p>Phone: {attraction.phone}</p>
+                                    </div>
+                                    <div className="name-description">
+                                        <h5>{attraction.name}</h5>
+                                        <p>{attraction.description}</p>
+                                    </div>
+                                    <div className="learn-more">
+                                        <button className="learn-more-button">
+                                            <Link to={`/attraction/${attraction.name}`}>Learn More</Link>
+                                        </button>
+                                    </div>
+                                    <div className="time">
+                                        <p>Opening Time: {attraction.openTime}</p>
+                                        <p>Closing Time: {attraction.closeTime}</p>
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -134,17 +136,17 @@ function Attractions() {
 
                 {/* Filter Container */}
                 <div className="filter-container">
-                    <h5>Filter by Type</h5>
+                    <h5>Filter</h5>
                     <div className="checkboxes">
                         {types.map((type) => (
                             <div key={type} className="checkbox-container">
+                                <label>{type}</label>
                                 <input
                                     type="checkbox"
                                     value={type}
                                     checked={selectedTypes.includes(type)}
                                     onChange={handleTypeChange}
                                 />
-                                <label>{type}</label>
                             </div>
                         ))}
                     </div>
