@@ -2,12 +2,14 @@ package com.travel.to.travel_to.model;
 
 import org.springframework.hateoas.PagedModel;
 
+import java.util.List;
+
 public class AttractionModel extends PagedModel<AttractionModel> {
     private String uuid;
     private String name;
     private String description;
     private String address;
-    private byte[] image;
+    private List<byte[]> images;
     private String phone;
     private String website;
     private String type;
@@ -51,12 +53,12 @@ public class AttractionModel extends PagedModel<AttractionModel> {
         return this;
     }
 
-    public byte[] getImage() {
-        return image;
+    public List<byte[]> getImages() {
+        return images;
     }
 
-    public AttractionModel setImage(byte[] image) {
-        this.image = image;
+    public AttractionModel setImages(List<byte[]> images) {
+        this.images = images;
         return this;
     }
 

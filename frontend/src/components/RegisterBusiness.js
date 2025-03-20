@@ -10,7 +10,7 @@ function RegisterBusiness() {
     const [city, setCity] = useState('');
     const [street, setStreet] = useState('');
     const [household, setHousehold] = useState('');
-    const [image, setImage] = useState('');
+    const [images, setImages] = useState([]);
     const [phone, setPhone] = useState('');
     const [website, setWebsite] = useState('');
     const [type, setType] = useState('');
@@ -22,7 +22,7 @@ function RegisterBusiness() {
     const authUser = JSON.parse(localStorage.getItem('user'));
 
     const handleImageChange = (e) => {
-        setImage(e.target.files[0]); // Set the file object
+        setImages([...e.target.files]); // Set the file object
     };
 
     const handleRegistration = async (e) => {
@@ -50,14 +50,15 @@ function RegisterBusiness() {
                     [JSON.stringify(formJson)],
                     { type: 'application/json' }
                 )
-            );
+            )
 
             // Append the image file as a separate part
-            if (image) {
-                formData.append('image', image);
+            if (images.length > 0) {
+                images.forEach((image, index) => {
+                    formData.append('images', image); // Each file gets appended as 'images' with a unique key
+                })
             }
 
-            // Send the request
             await axios.post(
                 "http://localhost:8080/attraction/register-business",
                 formData,
@@ -134,9 +135,10 @@ function RegisterBusiness() {
                 />
                 <MDBInput
                     wrapperClass='mb-4'
-                    placeholder='Choose an image'
-                    id='image'
+                    placeholder='Choose images'
+                    id='images'
                     type='file'
+                    multiple
                     onChange={handleImageChange}
                 />
                 <MDBInput

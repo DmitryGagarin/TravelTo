@@ -12,16 +12,24 @@ import java.util.Objects;
 public class ValidationUtils {
 
     public boolean validateImageFileFormat(
-        @NotNull MultipartFile image,
+        @NotNull MultipartFile[] images,
         @NotNull BindingResult bindingResult
     ) {
-        String imageExtension =
-            Objects.requireNonNull(image.getOriginalFilename())
-                .substring(1 + image.getOriginalFilename().lastIndexOf("."));
+        boolean isValid = true;
+        for (MultipartFile image : images) {
+            String imageExtension =
+                Objects.requireNonNull(image.getOriginalFilename())
+                    .substring(1 + image.getOriginalFilename().lastIndexOf("."));
+            if (!
+                (!image.isEmpty()
+                && ValidationConstants.ALLOWED_IMAGE_FORMATS.contains(imageExtension)
+                && image.getSize() <= ValidationConstants.MAX_FILE_SIZE)
+            ) {
+                isValid = false;
+                break;
+            }
 
-        return
-            !image.isEmpty()
-            && ValidationConstants.ALLOWED_IMAGE_FORMATS.contains(imageExtension)
-            && image.getSize() <= ValidationConstants.MAX_FILE_SIZE;
+        }
+        return isValid;
     }
 }

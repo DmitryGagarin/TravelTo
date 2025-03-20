@@ -3,8 +3,12 @@ package com.travel.to.travel_to.service.impl;
 import com.travel.to.travel_to.constants.DefaultInitialValues;
 import com.travel.to.travel_to.entity.Attraction;
 import com.travel.to.travel_to.entity.AuthUser;
+import com.travel.to.travel_to.entity.User;
+import com.travel.to.travel_to.entity.UserType;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.repository.AttractionRepository;
+import com.travel.to.travel_to.repository.UserRepository;
+import com.travel.to.travel_to.service.AttractionImageService;
 import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.service.UserService;
 import jakarta.validation.constraints.NotNull;
@@ -22,13 +26,17 @@ public class AttractionServiceImpl implements AttractionService {
 
     private final AttractionRepository attractionRepository;
     private final UserService userService;
+    private final AttractionImageService attractionImageService;
 
     @Autowired
     public AttractionServiceImpl(
         AttractionRepository attractionRepository,
-        UserService userService) {
+        UserService userService,
+        AttractionImageService attractionImageService
+    ) {
         this.attractionRepository = attractionRepository;
         this.userService = userService;
+        this.attractionImageService = attractionImageService;
     }
 
     @Override
@@ -51,22 +59,15 @@ public class AttractionServiceImpl implements AttractionService {
     public Attraction createAttraction(
         @NotNull AttractionCreateForm attractionCreateForm,
         @NotNull AuthUser authUser,
-        @NotNull MultipartFile image
+        @NotNull MultipartFile[] images
     ) {
-        byte[] imageBytes;
-        try {
-            imageBytes = image.getBytes();
-        } catch (IOException ignored) {
-            throw new RuntimeException("Can't get bytes of image");
-        }
+        userService.updateUserType(authUser);
 
-        // TODO: менять тип юзера при создании им достопремечательности
         Attraction attraction = new Attraction();
         attraction
             .setName(attractionCreateForm.getName())
             .setDescription(attractionCreateForm.getDescription())
             .setAddress(attractionCreateForm.getAddress())
-            .setImage(imageBytes)
             .setPhone(attractionCreateForm.getPhone())
             .setWebsite(attractionCreateForm.getWebsite())
             .setOpenTime(attractionCreateForm.getOpenTime())
@@ -74,7 +75,15 @@ public class AttractionServiceImpl implements AttractionService {
             .setType(attractionCreateForm.getAttractionType())
             .setRating(DefaultInitialValues.INITIAL_ATTRACTION_RATING)
             .setOwner(userService.findByUuid(authUser.getUuid()));
-        return attractionRepository.save(attraction);
+        attractionRepository.save(attraction);
+
+        try {
+            attractionImageService.create(images, attraction.getId());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return attraction;
     }
 
     @Override

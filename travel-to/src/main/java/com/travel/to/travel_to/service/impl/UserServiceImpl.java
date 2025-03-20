@@ -109,6 +109,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @NotNull
+    public User updateUserType(AuthUser authUser) {
+        User user = findByUuid(authUser.getUuid());
+        user.setUserType(UserType.BUSINESS_OWNER);
+        return userRepository.save(user);
+    }
+
+    @Override
+    @NotNull
     public User findByUuid(
         @NotNull String userUuid
     ) {

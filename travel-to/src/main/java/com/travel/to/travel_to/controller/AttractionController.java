@@ -95,16 +95,16 @@ public class AttractionController {
     public Attraction registerBusiness(
         @Validated @RequestPart("attractionCreateForm") AttractionCreateForm attractionCreateForm,
         BindingResult bindingResult,
-        @RequestPart(value = "image") MultipartFile image,
+        @RequestPart(value = "images") MultipartFile[] images,
         @AuthenticationPrincipal AuthUser authUser
     ) throws BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        if (!validationUtils.validateImageFileFormat(image, bindingResult)) {
+        if (!validationUtils.validateImageFileFormat(images, bindingResult)) {
             throw new FileExtensionException("This image format not allowed");
         }
-        return attractionService.createAttraction(attractionCreateForm, authUser, image);
+        return attractionService.createAttraction(attractionCreateForm, authUser, images);
     }
 
     @GetMapping("/{name}")

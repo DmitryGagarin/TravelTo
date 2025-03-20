@@ -7,27 +7,28 @@ import {MDBInput, MDBTextArea} from "mdb-react-ui-kit";
 
 function Attraction() {
     const API_KEY = process.env.REACT_APP_YANDEX_MAP_API_KEY
+    const domain = "https://geocode-maps.yandex.ru/v1/"
 
     const {name} = useParams()
-    const [error, setError] = useState('')
 
+    const [error, setError] = useState('')
     const [attraction, setAttraction] = useState('')
     const [discussions, setDiscussions] = useState([])
     const [attractionUuid, setAttractionUuid] = useState('')
 
+    const [showCreateDiscussionForm, setShowCreateDiscussionForm] = useState(false)
+    const [currentImageIndex, setCurrentImageIndex] = useState(0); // Initialize the current image index state
     const [title, setTitle] = useState('')
     const [contentLike, setContentLike] = useState('')
     const [contentDislike, setContentDislike] = useState('')
     const [content, setContent] = useState('')
     const [rating, setRating] = useState('')
-    // const [images, setImages] = useState([])
+
     const [balloon, setBalloon] = useState('')
     const [latitude, setLatitude] = useState('')
     const [longitude, setLongitude] = useState('')
 
-    const domain = "https://geocode-maps.yandex.ru/v1/"
-
-    const [showCreateDiscussionForm, setShowCreateDiscussionForm] = useState(false)
+    const [loading, setLoading] = useState(true); // Loading state to track fetching status
 
     useEffect(() => {
         const fetchAttraction = async () => {
@@ -42,8 +43,13 @@ function Attraction() {
                 setAttraction(response.data)
                 setAttractionUuid(response.data.uuid)
             } catch (err) {
+                setError('Failed to fetch attraction data');
+            } finally {
+                setLoading(false); // Set loading to false after data is fetched
             }
         }
+
+        // console.log(attraction)
 
         const fetchDiscussions = async () => {
             try {
@@ -84,22 +90,24 @@ function Attraction() {
         }
     }, [balloon]) // This effect runs whenever 'balloon' changes
 
+    useEffect(() => {
+        // Check if attraction is properly fetched and images is available
+        if (attraction && Array.isArray(attraction.images) && attraction.images.length > 0) {
+            setCurrentImageIndex(0); // Set to the first image initially
+        }
+    }, [attraction]);  // Trigger this effect when attraction is updated
 
     const handleLeaveDiscussion = () => {
         if (showCreateDiscussionForm) {
-            setShowCreateDiscussionForm(false); // Close the pop-up
+            setShowCreateDiscussionForm(false);
         } else {
             setShowCreateDiscussionForm(true);
-        }// Close the pop-up
-    };
-
-    const handleClosePopup = () => {
-        if (showCreateDiscussionForm) {
-            setShowCreateDiscussionForm(false); // Close the pop-up
         }
-        // setShowCreateDiscussionForm(true); // Close the pop-up
-    };
+    }
 
+    useEffect(() => {
+
+    }, []);
     const handleSendDiscussion = async (e) => {
         e.preventDefault()
 
@@ -150,20 +158,55 @@ function Attraction() {
         }
     }
 
+    const handleNextImage = (index, images) => {
+        return (index + 1) % images.length; // Wrap around the image array
+    };
+
+    const handlePrevImage = (index, images) => {
+        return (index - 1 + images.length) % images.length; // Wrap around the image array
+    };
+
+    // If loading, show loading message or spinner
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!attraction) {
+        return <div>No attraction data available</div>; // If attraction data is null, show an error message
+    }
+
+    // console.log(attraction.images)
+
     return (
         <div>
             <Header/>
             <div className="attraction-main-container">
                 <div className="attraction-container">
                     <div className="cards-container">
-                        <div key={attraction.id} className="attraction-card">
+                        <div className="attraction-card">
                             <div className="image-container">
                                 <img
-                                    src={`data:image/png;base64,${attraction.image}`}
+                                    src={`data:image/png;base64,${attraction.images[currentImageIndex]}`}
                                     alt={attraction.name}
                                     className="card-image"
                                 />
-                                <div className="attraction-type">{attraction.type}</div>
+                                <div className="image-navigation">
+                                    <button
+                                        className="image-nav-button left"
+                                        onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, attraction.images))}
+                                        disabled={attraction.images.length <= 1}
+                                    >
+                                        &lt;
+                                    </button>
+
+                                    <button
+                                        className="image-nav-button right"
+                                        onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, attraction.images))}
+                                        disabled={attraction.images.length <= 1}
+                                    >
+                                        &gt;
+                                    </button>
+                                </div>
                             </div>
                             <div className="rating">
                                 Rating: {attraction.rating}
@@ -193,13 +236,20 @@ function Attraction() {
                     </div>
                 </div>
             </div>
-            {/*<YMaps>*/}
-            {/*    <div className="map">*/}
-            {/*        <Map defaultState={{ center: [latitude, longitude], zoom: 15}} width="93%" height="40vh">*/}
-            {/*            <Placemark geometry={[latitude, longitude]}/>*/}
-            {/*        </Map>*/}
-            {/*    </div>*/}
-            {/*</YMaps>*/}
+            {/*<YMaps>*/
+            }
+            {/*    <div className="map">*/
+            }
+            {/*        <Map defaultState={{ center: [latitude, longitude], zoom: 15}} width="93%" height="40vh">*/
+            }
+            {/*            <Placemark geometry={[latitude, longitude]}/>*/
+            }
+            {/*        </Map>*/
+            }
+            {/*    </div>*/
+            }
+            {/*</YMaps>*/
+            }
             <div className="discussion-main-container">
                 <div className="leave-discussion-container">
                     <button className="leave-discussion" onClick={handleLeaveDiscussion}>
@@ -220,7 +270,7 @@ function Attraction() {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                     required
-                                    style={{ marginBottom: '10px' }}
+                                    style={{marginBottom: '10px'}}
                                 />
                                 <MDBInput
                                     placeholder="What you liked?"
@@ -228,7 +278,7 @@ function Attraction() {
                                     value={contentLike}
                                     onChange={(e) => setContentLike(e.target.value)}
                                     required
-                                    style={{ marginBottom: '10px' }}
+                                    style={{marginBottom: '10px'}}
                                 />
                                 <MDBInput
                                     placeholder="What you disliked?"
@@ -236,14 +286,14 @@ function Attraction() {
                                     value={contentDislike}
                                     onChange={(e) => setContentDislike(e.target.value)}
                                     required
-                                    style={{ marginBottom: '10px' }}
+                                    style={{marginBottom: '10px'}}
                                 />
                                 <MDBTextArea
                                     placeholder="Overall"
                                     value={content}
                                     onChange={(e) => setContent(e.target.value)}
                                     required
-                                    style={{ marginBottom: '10px' }}
+                                    style={{marginBottom: '10px'}}
                                 />
                                 <MDBInput
                                     placeholder="Mark"
@@ -253,7 +303,7 @@ function Attraction() {
                                     value={rating}
                                     onChange={(e) => setRating(e.target.value)}
                                     required
-                                    style={{ marginBottom: '10px' }}
+                                    style={{marginBottom: '10px'}}
                                 />
                                 <button type="submit">Submit Comment</button>
                             </form>

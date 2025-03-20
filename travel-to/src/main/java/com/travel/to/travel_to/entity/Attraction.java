@@ -12,8 +12,6 @@ public class Attraction extends UuidAbleEntity {
     private String name;
     private String description;
     private String address;
-    @Column(name = "image")
-    private byte[] image;
     private String phone;
     private String website;
     private String type;
@@ -53,15 +51,6 @@ public class Attraction extends UuidAbleEntity {
 
     public Attraction setAddress(String address) {
         this.address = address;
-        return this;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public Attraction setImage(byte[] image) {
-        this.image = image;
         return this;
     }
 

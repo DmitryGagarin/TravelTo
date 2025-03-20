@@ -20,6 +20,9 @@ public interface UserService {
     AuthUser addUserInformation(@NotNull UserSignUpSecondForm userSignupFormSecond, @NotNull AuthUser authUser);
 
     @NotNull
+    User updateUserType(@NotNull AuthUser authUser);
+
+    @NotNull
     User findByUuid(@NotNull String userUuid);
 
     @NotNull

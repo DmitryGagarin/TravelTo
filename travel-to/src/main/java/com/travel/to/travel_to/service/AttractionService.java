@@ -24,7 +24,7 @@ public interface AttractionService {
     Attraction createAttraction(
         @NotNull AttractionCreateForm attractionCreateForm,
         @NotNull AuthUser authUser,
-        @NotNull MultipartFile image
+        @NotNull MultipartFile[] image
     );
 
     @NotNull
