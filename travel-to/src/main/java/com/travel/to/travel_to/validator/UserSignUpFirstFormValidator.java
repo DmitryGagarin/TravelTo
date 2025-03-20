@@ -42,11 +42,6 @@ public class UserSignUpFirstFormValidator implements Validator {
             errors.rejectValue(ValidationFields.PASSWORD,  ValidationErrorCodes.PASSWORD_IS_REQUIRED);
         }
 
-        if (Objects.isNull(email)) {
-            errors.rejectValue(ValidationFields.EMAIL,  ValidationErrorCodes.EMAIL_IS_REQUIRED);
-        }
-
-
         if (!ValidationConstants.ALLOWED_EMAIL_DOMAINS.contains(emailDomain)) {
             errors.rejectValue(ValidationFields.EMAIL, ValidationErrorCodes.EMAIL_PROHIBITED_DOMAIN);
         }

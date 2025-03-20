@@ -78,6 +78,7 @@ function Attractions() {
         selectedTypes.length === 0 || selectedTypes.includes(attraction.type)
     )
 
+    //TODO: смена картинок распространяется на все карточки на странице
     // Handle image navigation
     const handleNextImage = (index, images) => {
         return (index + 1) % images.length; // Wrap around the image array
@@ -85,6 +86,25 @@ function Attractions() {
 
     const handlePrevImage = (index, images) => {
         return (index - 1 + images.length) % images.length; // Wrap around the image array
+    };
+
+    const getAttractionCardStyle = (type) => {
+        switch (type.toLowerCase()) {
+            case 'museum':
+                return { backgroundColor: 'yellow', color: 'black' };
+            case 'gallery':
+                return { backgroundColor: 'orange', color: 'black' };
+            case 'park':
+                return { backgroundColor: 'green', color: 'white' };
+            case 'religious':
+                return { backgroundColor: 'lightgray', color: 'black' };
+            case 'cafe':
+                return { backgroundColor: 'wheat', color: 'black' };
+            case 'restaurant':
+                return { backgroundColor: 'pink', color: 'black' };
+            default:
+                return { backgroundColor: 'lightgray', color: 'black' };
+        }
     };
 
     return (
@@ -121,7 +141,7 @@ function Attractions() {
                                         </div>
                                     </div>
                                     <div className="attraction-data">
-                                        <div className="attraction-type">
+                                        <div className="attraction-type" style={getAttractionCardStyle(attraction.type)}>
                                             {attraction.type}
                                         </div>
                                         <div className="like">

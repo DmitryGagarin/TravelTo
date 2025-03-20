@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { MDBInput, MDBContainer } from "mdb-react-ui-kit"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import Settings from "./Settings";
 
 function RegisterBusiness() {
 
@@ -91,6 +92,7 @@ function RegisterBusiness() {
 
     return (
         <div>
+            <Settings/>
             <button onClick={handleHome}>Back</button>
             <MDBContainer>
                 <MDBInput
@@ -165,6 +167,7 @@ function RegisterBusiness() {
                 >
                     <option value="" disabled>Type</option>
                     <option value="museum">Museum</option>
+                    <option value="gallery">Gallery</option>
                     <option value="park">Park</option>
                     <option value="religious">Religious</option>
                     <option value="cafe">Cafe</option>

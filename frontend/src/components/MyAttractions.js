@@ -31,7 +31,7 @@ function MyAttractions() {
                             <div key={attraction.id} className="attraction-card">
                                 <div className="image-container">
                                     <img
-                                        src={`data:image/png;base64,${attraction.image}`}
+                                        src={`data:image/png;base64,${attraction.images[0]}`}
                                         alt={attraction.name}
                                         className="card-image"
                                     />

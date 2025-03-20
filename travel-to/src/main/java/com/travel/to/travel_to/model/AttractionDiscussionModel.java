@@ -2,7 +2,6 @@ package com.travel.to.travel_to.model;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class AttractionDiscussionModel extends RepresentationModel<AttractionDiscussionModel> {

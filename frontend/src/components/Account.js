@@ -5,6 +5,7 @@ import {
     MDBInput,
 } from "mdb-react-ui-kit";
 import {useNavigate} from "react-router-dom";
+import Settings from "./Settings";
 
 function Account() {
 
@@ -72,6 +73,7 @@ function Account() {
 
     return (
         <div>
+            <Settings/>
             <MDBContainer>
                 <button onClick={handleHome}> Home</button>
             </MDBContainer>
