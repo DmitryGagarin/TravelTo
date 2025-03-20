@@ -4,16 +4,20 @@ import com.travel.to.travel_to.entity.AttractionDiscussion;
 import com.travel.to.travel_to.entity.AuthUser;
 import com.travel.to.travel_to.form.CreateAttractionDiscussionForm;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface AttractionDiscussionService {
 
+    @NotNull
     AttractionDiscussion create(
-        CreateAttractionDiscussionForm createAttractionDiscussionForm,
-        AuthUser authuser,
-        String attractionUuid
-    );
+        @NotNull CreateAttractionDiscussionForm createAttractionDiscussionForm,
+        @NotNull AuthUser authuser,
+        @NotNull String attractionUuid,
+        @NotNull MultipartFile[] images
+    ) throws IOException;
 
     void delete(
         AuthUser authUser,

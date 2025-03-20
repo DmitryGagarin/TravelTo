@@ -35,25 +35,27 @@ public class UserSignUpFirstFormValidator implements Validator {
         UserSignUpFirstForm userSignupFormFirst = (UserSignUpFirstForm) target;
 
         String password = userSignupFormFirst.getPassword();
+        String email = userSignupFormFirst.getEmail();
+        String emailDomain = email.substring(email.lastIndexOf('.') + 1);
 
         if (Objects.isNull(userSignupFormFirst.getPassword())) {
             errors.rejectValue(ValidationFields.PASSWORD,  ValidationErrorCodes.PASSWORD_IS_REQUIRED);
         }
 
-        if (Objects.isNull(userSignupFormFirst.getEmail())) {
+        if (Objects.isNull(email)) {
             errors.rejectValue(ValidationFields.EMAIL,  ValidationErrorCodes.EMAIL_IS_REQUIRED);
         }
 
-        // TODO: неправильная валидация, нужно обрезать до точки
-//        if (!ValidationConstants.ALLOWED_EMAIL_DOMAINS.contains(userSignupFormFirst.getEmail())) {
-//            errors.rejectValue(ValidationFields.EMAIL, ValidationErrorCodes.EMAIL_PROHIBITED_DOMAIN);
-//        }
+
+        if (!ValidationConstants.ALLOWED_EMAIL_DOMAINS.contains(emailDomain)) {
+            errors.rejectValue(ValidationFields.EMAIL, ValidationErrorCodes.EMAIL_PROHIBITED_DOMAIN);
+        }
 
         if (Objects.nonNull(password) && password.length() < ValidationConstants.USER_PASSWORD_MIN_LENGTH) {
             errors.rejectValue(ValidationFields.PASSWORD, ValidationErrorCodes.PASSWORD_TOO_SHORT);
         }
 
-        if (userService.findByEmail(userSignupFormFirst.getEmail()).isPresent()) {
+        if (userService.findByEmail(email).isPresent()) {
             errors.rejectValue(ValidationFields.EMAIL, ValidationErrorCodes.EMAIL_ALREADY_EXISTS);
         }
     }

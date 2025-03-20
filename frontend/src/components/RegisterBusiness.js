@@ -1,36 +1,36 @@
-import React, { useState } from 'react';
-import { MDBInput, MDBContainer } from "mdb-react-ui-kit";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react'
+import { MDBInput, MDBContainer } from "mdb-react-ui-kit"
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 function RegisterBusiness() {
 
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [city, setCity] = useState('');
-    const [street, setStreet] = useState('');
-    const [household, setHousehold] = useState('');
-    const [images, setImages] = useState([]);
-    const [phone, setPhone] = useState('');
-    const [website, setWebsite] = useState('');
-    const [type, setType] = useState('');
-    const [openTime, setOpenTime] = useState('');
-    const [closeTime, setCloseTime] = useState('');
-    const [error, setError] = useState('');
+    const [name, setName] = useState('')
+    const [description, setDescription] = useState('')
+    const [city, setCity] = useState('')
+    const [street, setStreet] = useState('')
+    const [household, setHousehold] = useState('')
+    const [images, setImages] = useState([])
+    const [phone, setPhone] = useState('')
+    const [website, setWebsite] = useState('')
+    const [type, setType] = useState('')
+    const [openTime, setOpenTime] = useState('')
+    const [closeTime, setCloseTime] = useState('')
+    const [error, setError] = useState('')
 
-    const history = useNavigate();
-    const authUser = JSON.parse(localStorage.getItem('user'));
+    const history = useNavigate()
+    const authUser = JSON.parse(localStorage.getItem('user'))
 
     const handleImageChange = (e) => {
-        setImages([...e.target.files]); // Set the file object
-    };
+        setImages([...e.target.files]) // Set the file object
+    }
 
     const handleRegistration = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         try {
             // Create a FormData object to send both fields and image
-            const formData = new FormData();
+            const formData = new FormData()
 
             // Create a single object with all form values
             const formJson = {
@@ -42,7 +42,7 @@ function RegisterBusiness() {
                 attractionType: type,
                 openTime,
                 closeTime,
-            };
+            }
 
             // Append the form data as JSON
             formData.append('attractionCreateForm',
@@ -55,7 +55,7 @@ function RegisterBusiness() {
             // Append the image file as a separate part
             if (images.length > 0) {
                 images.forEach((image, index) => {
-                    formData.append('images', image); // Each file gets appended as 'images' with a unique key
+                    formData.append('images', image) // Each file gets appended as 'images' with a unique key
                 })
             }
 
@@ -73,21 +73,21 @@ function RegisterBusiness() {
             history('/home')
         } catch (error) {
             if (error.response && error.response.data) {
-                const errorMessages = error.response.data;
+                const errorMessages = error.response.data
                 setError(
                     Object.entries(errorMessages)
                         .map(([field, message]) => `${field}: ${message}`)
                         .join(', ')
-                );
+                )
             } else {
-                setError('Business registration failed, please try again.');
+                setError('Business registration failed, please try again.')
             }
         }
-    };
+    }
 
     const handleHome = () => {
-        return history('/home');
-    };
+        return history('/home')
+    }
 
     return (
         <div>
@@ -190,7 +190,7 @@ function RegisterBusiness() {
                 <button onClick={handleRegistration}>Register business</button>
             </MDBContainer>
         </div>
-    );
+    )
 }
 
-export default RegisterBusiness;
+export default RegisterBusiness

@@ -3,6 +3,7 @@ package com.travel.to.travel_to.model;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AttractionDiscussionModel extends RepresentationModel<AttractionDiscussionModel> {
     private String title;
@@ -11,7 +12,8 @@ public class AttractionDiscussionModel extends RepresentationModel<AttractionDis
     private String content;
     private Double rating;
     private String author;
-    private LocalDateTime createdAt;
+    private String createdAt;
+    private List<byte[]> images;
 
     public String getTitle() {
         return title;
@@ -67,12 +69,21 @@ public class AttractionDiscussionModel extends RepresentationModel<AttractionDis
         return this;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public AttractionDiscussionModel setCreatedAt(LocalDateTime createdAt) {
+    public AttractionDiscussionModel setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+        return this;
+    }
+
+    public List<byte[]> getImages() {
+        return images;
+    }
+
+    public AttractionDiscussionModel setImages(List<byte[]> images) {
+        this.images = images;
         return this;
     }
 }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,25 +71,27 @@ public class AttractionDiscussionController {
 
     @PostMapping("/create/{attractionUuid}")
     public AttractionDiscussionModel createAttractionDiscussion(
-        @Validated @RequestPart("attractionDiscussionCreateForm") CreateAttractionDiscussionForm createAttractionDiscussionForm,
+        @Validated @RequestPart("attractionDiscussionCreateForm")
+        CreateAttractionDiscussionForm createAttractionDiscussionForm,
         BindingResult bindingResult,
-        @RequestPart(value = "images", required = false) MultipartFile[] images,
+        @RequestPart(value = "images", required = false)
+        MultipartFile[] images,
         // TODO: AuthUser не меняется в зависимости от реально залогиненого пользователя
         @AuthenticationPrincipal AuthUser authUser,
         @PathVariable String attractionUuid
-    ) throws BindException {
+    ) throws BindException, IOException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
         return attractionDiscussionModelAssembler.toModel(
-            attractionDiscussionService.create(createAttractionDiscussionForm, authUser, attractionUuid)
+            attractionDiscussionService.create(createAttractionDiscussionForm, authUser, attractionUuid, images)
         );
     }
 
     @PostMapping("/delete/{attractionUuid}")
     public void deleteAttractionDiscussion(
-        @AuthenticationPrincipal AuthUser authUser,
-        @PathVariable String attractionUuid
+        @PathVariable String attractionUuid,
+        @AuthenticationPrincipal AuthUser authUser
     ) {
         attractionDiscussionService.delete(authUser, attractionUuid);
     }

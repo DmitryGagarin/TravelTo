@@ -1,22 +1,28 @@
 package com.travel.to.travel_to.assembler;
 
+import com.travel.to.travel_to.constants.TimeFormatterConstants;
 import com.travel.to.travel_to.entity.AttractionDiscussion;
 import com.travel.to.travel_to.model.AttractionDiscussionModel;
+import com.travel.to.travel_to.service.AttractionDiscussionImageService;
 import com.travel.to.travel_to.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class AttractionDiscussionModelAssembler implements RepresentationModelAssembler<AttractionDiscussion, AttractionDiscussionModel> {
 
     private final UserService userService;
+    private final AttractionDiscussionImageService attractionDiscussionImageService;
 
     @Autowired
     public AttractionDiscussionModelAssembler(
-        UserService userService
-    ) {
+        UserService userService,
+        AttractionDiscussionImageService attractionDiscussionImageService) {
         this.userService = userService;
+        this.attractionDiscussionImageService = attractionDiscussionImageService;
     }
 
     @Override
@@ -40,8 +46,8 @@ public class AttractionDiscussionModelAssembler implements RepresentationModelAs
             .setContent(entity.getContent())
             .setRating(entity.getRating())
             .setAuthor(authorName)
-            // TODO: return normalized time
-            .setCreatedAt(entity.getCreatedAt());
+            .setCreatedAt(TimeFormatterConstants.DAY_MONTH_YEAR_FORMATTER.format(entity.getCreatedAt()))
+            .setImages(attractionDiscussionImageService.getAllImagesByDiscussionId(entity.getId()));
         return attractionDiscussionModel;
     }
 

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import {YMaps, Map, Placemark} from '@pbe/react-yandex-maps';
+import {YMaps, Map, Placemark} from '@pbe/react-yandex-maps'
 import axios from 'axios'
-import Header from "./Header";
-import {useParams} from "react-router-dom";
-import {MDBInput, MDBTextArea} from "mdb-react-ui-kit";
+import Header from "./Header"
+import {useParams} from "react-router-dom"
+import {MDBInput, MDBTextArea} from "mdb-react-ui-kit"
 
 function Attraction() {
     const API_KEY = process.env.REACT_APP_YANDEX_MAP_API_KEY
@@ -12,23 +12,26 @@ function Attraction() {
     const {name} = useParams()
 
     const [error, setError] = useState('')
+    const [loading, setLoading] = useState(true) // Loading state to track fetching status
+
     const [attraction, setAttraction] = useState('')
     const [discussions, setDiscussions] = useState([])
     const [attractionUuid, setAttractionUuid] = useState('')
 
     const [showCreateDiscussionForm, setShowCreateDiscussionForm] = useState(false)
-    const [currentImageIndex, setCurrentImageIndex] = useState(0); // Initialize the current image index state
+    const [currentAttractionImageIndex, setCurrentAttractionImageIndex] = useState(0) // Initialize the current image index state
+    const [currentDiscussionImageIndex, setCurrentDiscussionImageIndex] = useState(0)
+
     const [title, setTitle] = useState('')
     const [contentLike, setContentLike] = useState('')
     const [contentDislike, setContentDislike] = useState('')
     const [content, setContent] = useState('')
+    const [images, setImages] = useState([])
     const [rating, setRating] = useState('')
 
     const [balloon, setBalloon] = useState('')
     const [latitude, setLatitude] = useState('')
     const [longitude, setLongitude] = useState('')
-
-    const [loading, setLoading] = useState(true); // Loading state to track fetching status
 
     useEffect(() => {
         const fetchAttraction = async () => {
@@ -43,13 +46,11 @@ function Attraction() {
                 setAttraction(response.data)
                 setAttractionUuid(response.data.uuid)
             } catch (err) {
-                setError('Failed to fetch attraction data');
+                setError('Failed to fetch attraction data')
             } finally {
-                setLoading(false); // Set loading to false after data is fetched
+                setLoading(false) // Set loading to false after data is fetched
             }
         }
-
-        // console.log(attraction)
 
         const fetchDiscussions = async () => {
             try {
@@ -60,10 +61,13 @@ function Attraction() {
                             'Authorization': `Bearer ${token}`
                         }
                     })
+                console.log(response.data._embedded.attractionDiscussionModelList)
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
             } catch (err) {
             }
         }
+
+        console.log(discussions)
 
         // const fetchAddress = async() => {
         //     let coords = []
@@ -79,7 +83,7 @@ function Attraction() {
         fetchAttraction()
         fetchDiscussions()
         // fetchAddress()
-    }, [attractionUuid, name]);
+    }, [attractionUuid, name])
 
     useEffect(() => {
         if (balloon) {
@@ -93,21 +97,18 @@ function Attraction() {
     useEffect(() => {
         // Check if attraction is properly fetched and images is available
         if (attraction && Array.isArray(attraction.images) && attraction.images.length > 0) {
-            setCurrentImageIndex(0); // Set to the first image initially
+            setCurrentAttractionImageIndex(0) // Set to the first image initially
         }
-    }, [attraction]);  // Trigger this effect when attraction is updated
+    }, [attraction])  // Trigger this effect when attraction is updated
 
     const handleLeaveDiscussion = () => {
         if (showCreateDiscussionForm) {
-            setShowCreateDiscussionForm(false);
+            setShowCreateDiscussionForm(false)
         } else {
-            setShowCreateDiscussionForm(true);
+            setShowCreateDiscussionForm(true)
         }
     }
 
-    useEffect(() => {
-
-    }, []);
     const handleSendDiscussion = async (e) => {
         e.preventDefault()
 
@@ -126,12 +127,13 @@ function Attraction() {
                     [JSON.stringify(formJson)],
                     {type: 'application/json'}
                 )
-            );
+            )
 
-            // TODO: загрузка картинок к отзывам
-            // if (images) {
-            //     formData.append('images', images)
-            // }
+            if (images.length > 0) {
+                images.forEach((image, index) => {
+                    formData.append('images', image) // Each file gets appended as 'images' with a unique key
+                })
+            }
 
             await axios.post(
                 `http://localhost:8080/attraction-discussion/create/${attractionUuid}`,
@@ -143,40 +145,42 @@ function Attraction() {
                     }
                 }
             )
-            window.location.reload();
+            window.location.reload()
         } catch (error) {
             if (error.response && error.response.data) {
-                const errorMessages = error.response.data;
+                const errorMessages = error.response.data
                 setError(
                     Object.entries(errorMessages)
                         .map(([field, message]) => `${field}: ${message}`)
                         .join(', ')
-                );
+                )
             } else {
-                setError('Discussion registration failed, please try again.');
+                setError('Discussion registration failed, please try again.')
             }
         }
     }
 
     const handleNextImage = (index, images) => {
-        return (index + 1) % images.length; // Wrap around the image array
-    };
-
+        return (index + 1) % images.length // Wrap around the image array
+    }
+    
     const handlePrevImage = (index, images) => {
-        return (index - 1 + images.length) % images.length; // Wrap around the image array
-    };
+        return (index - 1 + images.length) % images.length // Wrap around the image array
+    }
+
+    const handleImageChange = (e) => {
+        setImages([...e.target.files]) // Set the file object
+    }
 
     // If loading, show loading message or spinner
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>Loading...</div>
     }
 
     if (!attraction) {
-        return <div>No attraction data available</div>; // If attraction data is null, show an error message
+        return <div>No attraction data available</div> // If attraction data is null, show an error message
     }
-
-    // console.log(attraction.images)
-
+    
     return (
         <div>
             <Header/>
@@ -186,25 +190,30 @@ function Attraction() {
                         <div className="attraction-card">
                             <div className="image-container">
                                 <img
-                                    src={`data:image/png;base64,${attraction.images[currentImageIndex]}`}
+                                    // TODO: реакт почему то не видит стейте в этом скоупе
+                                    src={`data:image/pngbase64,${attraction.images[currentAttractionImageIndex]}`}
                                     alt={attraction.name}
                                     className="card-image"
                                 />
                                 <div className="image-navigation">
                                     <button
                                         className="image-nav-button left"
-                                        onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, attraction.images))}
+                                        onClick={() => setCurrentAttractionImageIndex(
+                                            handlePrevImage(currentAttractionImageIndex, attraction.images)
+                                        )}
                                         disabled={attraction.images.length <= 1}
                                     >
-                                        &lt;
+                                        &lt
                                     </button>
 
                                     <button
                                         className="image-nav-button right"
-                                        onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, attraction.images))}
+                                        onClick={() => setCurrentAttractionImageIndex(
+                                            handleNextImage(currentAttractionImageIndex, attraction.images)
+                                        )}
                                         disabled={attraction.images.length <= 1}
                                     >
-                                        &gt;
+                                        &gt
                                     </button>
                                 </div>
                             </div>
@@ -261,7 +270,6 @@ function Attraction() {
                 {showCreateDiscussionForm && (
                     <div className="popup">
                         <div className="popup-content">
-                            {/*<button className="close-popup" onClick={handleClosePopup}>X</button>*/}
                             <h2>Leave Comment</h2>
                             <form onSubmit={handleSendDiscussion}>
                                 <MDBInput
@@ -294,6 +302,14 @@ function Attraction() {
                                     onChange={(e) => setContent(e.target.value)}
                                     required
                                     style={{marginBottom: '10px'}}
+                                />
+                                <MDBInput
+                                    wrapperClass='mb-4'
+                                    placeholder='Choose images'
+                                    id='images'
+                                    type='file'
+                                    multiple
+                                    onChange={handleImageChange}
                                 />
                                 <MDBInput
                                     placeholder="Mark"
@@ -331,6 +347,32 @@ function Attraction() {
                                 </div>
                                 <div className="discussion-ration discussion-part">
                                     Overall: {discussion.rating}
+                                </div>
+                                <img
+                                    // TODO: реакт почему то не видит стейте в этом скоупе
+                                    src={`data:image/pngbase64,${discussion.images[currentDiscussionImageIndex]}`}
+                                    alt={attraction.name}
+                                    className="card-image"
+                                />
+                                <div className="image-navigation">
+                                    <button
+                                        className="image-nav-button left"
+                                        onClick={() => setCurrentAttractionImageIndex(
+                                            handlePrevImage(currentDiscussionImageIndex, discussion.images)
+                                        )}
+                                        disabled={discussion.images.length <= 1}
+                                    >
+                                        &lt
+                                    </button>
+                                    <button
+                                        className="image-nav-button right"
+                                        onClick={() => setCurrentAttractionImageIndex(
+                                            handleNextImage(currentDiscussionImageIndex, discussion.images)
+                                        )}
+                                        disabled={discussion.images.length <= 1}
+                                    >
+                                        &gt
+                                    </button>
                                 </div>
                                 <div className="discussion-created_at discussion-part">
                                     Created at: {discussion.createdAt}
