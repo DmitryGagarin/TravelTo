@@ -1,8 +1,8 @@
 package com.travel.to.travel_to.service.impl;
 
-import com.travel.to.travel_to.entity.AuthUser;
+import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.form.UserSignInForm;
-import com.travel.to.travel_to.security.JwtProvider;
+import com.travel.to.travel_to.security.jwt.JwtProvider;
 import com.travel.to.travel_to.service.AuthenticationService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

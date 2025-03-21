@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.service;
 
-import com.travel.to.travel_to.entity.AuthUser;
+import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.Likes;
 import jakarta.validation.constraints.NotNull;
 

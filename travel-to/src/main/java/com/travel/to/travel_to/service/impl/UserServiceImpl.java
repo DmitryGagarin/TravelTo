@@ -1,13 +1,13 @@
 package com.travel.to.travel_to.service.impl;
 
-import com.travel.to.travel_to.entity.AuthUser;
-import com.travel.to.travel_to.entity.User;
-import com.travel.to.travel_to.entity.UserType;
+import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.entity.user.User;
+import com.travel.to.travel_to.entity.user.UserType;
 import com.travel.to.travel_to.form.UserProfileForm;
 import com.travel.to.travel_to.form.UserSignUpFirstForm;
 import com.travel.to.travel_to.form.UserSignUpSecondForm;
 import com.travel.to.travel_to.repository.UserRepository;
-import com.travel.to.travel_to.security.JwtProvider;
+import com.travel.to.travel_to.security.jwt.JwtProvider;
 import com.travel.to.travel_to.service.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;

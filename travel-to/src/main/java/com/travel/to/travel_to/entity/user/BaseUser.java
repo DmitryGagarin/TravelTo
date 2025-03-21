@@ -1,5 +1,7 @@
-package com.travel.to.travel_to.entity;
+package com.travel.to.travel_to.entity.user;
 
+import com.travel.to.travel_to.entity.attraction.Attraction;
+import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;

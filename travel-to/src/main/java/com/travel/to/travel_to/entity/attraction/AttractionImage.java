@@ -1,11 +1,12 @@
-package com.travel.to.travel_to.entity;
+package com.travel.to.travel_to.entity.attraction;
 
+import com.travel.to.travel_to.entity.user.UuidAbleEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "attraction_image")
-public class AttractionImage extends UuidAbleEntity{
+public class AttractionImage extends UuidAbleEntity {
     private Long attractionId;
     private byte[] image;
 

@@ -1,6 +1,6 @@
-package com.travel.to.travel_to.security;
+package com.travel.to.travel_to.security.jwt;
 
-import com.travel.to.travel_to.entity.AuthUser;
+import com.travel.to.travel_to.entity.user.AuthUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;

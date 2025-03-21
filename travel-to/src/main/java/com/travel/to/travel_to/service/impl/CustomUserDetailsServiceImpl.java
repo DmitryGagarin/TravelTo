@@ -1,7 +1,7 @@
 package com.travel.to.travel_to.service.impl;
 
-import com.travel.to.travel_to.entity.AuthUser;
-import com.travel.to.travel_to.entity.User;
+import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.repository.UserRepository;
 import com.travel.to.travel_to.service.CustomUserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

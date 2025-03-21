@@ -1,8 +1,8 @@
 package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.assembler.AttractionModelAssembler;
-import com.travel.to.travel_to.entity.Attraction;
-import com.travel.to.travel_to.entity.AuthUser;
+import com.travel.to.travel_to.entity.attraction.Attraction;
+import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.exception.exception.FileExtensionException;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.model.AttractionModel;

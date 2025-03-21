@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.assembler;
 
-import com.travel.to.travel_to.entity.Attraction;
+import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.Likes;
 import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.model.LikesModel;

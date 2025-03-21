@@ -1,7 +1,7 @@
 package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.assembler.LikesModelAssembler;
-import com.travel.to.travel_to.entity.AuthUser;
+import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.Likes;
 import com.travel.to.travel_to.model.LikesModel;
 import com.travel.to.travel_to.service.LikesService;

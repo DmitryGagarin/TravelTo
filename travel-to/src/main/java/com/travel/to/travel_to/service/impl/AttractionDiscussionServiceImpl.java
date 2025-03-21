@@ -1,7 +1,7 @@
 package com.travel.to.travel_to.service.impl;
 
-import com.travel.to.travel_to.entity.AttractionDiscussion;
-import com.travel.to.travel_to.entity.AuthUser;
+import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
+import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.form.CreateAttractionDiscussionForm;
 import com.travel.to.travel_to.repository.AttractionDiscussionRepository;
 import com.travel.to.travel_to.service.AttractionDiscussionImageService;

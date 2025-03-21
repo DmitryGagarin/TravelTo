@@ -1,7 +1,7 @@
 package com.travel.to.travel_to.service;
 
-import com.travel.to.travel_to.entity.Attraction;
-import com.travel.to.travel_to.entity.AuthUser;
+import com.travel.to.travel_to.entity.attraction.Attraction;
+import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;

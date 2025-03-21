@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.service.impl;
 
-import com.travel.to.travel_to.entity.AttractionImage;
+import com.travel.to.travel_to.entity.attraction.AttractionImage;
 import com.travel.to.travel_to.repository.AttractionImageRepository;
 import com.travel.to.travel_to.service.AttractionImageService;
 import jakarta.validation.constraints.NotNull;

@@ -1,8 +1,8 @@
 package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.constants.DefaultInitialValues;
-import com.travel.to.travel_to.entity.Attraction;
-import com.travel.to.travel_to.entity.AuthUser;
+import com.travel.to.travel_to.entity.attraction.Attraction;
+import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.repository.AttractionRepository;
 import com.travel.to.travel_to.service.AttractionImageService;

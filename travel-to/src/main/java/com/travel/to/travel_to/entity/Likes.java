@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.entity;
 
+import com.travel.to.travel_to.entity.user.UuidAbleTimedEntity;
 import jakarta.persistence.Entity;
 
 @Entity(name = "likes")

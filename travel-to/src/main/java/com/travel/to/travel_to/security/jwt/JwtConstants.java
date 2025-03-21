@@ -1,4 +1,4 @@
-package com.travel.to.travel_to.security;
+package com.travel.to.travel_to.security.jwt;
 
 public class JwtConstants {
 

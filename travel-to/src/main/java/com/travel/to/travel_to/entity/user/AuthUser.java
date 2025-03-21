@@ -1,4 +1,4 @@
-package com.travel.to.travel_to.entity;
+package com.travel.to.travel_to.entity.user;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

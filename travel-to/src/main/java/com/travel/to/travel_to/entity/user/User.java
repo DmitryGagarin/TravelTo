@@ -1,4 +1,4 @@
-package com.travel.to.travel_to.entity;
+package com.travel.to.travel_to.entity.user;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

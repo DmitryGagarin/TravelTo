@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.security;
 
 import com.travel.to.travel_to.configuration.WebConfig;
+import com.travel.to.travel_to.security.jwt.JwtTokenValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

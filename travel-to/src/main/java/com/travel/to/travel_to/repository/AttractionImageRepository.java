@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.repository;
 
-import com.travel.to.travel_to.entity.AttractionImage;
+import com.travel.to.travel_to.entity.attraction.AttractionImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

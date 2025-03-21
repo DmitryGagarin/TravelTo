@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.repository;
 
-import com.travel.to.travel_to.entity.Attraction;
+import com.travel.to.travel_to.entity.attraction.Attraction;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

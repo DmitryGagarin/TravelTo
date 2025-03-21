@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.service;
 
-import com.travel.to.travel_to.entity.AttractionDiscussionImage;
+import com.travel.to.travel_to.entity.attraction.AttractionDiscussionImage;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
