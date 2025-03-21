@@ -21,6 +21,9 @@ public interface AttractionService {
     List<Attraction> findAllByOwner(@NotNull AuthUser authUser);
 
     @NotNull
+    List<Double> findAllAttractionRatingByAttractionId(@NotNull Long attractionId);
+
+    @NotNull
     Attraction createAttraction(
         @NotNull AttractionCreateForm attractionCreateForm,
         @NotNull AuthUser authUser,
@@ -33,14 +36,13 @@ public interface AttractionService {
         @NotNull Double totalRating
     );
 
-    Optional<Attraction> findByName(@NotNull String name);
-
     @NotNull
     Attraction getByUuid(@NotNull String uuid);
 
     @NotNull
     Attraction getByName(@NotNull String name);
 
-    @NotNull
-    List<Double> findAllAttractionRatingByAttractionId(Long attractionId);
+    Optional<Attraction> findByName(@NotNull String name);
+
+    void deleteAttractionByName(@NotNull String name, @NotNull AuthUser authUser);
 }

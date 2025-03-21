@@ -3,6 +3,8 @@ package com.travel.to.travel_to.service.impl;
 import com.travel.to.travel_to.constants.DefaultInitialValues;
 import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.entity.user.User;
+import com.travel.to.travel_to.entity.user.UserType;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.repository.AttractionRepository;
 import com.travel.to.travel_to.service.AttractionImageService;
@@ -58,7 +60,7 @@ public class AttractionServiceImpl implements AttractionService {
         @NotNull AuthUser authUser,
         @NotNull MultipartFile[] images
     ) {
-        userService.updateUserType(authUser);
+        userService.updateUserType(authUser, UserType.BUSINESS_OWNER);
 
         Attraction attraction = new Attraction();
         attraction
@@ -114,4 +116,12 @@ public class AttractionServiceImpl implements AttractionService {
         return attractionRepository.findAllAttractionRatingsById(attractionId);
     }
 
+    @Override
+    public void deleteAttractionByName(String name, AuthUser authUser) {
+        attractionRepository.delete(getByName(name));
+        if (findAllByOwner(authUser).isEmpty()) {
+            User user = userService.findByUuid(authUser.getUuid());
+            userService.updateUserType(authUser, UserType.VISITOR);
+        }
+    }
 }

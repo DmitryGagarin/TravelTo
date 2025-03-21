@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { MDBInput, MDBContainer } from "mdb-react-ui-kit"
+import React, {useState} from 'react'
+import {MDBContainer, MDBInput} from "mdb-react-ui-kit"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 import Settings from "./Settings";
 
 function RegisterBusiness() {
@@ -22,18 +22,25 @@ function RegisterBusiness() {
     const history = useNavigate()
     const authUser = JSON.parse(localStorage.getItem('user'))
 
-    const handleImageChange = (e) => {
-        setImages([...e.target.files]) // Set the file object
+    const validateForm = () => {
+        return name && description && city && street && household && phone && type && openTime && closeTime;
     }
 
-    const handleRegistration = async (e) => {
+    const handleImageChange = (e) => {
+        setImages([...e.target.files])
+    }
+
+    const handleAttractionRegistration = async (e) => {
         e.preventDefault()
 
+        if (!validateForm()) {
+            setError('Please fill in all required fields.')
+            return
+        }
+
         try {
-            // Create a FormData object to send both fields and image
             const formData = new FormData()
 
-            // Create a single object with all form values
             const formJson = {
                 name,
                 description,
@@ -45,15 +52,13 @@ function RegisterBusiness() {
                 closeTime,
             }
 
-            // Append the form data as JSON
             formData.append('attractionCreateForm',
                 new Blob(
                     [JSON.stringify(formJson)],
-                    { type: 'application/json' }
+                    {type: 'application/json'}
                 )
             )
 
-            // Append the image file as a separate part
             if (images.length > 0) {
                 images.forEach((image, index) => {
                     formData.append('images', image) // Each file gets appended as 'images' with a unique key
@@ -86,112 +91,118 @@ function RegisterBusiness() {
         }
     }
 
-    const handleHome = () => {
-        return history('/home')
-    }
-
     return (
-        <div>
+        <div className="register-business-main-container">
+            <div className="register-business-container">
+                <MDBContainer>
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Name'
+                        id='name'
+                        value={name}
+                        type='text'
+                        required
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Description'
+                        id='description'
+                        value={description}
+                        type='text'
+                        required
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='City'
+                        id='city'
+                        value={city}
+                        type='text'
+                        required
+                        onChange={(e) => setCity(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Street'
+                        id='street'
+                        value={street}
+                        type='text'
+                        required
+                        onChange={(e) => setStreet(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Household'
+                        id='household'
+                        value={household}
+                        type='text'
+                        required
+                        onChange={(e) => setHousehold(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Choose images'
+                        id='images'
+                        type='file'
+                        multiple
+                        onChange={handleImageChange}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Phone'
+                        id='phone'
+                        value={phone}
+                        type='tel'
+                        required
+                        onChange={(e) => setPhone(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Website'
+                        id='website'
+                        value={website}
+                        type='url'
+                        onChange={(e) => setWebsite(e.target.value)}
+                    />
+                    <select
+                        className='mb-4'
+                        id='type'
+                        value={type}
+                        required
+                        onChange={(e) => setType(e.target.value)}
+                    >
+                        <option value="" disabled>Type</option>
+                        <option value="museum">Museum</option>
+                        <option value="gallery">Gallery</option>
+                        <option value="park">Park</option>
+                        <option value="religious">Religious</option>
+                        <option value="cafe">Cafe</option>
+                        <option value="restaurant">Restaurant</option>
+                    </select>
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='OpenTime'
+                        id='openTime'
+                        value={openTime}
+                        type='time'
+                        required={true}
+                        onChange={(e) => setOpenTime(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='CloseTime'
+                        id='closeTime'
+                        value={closeTime}
+                        type='time'
+                        required
+                        onChange={(e) => setCloseTime(e.target.value)}
+                    />
+                    {error && <p className="text-danger">{error}</p>}
+                    <button onClick={handleAttractionRegistration} disabled={!validateForm()}>Register business</button>
+                </MDBContainer>
+            </div>
             <Settings/>
-            <button onClick={handleHome}>Back</button>
-            <MDBContainer>
-                <MDBInput
-                    wrapperClass='mb-4'
-                    placeholder='Name'
-                    id='name'
-                    value={name}
-                    type='text'
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <MDBInput
-                    wrapperClass='mb-4'
-                    placeholder='Description'
-                    id='description'
-                    value={description}
-                    type='text'
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-                <MDBInput
-                    wrapperClass='mb-4'
-                    placeholder='City'
-                    id='city'
-                    value={city}
-                    type='text'
-                    onChange={(e) => setCity(e.target.value)}
-                />
-                <MDBInput
-                    wrapperClass='mb-4'
-                    placeholder='Street'
-                    id='street'
-                    value={street}
-                    type='text'
-                    onChange={(e) => setStreet(e.target.value)}
-                />
-                <MDBInput
-                    wrapperClass='mb-4'
-                    placeholder='Household'
-                    id='household'
-                    value={household}
-                    type='text'
-                    onChange={(e) => setHousehold(e.target.value)}
-                />
-                <MDBInput
-                    wrapperClass='mb-4'
-                    placeholder='Choose images'
-                    id='images'
-                    type='file'
-                    multiple
-                    onChange={handleImageChange}
-                />
-                <MDBInput
-                    wrapperClass='mb-4'
-                    placeholder='Phone'
-                    id='phone'
-                    value={phone}
-                    type='tel'
-                    onChange={(e) => setPhone(e.target.value)}
-                />
-                <MDBInput
-                    wrapperClass='mb-4'
-                    placeholder='Website'
-                    id='website'
-                    value={website}
-                    type='url'
-                    onChange={(e) => setWebsite(e.target.value)}
-                />
-                <select
-                    className='mb-4'
-                    id='type'
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                >
-                    <option value="" disabled>Type</option>
-                    <option value="museum">Museum</option>
-                    <option value="gallery">Gallery</option>
-                    <option value="park">Park</option>
-                    <option value="religious">Religious</option>
-                    <option value="cafe">Cafe</option>
-                    <option value="restaurant">Restaurant</option>
-                </select>
-                <MDBInput
-                    wrapperClass='mb-4'
-                    placeholder='OpenTime'
-                    id='openTime'
-                    value={openTime}
-                    type='time'
-                    onChange={(e) => setOpenTime(e.target.value)}
-                />
-                <MDBInput
-                    wrapperClass='mb-4'
-                    placeholder='CloseTime'
-                    id='closeTime'
-                    value={closeTime}
-                    type='time'
-                    onChange={(e) => setCloseTime(e.target.value)}
-                />
-                {error && <p className="text-danger">{error}</p>}
-                <button onClick={handleRegistration}>Register business</button>
-            </MDBContainer>
         </div>
     )
 }

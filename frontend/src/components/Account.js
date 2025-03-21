@@ -72,25 +72,23 @@ function Account() {
     }
 
     return (
-        <div>
+        <div className="account-details-main-container">
+            <div className="account-details-container">
+                <MDBContainer>
+                    <MDBInput wrapperClass='mb-4' placeholder='Name' id='name' value={name} type='text'
+                              onChange={(e) => setName(e.target.value)}/>
+                    <MDBInput wrapperClass='mb-4' placeholder='Surname' id='surname' value={surname} type='text'
+                              onChange={(e) => setSurname(e.target.value)}/>
+                    <MDBInput wrapperClass='mb-4' placeholder='Phone' id='phone' value={phone} type='tel'
+                              onChange={(e) => setPhone(e.target.value)}/>
+                    <MDBInput wrapperClass='mb-4' placeholder='Email' id='email' value={email} type='email'
+                              onChange={(e) => setEmail(e.target.value)}/>
+                    {error && <p className="text-danger">{error}</p>}
+                    <button onClick={handleChange}>Save changes</button>
+                    <button onClick={handleDelete}>Delete account</button>
+                </MDBContainer>
+            </div>
             <Settings/>
-            <MDBContainer>
-                <button onClick={handleHome}> Home</button>
-            </MDBContainer>
-            <MDBContainer>
-                <MDBInput wrapperClass='mb-4' placeholder='Name' id='name' value={name} type='text'
-                          onChange={(e) => setName(e.target.value)}/>
-                <MDBInput wrapperClass='mb-4' placeholder='Surname' id='surname' value={surname} type='text'
-                          onChange={(e) => setSurname(e.target.value)}/>
-                <MDBInput wrapperClass='mb-4' placeholder='Phone' id='phone' value={phone} type='tel'
-                          onChange={(e) => setPhone(e.target.value)}/>
-                <MDBInput wrapperClass='mb-4' placeholder='Email' id='email' value={email} type='email'
-                          onChange={(e) => setEmail(e.target.value)}/>
-                {error && <p className="text-danger">{error}</p>}
-                <button onClick={handleChange}>Save changes</button>
-                <button onClick={handleDelete}>Delete account</button>
-            </MDBContainer>
-
         </div>
     );
 }

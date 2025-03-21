@@ -72,8 +72,15 @@ public class AttractionController {
         return PagedModel.of(attractionModels, pageMetadata);
     }
 
+    @GetMapping("/{name}")
+    public AttractionModel getAttractionByName(
+        @PathVariable String name
+    ) {
+        return attractionModelAssembler.toModel(attractionService.getByName(name));
+    }
+
     @GetMapping("/my")
-    public PagedModel<AttractionModel> getMyAttractions(
+    public PagedModel<AttractionModel> getAttractionsByOwner(
         @AuthenticationPrincipal AuthUser authUser
     ) {
         List<Attraction> attractions = attractionService.findAllByOwner(authUser);
@@ -92,7 +99,7 @@ public class AttractionController {
     }
 
     @PostMapping("/register-business")
-    public Attraction registerBusiness(
+    public AttractionModel registerBusiness(
         @Validated @RequestPart("attractionCreateForm") AttractionCreateForm attractionCreateForm,
         BindingResult bindingResult,
         @RequestPart(value = "images") MultipartFile[] images,
@@ -104,14 +111,17 @@ public class AttractionController {
         if (!validationUtils.validateImageFileFormat(images, bindingResult)) {
             throw new FileExtensionException("This image format not allowed");
         }
-        return attractionService.createAttraction(attractionCreateForm, authUser, images);
+        return attractionModelAssembler.toModel(
+            attractionService.createAttraction(attractionCreateForm, authUser, images)
+        );
     }
 
-    @GetMapping("/{name}")
-    public AttractionModel getAttraction(
-        @PathVariable String name
+    @PostMapping("/delete/{name}")
+    public void deleteAttraction(
+        @PathVariable String name,
+        @AuthenticationPrincipal AuthUser authUser
     ) {
-        return attractionModelAssembler.toModel(attractionService.getByName(name));
+        attractionService.deleteAttractionByName(name, authUser);
     }
 
 }

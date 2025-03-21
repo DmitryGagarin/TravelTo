@@ -19,15 +19,14 @@ public interface AttractionDiscussionService {
         @NotNull MultipartFile[] images
     ) throws IOException;
 
-    void delete(
-        AuthUser authUser,
-        String attractionUuid
-    );
-
     @NotNull
     AttractionDiscussion getByUuid(String attractionUuid);
 
     @NotNull
     List<AttractionDiscussion> findAllByAttractionUuid(String attractionUuid);
 
+    void delete(
+        AuthUser authUser,
+        String attractionUuid
+    );
 }

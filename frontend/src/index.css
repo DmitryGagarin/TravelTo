@@ -49,7 +49,7 @@
   margin: 10px 0 20px 0;
 }
 
-.attractions-container {
+.attractions-container, .my-attraction-container {
   flex: 3; /* Takes up 75% of the container width */
   text-align: center;
   overflow-y: auto; /* Ensures content is scrollable if it overflows vertically */
@@ -106,9 +106,14 @@
   max-height: 550px;
 }
 
-/*.attraction-card:hover {*/
-/*  transform: translateY(-5px); !* Adds a subtle hover effect *!*/
-/*}*/
+.my-attraction-card {
+  min-height: 700px;
+  max-height: 700px;
+}
+
+.attraction-card:hover {
+  transform: translateY(-5px); /* Adds a subtle hover effect */
+}
 
 .image-container {
   width: 100%;
@@ -187,11 +192,40 @@
   margin: 4px;
 }
 
+.register-business-main-container,
+.account-details-main-container,
+.my-attractions-main-container {
+  display: flex;
+  align-items: flex-start; /* Ensures both columns align at the top */
+  justify-content: space-between; /* This places the items side by side */
+}
+
+.register-business-container,
+.account-details-container,
+.my-attractions-container {
+  width: 80%;
+  margin-right: auto;
+  margin-top: 90px;
+}
+
+.my-attractions-container {
+  margin-top: 72px;
+}
+
+.delete-button {
+  text-align: center;
+}
+
+.delete-button button{
+  background: red;
+  border-radius: 4px;
+}
+
 .settings {
   display: flex;
   flex-direction: column; /* Stacks buttons vertically */
   align-items: end;
-  margin: 80px 20px 0 0;
+  margin: 74px 20px 0 0;
 }
 
 .settings-button {
