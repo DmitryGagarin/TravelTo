@@ -3,6 +3,8 @@ package com.travel.to.travel_to.entity.attraction;
 import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.entity.user.UuidAbleEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -19,6 +21,9 @@ public class Attraction extends UuidAbleEntity {
     private String openTime;
     private String closeTime;
     private Double rating;
+
+    @Enumerated(EnumType.STRING)
+    private AttractionStatus status;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
@@ -124,6 +129,15 @@ public class Attraction extends UuidAbleEntity {
 
     public Attraction setLikedBy(User likedBy) {
         this.likedBy = likedBy;
+        return this;
+    }
+
+    public AttractionStatus getStatus() {
+        return status;
+    }
+
+    public Attraction setStatus(AttractionStatus status) {
+        this.status = status;
         return this;
     }
 }

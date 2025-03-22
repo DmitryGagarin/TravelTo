@@ -21,7 +21,8 @@ public class LikesModelAssembler implements RepresentationModelAssembler<Likes, 
     @Autowired
     public LikesModelAssembler(
         AttractionService attractionService,
-        AttractionModelAssembler attractionModelAssembler) {
+        AttractionModelAssembler attractionModelAssembler
+    ) {
         this.attractionService = attractionService;
         this.attractionModelAssembler = attractionModelAssembler;
     }
@@ -37,5 +38,4 @@ public class LikesModelAssembler implements RepresentationModelAssembler<Likes, 
         likesModel.setAttraction(attractionModels);
         return likesModel;
     }
-
 }

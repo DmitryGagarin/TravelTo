@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.service;
 
 import com.travel.to.travel_to.entity.attraction.Attraction;
+import com.travel.to.travel_to.entity.attraction.AttractionStatus;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,9 @@ public interface AttractionService {
 
     @NotNull
     List<Attraction> findAll();
+
+    @NotNull
+    List<Attraction> findAllByStatus(@NotNull AttractionStatus status);
 
     @NotNull
     List<Attraction> findAllByAttractionId(@NotNull Long attractionId);
@@ -34,6 +38,12 @@ public interface AttractionService {
     Attraction updateRating(
         @NotNull String attractionUuid,
         @NotNull Double totalRating
+    );
+
+    @NotNull
+    Attraction updateAttractionStatus(
+        @NotNull AttractionStatus attractionStatus,
+        @NotNull String name
     );
 
     @NotNull

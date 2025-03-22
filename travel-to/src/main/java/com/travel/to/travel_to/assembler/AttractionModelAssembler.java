@@ -4,6 +4,7 @@ import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.service.AttractionImageService;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,10 @@ public class AttractionModelAssembler implements RepresentationModelAssembler<At
 
     private final AttractionImageService attractionImageService;
 
-    public AttractionModelAssembler(AttractionImageService attractionImageService) {
+    @Autowired
+    public AttractionModelAssembler(
+        AttractionImageService attractionImageService
+    ) {
         this.attractionImageService = attractionImageService;
     }
 
@@ -31,7 +35,9 @@ public class AttractionModelAssembler implements RepresentationModelAssembler<At
             .setType(entity.getType())
             .setOpenTime(entity.getOpenTime())
             .setCloseTime(entity.getCloseTime())
-            .setRating(entity.getRating());
+            .setRating(entity.getRating())
+            .setStatus(entity.getStatus().name());
         return attractionModel;
     }
+
 }

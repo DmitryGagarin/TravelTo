@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import Settings from "./Settings";
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import { Link } from "react-router-dom"
+import Settings from "./Settings"
 
 function MyAttractions() {
-    const [attractions, setAttractions] = useState([]);
-    const [attractionName, setAttractionName] = useState(null); // State to store the attraction to be deleted
+    const [attractions, setAttractions] = useState([])
+    const [attractionName, setAttractionName] = useState(null) 
 
-    const token = JSON.parse(localStorage.getItem('user'))?.token;
+    const token = JSON.parse(localStorage.getItem('user'))?.token
 
-    // Fetch attractions on initial load
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
@@ -17,50 +16,51 @@ function MyAttractions() {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
-                });
-                setAttractions(response.data._embedded.attractionModelList);
+                })
+                setAttractions(response.data._embedded.attractionModelList)
             } catch (err) {
-                console.error("Error fetching attractions:", err);
+                console.error("Error fetching attractions:", err)
             }
-        };
-        fetchAttractions();
-    }, [token]);
+        }
+        fetchAttractions()
+    }, [token])
 
-    console.log(attractionName)
     const handleDelete = async (name) => {
         try {
-            // Debugging log to check if this function is called
-            console.log(`Attempting to delete attraction: ${name}`);
-
-            // Delete the attraction with the specified name
             await axios.post(`http://localhost:8080/attraction/delete/${name}`, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
-            });
-
-            // After deletion, filter out the deleted attraction from the list
-            // setAttractions((prevAttractions) =>
-            //     prevAttractions.filter(attraction => attraction.name !== name)
-            // );
+            })
         } catch (err) {
-            console.error("Error deleting attraction:", err);
+            console.error("Error deleting attraction:", err)
         }
-    };
+    }
 
     // Handle deletion when attractionName changes
     useEffect(() => {
-        console.log("attractionName effect triggered:", attractionName); // Check if effect is triggered
+        console.log("attractionName effect triggered:", attractionName) // Check if effect is triggered
         if (attractionName) {
-            const confirmation = window.confirm("Are you sure you want to delete this attraction?");
+            const confirmation = window.confirm("Are you sure you want to delete this attraction?")
             if (confirmation) {
-                handleDelete(attractionName);
+                handleDelete(attractionName)
             } else {
-                console.log("User canceled deletion.");
+                console.log("User canceled deletion.")
             }
-            setAttractionName(null); // Reset attractionName after the confirmation
+            setAttractionName(null)
         }
-    }, [attractionName, token]); // Ensure it re-runs if attractionName or token changes
+    }, [attractionName, token])
+
+    const getAttractionStatusStyle = (status) => {
+        switch (status.toLowerCase()) {
+            case 'PUBLISHED':
+                return { color: 'green' }
+            case 'ON_MODERATION':
+                return { color: 'red' }
+            default:
+                return { backgroundColor: 'lightgray', color: 'black' }
+        }
+    }
 
     return (
         <div className="my-attractions-main-container">
@@ -70,7 +70,7 @@ function MyAttractions() {
                         <div key={attraction.id} className="attraction-card my-attraction-card">
                             <div className="image-container">
                                 <img
-                                    src={`data:image/png;base64,${attraction.images[0]}`}
+                                    src={`data:image/pngbase64,${attraction.images[0]}`}
                                     alt={attraction.name}
                                     className="card-image"
                                 />
@@ -107,9 +107,12 @@ function MyAttractions() {
                             </div>
                             <div className="delete-button">
                                 <button onClick={() => {
-                                    console.log(`Delete button clicked for ${attraction.name}`); // Check if button is clicked
-                                    setAttractionName(attraction.name);
+                                    console.log(`Delete button clicked for ${attraction.name}`)
+                                    setAttractionName(attraction.name)
                                 }}>Delete</button>
+                            </div>
+                            <div className="status" style={getAttractionStatusStyle(attraction.status)}>
+                                <h5>{attraction.status}</h5>
                             </div>
                         </div>
                     ))}
@@ -117,7 +120,7 @@ function MyAttractions() {
             </div>
             <Settings/>
         </div>
-    );
+    )
 }
 
-export default MyAttractions;
+export default MyAttractions

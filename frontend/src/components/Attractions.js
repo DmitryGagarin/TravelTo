@@ -9,11 +9,10 @@ function Attractions() {
     const [attractions, setAttractions] = useState([])
     const [types, setTypes] = useState([])
     const [selectedTypes, setSelectedTypes] = useState([])
-    const [likedAttraction, setLikedAttraction] = useState(null) // State to store the attraction to be liked
-    const [currentImageIndex, setCurrentImageIndex] = useState(0); // Initialize the current image index state
+    const [likedAttraction, setLikedAttraction] = useState(null) 
+    const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const token = JSON.parse(localStorage.getItem('user'))?.token
 
-    // Fetch the attractions and types
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
@@ -33,7 +32,6 @@ function Attractions() {
         fetchAttractions()
     }, [token])
 
-    // Trigger the like API call when likedAttraction changes
     useEffect(() => {
         if (likedAttraction) {
             const handleLike = async (name) => {
@@ -49,12 +47,10 @@ function Attractions() {
                 }
             }
 
-            // Call handleLike when likedAttraction changes
             handleLike(likedAttraction)
         }
-    }, [likedAttraction]) // Only run when likedAttraction changes
+    }, [likedAttraction])
 
-    // Handle the change in selected types
     const handleTypeChange = (event) => {
         const type = event.target.value
         setSelectedTypes(prevSelectedTypes =>
@@ -64,7 +60,6 @@ function Attractions() {
         )
     }
 
-    // Handle the search functionality
     const handleSearch = () => {
         const searchText = document.getElementById('filterInput').value.toLowerCase()
         const filteredAttractions = attractions.filter(attraction =>
@@ -73,39 +68,40 @@ function Attractions() {
         setAttractions(filteredAttractions)
     }
 
-    // Filter attractions based on selected types
     const filteredAttractions = attractions.filter(attraction =>
-        selectedTypes.length === 0 || selectedTypes.includes(attraction.type)
+        selectedTypes.length === 0 ||
+        selectedTypes.includes(attraction.type) &&
+        attraction.status === 'PUBLISHED'
     )
 
     //TODO: смена картинок распространяется на все карточки на странице
     // Handle image navigation
     const handleNextImage = (index, images) => {
-        return (index + 1) % images.length; // Wrap around the image array
-    };
+        return (index + 1) % images.length
+    }
 
     const handlePrevImage = (index, images) => {
-        return (index - 1 + images.length) % images.length; // Wrap around the image array
-    };
+        return (index - 1 + images.length) % images.length
+    }
 
     const getAttractionCardStyle = (type) => {
         switch (type.toLowerCase()) {
             case 'museum':
-                return { backgroundColor: 'yellow', color: 'black' };
+                return { backgroundColor: 'yellow', color: 'black' }
             case 'gallery':
-                return { backgroundColor: 'orange', color: 'black' };
+                return { backgroundColor: 'orange', color: 'black' }
             case 'park':
-                return { backgroundColor: 'green', color: 'white' };
+                return { backgroundColor: 'green', color: 'white' }
             case 'religious':
-                return { backgroundColor: 'lightgray', color: 'black' };
+                return { backgroundColor: 'lightgray', color: 'black' }
             case 'cafe':
-                return { backgroundColor: 'wheat', color: 'black' };
+                return { backgroundColor: 'wheat', color: 'black' }
             case 'restaurant':
-                return { backgroundColor: 'pink', color: 'black' };
+                return { backgroundColor: 'pink', color: 'black' }
             default:
-                return { backgroundColor: 'lightgray', color: 'black' };
+                return { backgroundColor: 'lightgray', color: 'black' }
         }
-    };
+    }
 
     return (
         <div>
@@ -118,7 +114,7 @@ function Attractions() {
                                 <div key={attraction.id} className="attraction-card">
                                     <div className="image-container">
                                         <img
-                                            src={`data:image/png;base64,${attraction.images[currentImageIndex]}`}
+                                            src={`data:image/pngbase64,${attraction.images[currentImageIndex]}`}
                                             alt={attraction.name}
                                             className="card-image"
                                         />
@@ -128,7 +124,7 @@ function Attractions() {
                                                 className="image-nav-button left"
                                                 onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, attraction.images))}
                                             >
-                                                &lt;
+                                                &lt
                                             </button>
 
                                             {/* Right Arrow Button */}
@@ -136,7 +132,7 @@ function Attractions() {
                                                 className="image-nav-button right"
                                                 onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, attraction.images))}
                                             >
-                                                &gt;
+                                                &gt
                                             </button>
                                         </div>
                                     </div>
@@ -178,7 +174,7 @@ function Attractions() {
                                         </div>
                                     </div>
                                 </div>
-                            );
+                            )
                         })}
                     </div>
                 </div>
@@ -209,7 +205,7 @@ function Attractions() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default Attractions;
+export default Attractions

@@ -2,6 +2,7 @@ package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.constants.DefaultInitialValues;
 import com.travel.to.travel_to.entity.attraction.Attraction;
+import com.travel.to.travel_to.entity.attraction.AttractionStatus;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.entity.user.UserType;
@@ -39,18 +40,33 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
+    @NotNull
     public List<Attraction> findAll() {
         return attractionRepository.findAll();
     }
 
     @Override
-    public List<Attraction> findAllByAttractionId(Long attractionId) {
+    @NotNull
+    public List<Attraction> findAllByStatus(@NotNull AttractionStatus status) {
+        return attractionRepository.findAllByStatus(status);
+    }
+
+    @Override
+    @NotNull
+    public List<Attraction> findAllByAttractionId(@NotNull Long attractionId) {
         return attractionRepository.findAllById(Collections.singleton(attractionId));
     }
 
     @Override
-    public List<Attraction> findAllByOwner(AuthUser authUser) {
+    @NotNull
+    public List<Attraction> findAllByOwner(@NotNull AuthUser authUser) {
         return attractionRepository.findAllByOwnerId(userService.findByUuid(authUser.getUuid()).getId());
+    }
+
+    @Override
+    @NotNull
+    public List<Double> findAllAttractionRatingByAttractionId(@NotNull Long attractionId) {
+        return attractionRepository.findAllAttractionRatingsById(attractionId);
     }
 
     @Override
@@ -73,7 +89,8 @@ public class AttractionServiceImpl implements AttractionService {
             .setCloseTime(attractionCreateForm.getCloseTime())
             .setType(attractionCreateForm.getAttractionType())
             .setRating(DefaultInitialValues.INITIAL_ATTRACTION_RATING)
-            .setOwner(userService.findByUuid(authUser.getUuid()));
+            .setOwner(userService.findByUuid(authUser.getUuid()))
+            .setStatus(AttractionStatus.ON_MODERATION);
         attractionRepository.save(attraction);
 
         try {
@@ -86,6 +103,7 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
+    @NotNull
     public Attraction updateRating(
         @NotNull String attractionUuid,
         @NotNull Double totalRating
@@ -96,28 +114,38 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public Optional<Attraction> findByName(@NotNull String attractionName) {
-        return attractionRepository.findByName(attractionName);
+    @NotNull
+    public Attraction updateAttractionStatus(
+        @NotNull AttractionStatus attractionStatus,
+        @NotNull String attractionName
+    ) {
+        Attraction attraction = getByName(attractionName);
+        attraction.setStatus(attractionStatus);
+        return attractionRepository.save(attraction);
     }
 
     @Override
+    @NotNull
     public Attraction getByUuid(@NotNull String uuid) {
         return attractionRepository.getByUuid(uuid);
     }
 
     @Override
-    public Attraction getByName(String attractionName) {
+    @NotNull
+    public Attraction getByName(@NotNull String attractionName) {
         return attractionRepository.getByName(attractionName);
     }
 
     @Override
-    @NotNull
-    public List<Double> findAllAttractionRatingByAttractionId(Long attractionId) {
-        return attractionRepository.findAllAttractionRatingsById(attractionId);
+    public Optional<Attraction> findByName(@NotNull String attractionName) {
+        return attractionRepository.findByName(attractionName);
     }
 
     @Override
-    public void deleteAttractionByName(String name, AuthUser authUser) {
+    public void deleteAttractionByName(
+        @NotNull String name,
+        @NotNull AuthUser authUser
+    ) {
         attractionRepository.delete(getByName(name));
         if (findAllByOwner(authUser).isEmpty()) {
             User user = userService.findByUuid(authUser.getUuid());

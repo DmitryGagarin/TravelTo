@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.repository;
 
 import com.travel.to.travel_to.entity.attraction.Attraction;
+import com.travel.to.travel_to.entity.attraction.AttractionStatus;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,9 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
 
     @NotNull
     List<Attraction> findAll();
+
+    @NotNull
+    List<Attraction> findAllByStatus(@NotNull AttractionStatus status);
 
     @NotNull
     @Query(value = "SELECT * FROM Attraction a WHERE a.owner_id = :ownerId",

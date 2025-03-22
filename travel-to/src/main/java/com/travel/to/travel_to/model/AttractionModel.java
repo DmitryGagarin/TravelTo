@@ -16,6 +16,7 @@ public class AttractionModel extends PagedModel<AttractionModel> {
     private String openTime;
     private String closeTime;
     private Double rating;
+    private String status;
 
     public String getUuid() {
         return uuid;
@@ -113,6 +114,15 @@ public class AttractionModel extends PagedModel<AttractionModel> {
 
     public AttractionModel setRating(Double rating) {
         this.rating = rating;
+        return this;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public AttractionModel setStatus(String status) {
+        this.status = status;
         return this;
     }
 }
