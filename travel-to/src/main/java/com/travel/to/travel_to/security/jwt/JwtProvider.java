@@ -17,7 +17,7 @@ import java.util.Set;
 public class JwtProvider {
     static final SecretKey key = Keys.hmacShaKeyFor(JwtConstants.SECRET_KEY.getBytes());
 
-    public static String generateToken(Authentication auth) {
+    public static String generateAccessToken(Authentication auth) {
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
         String roles = populateAuthorities(authorities);
 
@@ -28,12 +28,31 @@ public class JwtProvider {
 
         return Jwts.builder()
                 .issuedAt(new Date())
-                .expiration(new Date(new Date().getTime() + 86400000))
-                .claim("auth", authUserMap) // Store the Map as "auth"
+                .expiration(new Date(new Date().getTime() + 90000)) // 15 minutes
+                .claim("auth", authUserMap)
                 .claim("email", auth.getName())
                 .claim("authorities", roles)
                 .signWith(key)
                 .compact();
+    }
+
+    public static String generateRefreshToken(Authentication auth) {
+        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+        String roles = populateAuthorities(authorities);
+
+        Map<String, Object> authUserMap = new HashMap<>();
+        authUserMap.put("uuid", ((AuthUser) auth.getPrincipal()).getUuid());
+        authUserMap.put("email", ((AuthUser) auth.getPrincipal()).getEmail());
+        authUserMap.put("password", ((AuthUser) auth.getPrincipal()).getPassword());
+
+        return Jwts.builder()
+            .issuedAt(new Date())
+            .expiration(new Date(new Date().getTime() + 604800000)) // 7 days
+            .claim("auth", authUserMap)
+            .claim("email", auth.getName())
+            .claim("authorities", roles)
+            .signWith(key)
+            .compact();
     }
 
     private static String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {

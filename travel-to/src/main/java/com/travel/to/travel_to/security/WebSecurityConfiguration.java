@@ -29,7 +29,7 @@ public class WebSecurityConfiguration {
             )
             .authorizeHttpRequests((requests) -> requests
                 .requestMatchers(
-                    "/singin",
+                    "/singin/**",
                     "/signup",
                     "/signup/name",
                     "/",

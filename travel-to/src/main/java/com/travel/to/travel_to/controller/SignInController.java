@@ -1,10 +1,12 @@
 package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.form.UserRefreshTokenForm;
 import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.service.AuthenticationService;
 import com.travel.to.travel_to.validator.UserSignInFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -31,12 +33,12 @@ public class SignInController {
         this.authenticationService = authenticationService;
     }
 
-    @InitBinder
+    @InitBinder("userSignInFormBinder")
     private void userSignInFormBinder(WebDataBinder binder) {
         binder.setValidator(userSignInFormValidator);
     }
 
-    @PostMapping()
+    @PostMapping("")
     public AuthUser signIn(
         @Validated @RequestBody UserSignInForm userSignInForm,
         BindingResult bindingResult
@@ -45,5 +47,13 @@ public class SignInController {
             throw new BindException(bindingResult);
         }
         return authenticationService.login(userSignInForm);
+    }
+
+    @PostMapping("/refresh")
+    public AuthUser refresh(
+        @RequestBody UserRefreshTokenForm userRefreshTokenForm,
+        @AuthenticationPrincipal AuthUser authUser
+    ) {
+        return authenticationService.refreshToken(userRefreshTokenForm);
     }
 }

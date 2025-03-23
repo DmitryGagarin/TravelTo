@@ -1,9 +1,14 @@
 package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.form.UserRefreshTokenForm;
 import com.travel.to.travel_to.form.UserSignInForm;
+import com.travel.to.travel_to.security.jwt.JwtConstants;
 import com.travel.to.travel_to.security.jwt.JwtProvider;
 import com.travel.to.travel_to.service.AuthenticationService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +16,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
+import java.util.Map;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -37,12 +45,44 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = JwtProvider.generateToken(authentication);
+
+        String jwtAccessToken = JwtProvider.generateAccessToken(authentication);
+        String jwtRefreshToken = JwtProvider.generateRefreshToken(authentication);
 
         AuthUser authUser = new AuthUser();
         authUser.setEmail(userSignInForm.getEmail());
-        authUser.setToken(token);
+        authUser.setAccessToken(jwtAccessToken);
+        authUser.setRefreshToken(jwtRefreshToken);
 
         return authUser;
+    }
+
+    @Override
+    public AuthUser refreshToken(
+        @NotNull UserRefreshTokenForm userRefreshTokenForm
+    ) {
+        String email = extractEmailFromRefreshToken(userRefreshTokenForm.getRefreshToken());
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                userRefreshTokenForm.getEmail(),
+                userRefreshTokenForm.getPassword()
+            )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthUser authUser = new AuthUser();
+        authUser.setEmail(authentication.getCredentials().toString());
+        String newAccessToken = JwtProvider.generateAccessToken(authentication);
+        authUser.setAccessToken(newAccessToken);
+        authUser.setRefreshToken(userRefreshTokenForm.getRefreshToken());
+        return authUser;
+    }
+
+    @Override
+    public String extractEmailFromRefreshToken(String refreshToken) {
+        SecretKey key = Keys.hmacShaKeyFor(JwtConstants.SECRET_KEY.getBytes());
+        Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(refreshToken).getBody();
+        Map<String, Object> authUserMap = (Map<String, Object>) claims.get("auth");
+        return authUserMap.get("email").toString();
     }
 }

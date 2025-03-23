@@ -55,13 +55,9 @@ public class UserServiceImpl implements UserService {
             .setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        User savedUser = userRepository.findByEmail(userSignupFormFirst.getEmail()).orElseThrow(
-                () -> new RuntimeException("User not found")
-        );
-
         AuthUser authUser = new AuthUser();
-        authUser.setUuid(savedUser.getUuid());
-        authUser.setEmail(savedUser.getEmail());
+        authUser.setUuid(user.getUuid());
+        authUser.setEmail(user.getEmail());
         authUser.setPassword(encodedPassword);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -72,8 +68,10 @@ public class UserServiceImpl implements UserService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwtToken = JwtProvider.generateToken(authentication);
-        authUser.setToken(jwtToken);
+        String jwtAccessToken = JwtProvider.generateAccessToken(authentication);
+        String jwtRefreshToken = JwtProvider.generateRefreshToken(authentication);
+        authUser.setAccessToken(jwtAccessToken);
+        authUser.setRefreshToken(jwtRefreshToken);
 
         return authUser;
     }
@@ -100,8 +98,10 @@ public class UserServiceImpl implements UserService {
                 authUser.getAuthorities()
         );
 
-        String jwtToken = JwtProvider.generateToken(authentication);
-        authUser.setToken(jwtToken);
+        String jwtAccessToken = JwtProvider.generateAccessToken(authentication);
+        String jwtRefreshToken = JwtProvider.generateRefreshToken(authentication);
+        authUser.setAccessToken(jwtAccessToken);
+        authUser.setRefreshToken(jwtRefreshToken);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

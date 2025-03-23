@@ -2,6 +2,7 @@ package com.travel.to.travel_to.security.jwt;
 
 import com.travel.to.travel_to.entity.user.AuthUser;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
@@ -53,6 +54,11 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(authUser, null, auth);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            } catch (ExpiredJwtException e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+                response.setContentType("application/json");
+                response.getWriter().write("{\"message\":\"Token expired, please use the refresh token to get a new access token\"}");
+                return;
             } catch (Exception e) {
                 throw new BadCredentialsException("Invalid token", e);
             }
