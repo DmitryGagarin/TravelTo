@@ -1,0 +1,51 @@
+package com.travel.to.travel_to;
+
+import com.travel.to.travel_to.entity.user.User;
+import com.travel.to.travel_to.entity.user.UserType;
+import com.travel.to.travel_to.form.UserSignInForm;
+import com.travel.to.travel_to.form.UserSignUpFirstForm;
+import com.travel.to.travel_to.repository.UserRepository;
+import com.travel.to.travel_to.service.AuthenticationService;
+import com.travel.to.travel_to.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+@Component
+public class AdminUserCreation implements CommandLineRunner {
+
+    private final UserService userService;
+    private final AuthenticationService authenticationService;
+    private final UserRepository userRepository;
+
+    @Autowired
+    public AdminUserCreation(
+        UserService userService,
+        AuthenticationService authenticationService,
+        UserRepository userRepository
+    ) {
+        this.userService = userService;
+        this.authenticationService = authenticationService;
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public void run(String... args) {
+        if (userService.findByEmail("admin@travel.com").isEmpty()) {
+            UserSignUpFirstForm userSignUpFirstForm = new UserSignUpFirstForm();
+            userSignUpFirstForm.setEmail("admin@travel.com");
+            userSignUpFirstForm.setPassword("password");
+            userService.registration(userSignUpFirstForm);
+
+            User admin = userService.findByEmail("admin@travel.com").get();
+            admin.setRole("ADMIN_USER");
+            admin.setUserType(UserType.ADMIN);
+            userRepository.save(admin);
+
+            UserSignInForm userSignInForm = new UserSignInForm();
+            userSignInForm.setEmail("admin@travel.com");
+            userSignInForm.setPassword("password");
+            authenticationService.login(userSignInForm);
+        }
+    }
+}
