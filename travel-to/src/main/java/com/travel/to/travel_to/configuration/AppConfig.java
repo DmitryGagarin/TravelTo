@@ -28,11 +28,9 @@ public class AppConfig {
 
     @Bean
     public AuthenticationManager authenticationManager() {
-        // Directly create an AuthenticationManager
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
-
         return authenticationProvider::authenticate;
     }
 

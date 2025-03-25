@@ -11,7 +11,7 @@ function Attractions() {
     const [selectedTypes, setSelectedTypes] = useState([])
     const [likedAttraction, setLikedAttraction] = useState(null) 
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
-    const token = JSON.parse(localStorage.getItem('user'))?.token
+    const token = JSON.parse(localStorage.getItem('user'))?.accessToken
 
     useEffect(() => {
         const fetchAttractions = async () => {
@@ -26,6 +26,9 @@ function Attractions() {
                 const attractionTypes = response.data._embedded.attractionModelList.map(item => item.type)
                 setTypes([...new Set(attractionTypes)])
             } catch (err) {
+                if (error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                }
                 console.error(err)
             }
         }
@@ -43,6 +46,9 @@ function Attractions() {
                         },
                     })
                 } catch (err) {
+                    if (error.response.status === 401) {
+                        window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                    }
                     console.error('Error liking attraction:', err)
                 }
             }

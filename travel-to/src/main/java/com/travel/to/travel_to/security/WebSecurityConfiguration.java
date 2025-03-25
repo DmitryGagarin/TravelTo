@@ -2,6 +2,7 @@ package com.travel.to.travel_to.security;
 
 import com.travel.to.travel_to.configuration.WebConfig;
 import com.travel.to.travel_to.security.jwt.JwtTokenValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,30 +18,34 @@ public class WebSecurityConfiguration {
 
     private final WebConfig webConfig;
 
-    public WebSecurityConfiguration(WebConfig webConfig) {
+    @Autowired
+    public WebSecurityConfiguration(
+        WebConfig webConfig
+    ) {
         this.webConfig = webConfig;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+        final HttpSecurity http
+    ) throws Exception {
         http
+            .cors(cors -> cors.configurationSource(webConfig.corsConfigurationSource()))
+            .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(management ->
                     management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            .authorizeHttpRequests((requests) -> requests
+            .authorizeHttpRequests(requests -> requests
                 .requestMatchers(
-                    "/singin/**",
-                    "/signup",
-                    "/signup/name",
                     "/",
+                    "/signin/**",
+                    "/signup/**",
                     "/logout")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
             )
-            .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-            .csrf(AbstractHttpConfigurer::disable)
-            .cors(cors -> cors.configurationSource(webConfig.corsConfigurationSource()));
+            .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class);
 
         return http.build();
     }

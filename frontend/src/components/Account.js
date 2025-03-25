@@ -37,12 +37,15 @@ function Account() {
                     }, {
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + authUser.token
+                            'Authorization': 'Bearer ' + authUser.accessToken
                         }
                     })
             localStorage.setItem('user', JSON.stringify(response.data));
             history('/home');
         } catch (error) {
+            if (error.response.status === 401) {
+                window.location.href = "http://localhost:3000/"; // Manually redirect to login
+            }
             console.log(authUser)
             setError("Failed to change data")
         }

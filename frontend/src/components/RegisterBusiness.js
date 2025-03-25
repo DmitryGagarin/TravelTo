@@ -70,7 +70,7 @@ function RegisterBusiness() {
                 formData,
                 {
                     headers: {
-                        'Authorization': 'Bearer ' + authUser.token,
+                        'Authorization': 'Bearer ' + authUser.accessToken,
                         'Content-Type': 'multipart/form-data'
                     }
                 }
@@ -86,6 +86,9 @@ function RegisterBusiness() {
                         .join(', ')
                 )
             } else {
+                if (error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                }
                 setError('Business registration failed, please try again.')
             }
         }

@@ -1,4 +1,4 @@
-package com.travel.to.travel_to.validator;
+package com.travel.to.travel_to.validator.attraction;
 
 import com.travel.to.travel_to.constants.RegExConstants;
 import com.travel.to.travel_to.constants.ValidationConstants;

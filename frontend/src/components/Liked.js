@@ -7,17 +7,22 @@ function Liked() {
     const [likes, setLikes] = useState([])
 
     useEffect(() => {
-        const token = JSON.parse(localStorage.getItem('user'))?.token
-        const fetchLikes = async () => {
-            const response = await axios.get("http://localhost:8080/like", {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            console.log(response)
-            setLikes(response.data._embedded.likesModelList || [])
+        const token = JSON.parse(localStorage.getItem('user'))?.accessToken
+        try {
+            const fetchLikes = async () => {
+                const response = await axios.get("http://localhost:8080/like", {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                console.log(response)
+                setLikes(response.data._embedded.likesModelList || [])
+            }
+        } catch (error) {
+            if (error.response.status === 401) {
+                window.location.href = "http://localhost:3000/"; // Manually redirect to login
+            }
         }
-        fetchLikes()
     }, []);
 
     if (likes == null) {

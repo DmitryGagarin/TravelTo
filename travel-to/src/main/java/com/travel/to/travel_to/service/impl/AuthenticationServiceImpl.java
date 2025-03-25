@@ -81,8 +81,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public String extractEmailFromRefreshToken(String refreshToken) {
         SecretKey key = Keys.hmacShaKeyFor(JwtConstants.SECRET_KEY.getBytes());
-        Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(refreshToken).getBody();
-        Map<String, Object> authUserMap = (Map<String, Object>) claims.get("auth");
+        Claims claims = Jwts
+            .parser()
+            .verifyWith(key)
+            .build()
+            .parseSignedClaims(refreshToken)
+            .getPayload();
+        Map<?, ?> authUserMap = (Map<?, ?>) claims.get("auth");
         return authUserMap.get("email").toString();
     }
 }

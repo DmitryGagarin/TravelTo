@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.security.jwt;
 
+import com.travel.to.travel_to.constants.URLConstants;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -10,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
+import org.apache.hc.core5.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,32 +34,50 @@ public class JwtTokenValidator extends OncePerRequestFilter {
         @NotNull HttpServletResponse response,
         @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
-        String jwt = request.getHeader(JwtConstants.JWT_HEADER);
-        if (Objects.nonNull(jwt) && jwt.startsWith(JwtConstants.TOKEN_PREFIX)) {
-            jwt = jwt.substring(7);
+
+        String requestURI = request.getRequestURI();
+        if (
+            requestURI.startsWith(URLConstants.SIGNIN)
+            || requestURI.startsWith(URLConstants.SIGNUP)
+        ) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (Objects.nonNull(accessToken) && accessToken.startsWith(JwtConstants.TOKEN_PREFIX)) {
+            accessToken = accessToken.substring(7);
             try {
                 SecretKey key = Keys.hmacShaKeyFor(JwtConstants.SECRET_KEY.getBytes());
 
-                @SuppressWarnings("deprecation")
-                Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+                Claims claims = Jwts
+                    .parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(accessToken)
+                    .getPayload();
 
-                Map<String, Object> authUserMap = (Map<String, Object>) claims.get("auth");
+                Map<?, ?> authUserMap = (Map<?, ?>) claims.get("auth");
 
                 AuthUser authUser = new AuthUser();
-                authUser.setUuid((String) authUserMap.get("uuid"));
-                authUser.setEmail((String) authUserMap.get("email"));
-                authUser.setPassword((String) authUserMap.get("password"));
+                authUser.setUuid(String.valueOf(authUserMap.get("uuid")));
+                authUser.setEmail(String.valueOf(authUserMap.get("email")));
+                authUser.setPassword(String.valueOf(authUserMap.get("password")));
 
                 String authorities = String.valueOf(claims.get("authorities"));
                 List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
 
-                Authentication authentication = new UsernamePasswordAuthenticationToken(authUser, null, auth);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    authUser.getEmail(),
+                    authUser.getPassword(),
+                    auth
+                );
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (ExpiredJwtException e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-                response.setContentType("application/json");
-                response.getWriter().write("{\"message\":\"Token expired, please use the refresh token to get a new access token\"}");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setHeader("Location", "http://localhost:3000/"); // Redirect to your login page (UI)
                 return;
             } catch (Exception e) {
                 throw new BadCredentialsException("Invalid token", e);

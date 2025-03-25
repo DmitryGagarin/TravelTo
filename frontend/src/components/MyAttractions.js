@@ -7,7 +7,7 @@ function MyAttractions() {
     const [attractions, setAttractions] = useState([])
     const [attractionName, setAttractionName] = useState(null) 
 
-    const token = JSON.parse(localStorage.getItem('user'))?.token
+    const token = JSON.parse(localStorage.getItem('user'))?.accessToken
 
     useEffect(() => {
         const fetchAttractions = async () => {
@@ -19,6 +19,9 @@ function MyAttractions() {
                 })
                 setAttractions(response.data._embedded.attractionModelList)
             } catch (err) {
+                if (error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                }
                 console.error("Error fetching attractions:", err)
             }
         }
@@ -33,13 +36,14 @@ function MyAttractions() {
                 },
             })
         } catch (err) {
+            if (error.response.status === 401) {
+                window.location.href = "http://localhost:3000/"; // Manually redirect to login
+            }
             console.error("Error deleting attraction:", err)
         }
     }
 
-    // Handle deletion when attractionName changes
     useEffect(() => {
-        console.log("attractionName effect triggered:", attractionName) // Check if effect is triggered
         if (attractionName) {
             const confirmation = window.confirm("Are you sure you want to delete this attraction?")
             if (confirmation) {

@@ -4,7 +4,7 @@ import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.form.UserRefreshTokenForm;
 import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.service.AuthenticationService;
-import com.travel.to.travel_to.validator.UserSignInFormValidator;
+import com.travel.to.travel_to.validator.user.UserSignInFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;

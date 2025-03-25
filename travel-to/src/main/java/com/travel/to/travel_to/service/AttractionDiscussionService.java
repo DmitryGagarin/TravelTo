@@ -2,7 +2,7 @@ package com.travel.to.travel_to.service;
 
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
 import com.travel.to.travel_to.entity.user.AuthUser;
-import com.travel.to.travel_to.form.CreateAttractionDiscussionForm;
+import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +13,7 @@ public interface AttractionDiscussionService {
 
     @NotNull
     AttractionDiscussion create(
-        @NotNull CreateAttractionDiscussionForm createAttractionDiscussionForm,
+        @NotNull AttractionDiscussionCreateForm attractionDiscussionCreateForm,
         @NotNull AuthUser authuser,
         @NotNull String attractionUuid,
         @NotNull MultipartFile[] images

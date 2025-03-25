@@ -7,7 +7,7 @@ import com.travel.to.travel_to.exception.exception.FileExtensionException;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.service.AttractionService;
-import com.travel.to.travel_to.validator.AttractionCreateFormValidator;
+import com.travel.to.travel_to.validator.attraction.AttractionCreateFormValidator;
 import com.travel.to.travel_to.validator.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;

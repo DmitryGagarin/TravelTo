@@ -2,7 +2,7 @@ package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
 import com.travel.to.travel_to.entity.user.AuthUser;
-import com.travel.to.travel_to.form.CreateAttractionDiscussionForm;
+import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
 import com.travel.to.travel_to.repository.AttractionDiscussionRepository;
 import com.travel.to.travel_to.service.AttractionDiscussionImageService;
 import com.travel.to.travel_to.service.AttractionDiscussionService;
@@ -40,7 +40,7 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
 
     @Override
     public AttractionDiscussion create(
-        @NotNull CreateAttractionDiscussionForm createAttractionDiscussionForm,
+        @NotNull AttractionDiscussionCreateForm attractionDiscussionCreateForm,
         @NotNull AuthUser authUser,
         @NotNull String attractionUuid,
         @NotNull MultipartFile[] images
@@ -49,11 +49,11 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
 
         AttractionDiscussion attractionDiscussion = new AttractionDiscussion();
         attractionDiscussion
-            .setTitle(createAttractionDiscussionForm.getTitle())
-            .setContentLike(createAttractionDiscussionForm.getContentLike())
-            .setContentDislike(createAttractionDiscussionForm.getContentDislike())
-            .setContent(createAttractionDiscussionForm.getContent())
-            .setRating(createAttractionDiscussionForm.getRating())
+            .setTitle(attractionDiscussionCreateForm.getTitle())
+            .setContentLike(attractionDiscussionCreateForm.getContentLike())
+            .setContentDislike(attractionDiscussionCreateForm.getContentDislike())
+            .setContent(attractionDiscussionCreateForm.getContent())
+            .setRating(attractionDiscussionCreateForm.getRating())
             .setAuthorId(userService.findByUuid(authUser.getUuid()))
             .setAttractionId(attractionId)
             .setCreatedAt(LocalDateTime.now())

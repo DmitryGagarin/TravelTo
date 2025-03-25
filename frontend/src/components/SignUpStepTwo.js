@@ -13,8 +13,6 @@ function SignUpStepOne() {
 
     const history = useNavigate()
 
-    const authUser = JSON.parse(localStorage.getItem('user'))
-
     const handleSignup = async () => {
         try {
             const response = await axios.post('http://localhost:8080/signup/name', {
@@ -22,11 +20,9 @@ function SignUpStepOne() {
                 surname
             }, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + authUser.accessToken
+                    'Content-Type': 'application/json'
                 }
             })
-
             localStorage.setItem('user', JSON.stringify(response.data))
             history('/home')
         } catch (error) {
@@ -38,6 +34,9 @@ function SignUpStepOne() {
                         .join(', ')
                 )
             } else {
+                if (error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                }
                 console.error('Signup failed:', error.message)
                 setError('Signup failed, please try again.')
             }

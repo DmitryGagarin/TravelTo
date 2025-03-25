@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.form;
 
-public class CreateAttractionDiscussionForm {
+public class AttractionDiscussionCreateForm {
     private String title;
     private String contentLike;
     private String contentDislike;

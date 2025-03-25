@@ -3,10 +3,10 @@ package com.travel.to.travel_to.controller;
 import com.travel.to.travel_to.assembler.AttractionDiscussionModelAssembler;
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
 import com.travel.to.travel_to.entity.user.AuthUser;
-import com.travel.to.travel_to.form.CreateAttractionDiscussionForm;
+import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
 import com.travel.to.travel_to.model.AttractionDiscussionModel;
 import com.travel.to.travel_to.service.AttractionDiscussionService;
-import com.travel.to.travel_to.validator.CreateAttractionDiscussionFormValidator;
+import com.travel.to.travel_to.validator.attraction_discussion.AttractionDiscussionCreateFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,24 +31,24 @@ import java.util.stream.Collectors;
 @RequestMapping("/attraction-discussion")
 public class AttractionDiscussionController {
 
-    private final CreateAttractionDiscussionFormValidator createAttractionDiscussionFormValidator;
+    private final AttractionDiscussionCreateFormValidator attractionDiscussionCreateFormValidator;
     private final AttractionDiscussionService attractionDiscussionService;
     private final AttractionDiscussionModelAssembler attractionDiscussionModelAssembler;
 
     @Autowired
     public AttractionDiscussionController(
-        CreateAttractionDiscussionFormValidator createAttractionDiscussionFormValidator,
+        AttractionDiscussionCreateFormValidator attractionDiscussionCreateFormValidator,
         AttractionDiscussionService attractionDiscussionService,
         AttractionDiscussionModelAssembler attractionDiscussionModelAssembler
     ) {
-        this.createAttractionDiscussionFormValidator = createAttractionDiscussionFormValidator;
+        this.attractionDiscussionCreateFormValidator = attractionDiscussionCreateFormValidator;
         this.attractionDiscussionService = attractionDiscussionService;
         this.attractionDiscussionModelAssembler = attractionDiscussionModelAssembler;
     }
 
     @InitBinder
     public void createAttractionDiscussionFormValidator(WebDataBinder binder) {
-        binder.addValidators(createAttractionDiscussionFormValidator);
+        binder.addValidators(attractionDiscussionCreateFormValidator);
     }
 
     @GetMapping("/{attractionUuid}")
@@ -72,7 +72,7 @@ public class AttractionDiscussionController {
     @PostMapping("/create/{attractionUuid}")
     public AttractionDiscussionModel createAttractionDiscussion(
         @Validated @RequestPart("attractionDiscussionCreateForm")
-        CreateAttractionDiscussionForm createAttractionDiscussionForm,
+        AttractionDiscussionCreateForm attractionDiscussionCreateForm,
         BindingResult bindingResult,
         @RequestPart(value = "images", required = false)
         MultipartFile[] images,
@@ -84,7 +84,7 @@ public class AttractionDiscussionController {
             throw new BindException(bindingResult);
         }
         return attractionDiscussionModelAssembler.toModel(
-            attractionDiscussionService.create(createAttractionDiscussionForm, authUser, attractionUuid, images)
+            attractionDiscussionService.create(attractionDiscussionCreateForm, authUser, attractionUuid, images)
         );
     }
 

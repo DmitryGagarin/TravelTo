@@ -36,7 +36,7 @@ function Attraction() {
     useEffect(() => {
         const fetchAttraction = async () => {
             try {
-                const token = JSON.parse(localStorage.getItem('user'))?.token
+                const token = JSON.parse(localStorage.getItem('user'))?.accessToken
                 const response =
                     await axios.get(`http://localhost:8080/attraction/${name}`, {
                         headers: {
@@ -46,24 +46,27 @@ function Attraction() {
                 setAttraction(response.data)
                 setAttractionUuid(response.data.uuid)
             } catch (err) {
+                if (error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                }
                 setError('Failed to fetch attraction data')
-            } finally {
-                setLoading(false) // Set loading to false after data is fetched
             }
         }
 
         const fetchDiscussions = async () => {
             try {
-                const token = JSON.parse(localStorage.getItem('user'))?.token
+                const token = JSON.parse(localStorage.getItem('user'))?.accessToken
                 const response =
                     await axios.get(`http://localhost:8080/attraction-discussion/${attractionUuid}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
                     })
-                console.log(response.data._embedded.attractionDiscussionModelList)
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
             } catch (err) {
+                if (error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                }
             }
         }
 
@@ -155,6 +158,9 @@ function Attraction() {
                         .join(', ')
                 )
             } else {
+                if (error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                }
                 setError('Discussion registration failed, please try again.')
             }
         }
@@ -163,7 +169,7 @@ function Attraction() {
     const handleNextImage = (index, images) => {
         return (index + 1) % images.length // Wrap around the image array
     }
-    
+
     const handlePrevImage = (index, images) => {
         return (index - 1 + images.length) % images.length // Wrap around the image array
     }
@@ -180,7 +186,7 @@ function Attraction() {
     if (!attraction) {
         return <div>No attraction data available</div> // If attraction data is null, show an error message
     }
-    
+
     return (
         <div>
             <Header/>

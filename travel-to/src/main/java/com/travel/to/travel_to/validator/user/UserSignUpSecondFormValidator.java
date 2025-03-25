@@ -1,4 +1,4 @@
-package com.travel.to.travel_to.validator;
+package com.travel.to.travel_to.validator.user;
 
 import com.travel.to.travel_to.form.UserSignUpSecondForm;
 import org.springframework.stereotype.Component;
