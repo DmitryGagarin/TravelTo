@@ -21,9 +21,7 @@ public class Attraction extends UuidAbleEntity {
     private String openTime;
     private String closeTime;
     private Double rating;
-
-    @Enumerated(EnumType.STRING)
-    private AttractionStatus status;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
@@ -132,11 +130,11 @@ public class Attraction extends UuidAbleEntity {
         return this;
     }
 
-    public AttractionStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public Attraction setStatus(AttractionStatus status) {
+    public Attraction setStatus(String status) {
         this.status = status;
         return this;
     }

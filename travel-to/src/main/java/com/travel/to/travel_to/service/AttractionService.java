@@ -16,7 +16,7 @@ public interface AttractionService {
     List<Attraction> findAll();
 
     @NotNull
-    List<Attraction> findAllByStatus(@NotNull AttractionStatus status);
+    List<Attraction> findAllByStatus(@NotNull String status);
 
     @NotNull
     List<Attraction> findAllByAttractionId(@NotNull Long attractionId);

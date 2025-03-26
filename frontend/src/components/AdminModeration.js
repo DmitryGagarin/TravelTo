@@ -1,0 +1,177 @@
+import React, {useEffect, useState} from 'react'
+import axios from "axios";
+import Settings from "./Settings";
+import {useParams} from "react-router-dom";
+
+const AdminModeration = () => {
+
+    const initType = useParams()
+
+    const [attractions, setAttractions] = useState([])
+    const [attractionStatus, setAttractionStatus] = useState('On_moderation')
+    const [attractionName, setAttractionName] = useState('')
+
+    const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+    useEffect(() => {
+        const fetchAttractions = async() => {
+            try {
+                const response = await axios.get(`http://localhost:8080/admin/moderation/${attractionStatus}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).data.accessToken}`
+                        }
+                    })
+                setAttractions(response.data._embedded.attractionModelList)
+            } catch (error) {
+                if (error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/";
+                }
+                console.log(error)
+            }
+        }
+
+        const applyModeration = async() => {
+            try {
+                await axios.post(`http://localhost:8080/admin/apply-moderation/${attractionName}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user'))?.accessToken}`
+                        }
+                    })
+            } catch (error) {
+                if (error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/";
+                }
+                console.log(error)
+            }
+        }
+
+        fetchAttractions()
+        if (attractionName) {
+            applyModeration()
+            setAttractionName('')
+        }
+    }, [attractionStatus])
+
+    const handleNextImage = (index, images) => {
+        return (index + 1) % images.length
+    }
+
+    const handlePrevImage = (index, images) => {
+        return (index - 1 + images.length) % images.length
+    }
+
+    const getAttractionCardStyle = (type) => {
+        switch (type.toLowerCase()) {
+            case 'museum':
+                return { backgroundColor: 'yellow', color: 'black' }
+            case 'gallery':
+                return { backgroundColor: 'orange', color: 'black' }
+            case 'park':
+                return { backgroundColor: 'green', color: 'white' }
+            case 'religious':
+                return { backgroundColor: 'lightgray', color: 'black' }
+            case 'cafe':
+                return { backgroundColor: 'wheat', color: 'black' }
+            case 'restaurant':
+                return { backgroundColor: 'pink', color: 'black' }
+            default:
+                return { backgroundColor: 'lightgray', color: 'black' }
+        }
+    }
+
+    return (
+        <div>
+            <div className="attractions-main-container">
+                <div className="attractions-container">
+                    <div className="cards-container">
+                        {attractions.map((attraction) => {
+                            return (
+                                <div key={attraction.name} className="attraction-card">
+                                    <div className="image-container">
+                                        <img
+                                            src={`data:image/pngbase64,${attraction.images[currentImageIndex]}`}
+                                            alt={attraction.name}
+                                            className="card-image"
+                                        />
+                                        <div className="image-navigation">
+                                            {/* Left Arrow Button */}
+                                            <button
+                                                className="image-nav-button left"
+                                                onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, attraction.images))}
+                                            >
+                                                &lt
+                                            </button>
+
+                                            {/* Right Arrow Button */}
+                                            <button
+                                                className="image-nav-button right"
+                                                onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, attraction.images))}
+                                            >
+                                                &gt
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="attraction-data">
+                                        <div className="attraction-type"
+                                             style={getAttractionCardStyle(attraction.type)}>
+                                            {attraction.type}
+                                        </div>
+                                        <div className="attraction-status">
+                                            {attraction.status}
+                                        </div>
+                                        <div className="rating">
+                                            Rating: {attraction.rating}
+                                        </div>
+                                        <div className="contact-info">
+                                            <p>
+                                                Website:{" "}
+                                                <a
+                                                    href={attraction.website}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    Visit
+                                                </a>
+                                            </p>
+                                            <p>Phone: {attraction.phone}</p>
+                                        </div>
+                                        <div className="publish">
+                                            <button onClick={() => setAttractionName(attraction.name)}>
+                                                Publish
+                                            </button>
+                                        </div>
+                                        <div className="name-description">
+                                            <h5>{attraction.name}</h5>
+                                            <p>{attraction.description}</p>
+                                        </div>
+                                        <div className="time">
+                                            <p>Opening Time: {attraction.openTime}</p>
+                                            <p>Closing Time: {attraction.closeTime}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+                <div className="attraction-type-changer-admin">
+                    <div className="text-center">
+                        <button type="button" className="btn btn-primary mt-3 admin-button"
+                                onClick={() => setAttractionStatus('published')}>
+                            Published
+                        </button>
+                        <button type="button" className="btn btn-primary mt-3 admin-button"
+                                onClick={() => setAttractionStatus('on_moderation')}>
+                            On Moderation
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <Settings/>
+        </div>
+    )
+}
+
+export default AdminModeration

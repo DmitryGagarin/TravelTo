@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import {FaUserAlt, FaCog, FaHeart} from 'react-icons/fa'
 
 function Header() {
@@ -26,14 +26,9 @@ function Header() {
         navigate('/home')
     }
 
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'))
-        setUser(user)
-    }, []);
-
     return (
-        <header className="d-flex justify-content-between align-items-center p-3 shadow-sm" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, backgroundColor: 'white' }}>
-            <div></div> {/* Empty div to maintain balance on the left side */}
+        <header className="d-flex justify-content-between align-items-center p-3 shadow-sm"
+                style={{position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, backgroundColor: 'white'}}>
             <button onClick={handleAttractionsClick} className="btn btn-light me-3">
                 Attractions
             </button>
@@ -41,15 +36,17 @@ function Header() {
                 Home
             </button>
             <div className="d-flex align-items-center">
-                {user && <p className="mb-0 me-3">Hello, {user.name}!</p>} {/* Display user email */}
+                <p className="mb-0 me-3">
+                    Hello, {JSON.parse(localStorage.getItem('user')).data.name}!
+                </p>
                 <button onClick={handleAccountClick} className="btn btn-light me-3">
-                    <FaUserAlt size={24} />
+                    <FaUserAlt size={24}/>
                 </button>
                 <button onClick={handleSettingsClick} className="btn btn-light">
-                    <FaCog size={24} />
+                    <FaCog size={24}/>
                 </button>
                 <button onClick={handleLiked} className="btn btn-light">
-                    <FaHeart size={24} />
+                    <FaHeart size={24}/>
                 </button>
             </div>
         </header>

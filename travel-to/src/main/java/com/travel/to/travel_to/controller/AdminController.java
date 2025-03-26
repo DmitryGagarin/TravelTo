@@ -7,6 +7,7 @@ import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.service.AttractionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,26 +33,12 @@ public class AdminController {
         this.attractionService = attractionService;
     }
 
-    @GetMapping("/moderation")
-    public PagedModel<AttractionModel> getAttractionsOnModeration() {
-        List<Attraction> attractions = attractionService.findAllByStatus(AttractionStatus.ON_MODERATION);
-        List<AttractionModel> attractionModels = attractions.stream()
-            .map(attractionModelAssembler::toModel)
-            .collect(Collectors.toList());
-
-        int pageSize = attractionModels.size();
-        int currentPage = 0;
-        int totalElements = attractionModels.size();
-        int totalPages = (int) Math.ceil((double) totalElements / pageSize);
-
-        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(pageSize, currentPage, totalElements, totalPages);
-
-        return PagedModel.of(attractionModels, pageMetadata);
-    }
-
-    @GetMapping("/published")
-    public PagedModel<AttractionModel> getAttractionsPublished() {
-        List<Attraction> attractions = attractionService.findAllByStatus(AttractionStatus.PUBLISHED);
+    @PreAuthorize("hasRole('ADMIN_USER')")
+    @GetMapping("/moderation/{type}")
+    public PagedModel<AttractionModel> getAttractionsOnModeration(
+        @PathVariable String type
+    ) {
+        List<Attraction> attractions = attractionService.findAllByStatus(type);
         List<AttractionModel> attractionModels = attractions.stream()
             .map(attractionModelAssembler::toModel)
             .collect(Collectors.toList());
@@ -71,7 +58,7 @@ public class AdminController {
         @PathVariable String name
     ) {
         return attractionModelAssembler.toModel(
-            attractionService.updateAttractionStatus(AttractionStatus.PUBLISHED, name)
+            attractionService.updateAttractionStatus(AttractionStatus.published, name)
         );
     }
 }

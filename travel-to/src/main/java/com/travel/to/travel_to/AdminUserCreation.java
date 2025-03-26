@@ -40,6 +40,7 @@ public class AdminUserCreation implements CommandLineRunner {
             User admin = userService.findByEmail("admin@travel.com").get();
             admin.setRole("ADMIN_USER");
             admin.setUserType(UserType.ADMIN);
+            admin.setName("ADMIN");
             userRepository.save(admin);
 
             UserSignInForm userSignInForm = new UserSignInForm();

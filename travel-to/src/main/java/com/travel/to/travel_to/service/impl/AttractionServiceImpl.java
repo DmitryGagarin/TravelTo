@@ -47,7 +47,7 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     @NotNull
-    public List<Attraction> findAllByStatus(@NotNull AttractionStatus status) {
+    public List<Attraction> findAllByStatus(@NotNull String status) {
         return attractionRepository.findAllByStatus(status);
     }
 
@@ -90,7 +90,7 @@ public class AttractionServiceImpl implements AttractionService {
             .setType(attractionCreateForm.getAttractionType())
             .setRating(DefaultInitialValues.INITIAL_ATTRACTION_RATING)
             .setOwner(userService.findByUuid(authUser.getUuid()))
-            .setStatus(AttractionStatus.ON_MODERATION);
+            .setStatus(AttractionStatus.on_moderation.name());
         attractionRepository.save(attraction);
 
         try {
@@ -120,7 +120,7 @@ public class AttractionServiceImpl implements AttractionService {
         @NotNull String attractionName
     ) {
         Attraction attraction = getByName(attractionName);
-        attraction.setStatus(attractionStatus);
+        attraction.setStatus(attractionStatus.name());
         return attractionRepository.save(attraction);
     }
 

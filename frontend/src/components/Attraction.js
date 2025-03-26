@@ -36,7 +36,7 @@ function Attraction() {
     useEffect(() => {
         const fetchAttraction = async () => {
             try {
-                const token = JSON.parse(localStorage.getItem('user'))?.accessToken
+                const token = JSON.parse(localStorage.getItem('user')).data.accessToken
                 const response =
                     await axios.get(`http://localhost:8080/attraction/${name}`, {
                         headers: {
@@ -45,7 +45,7 @@ function Attraction() {
                     })
                 setAttraction(response.data)
                 setAttractionUuid(response.data.uuid)
-            } catch (err) {
+            } catch (error) {
                 if (error.response.status === 401) {
                     window.location.href = "http://localhost:3000/"; // Manually redirect to login
                 }
@@ -55,7 +55,7 @@ function Attraction() {
 
         const fetchDiscussions = async () => {
             try {
-                const token = JSON.parse(localStorage.getItem('user'))?.accessToken
+                const token = JSON.parse(localStorage.getItem('user')).data.accessToken
                 const response =
                     await axios.get(`http://localhost:8080/attraction-discussion/${attractionUuid}`, {
                         headers: {
@@ -63,7 +63,7 @@ function Attraction() {
                         }
                     })
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
-            } catch (err) {
+            } catch (error) {
                 if (error.response.status === 401) {
                     window.location.href = "http://localhost:3000/"; // Manually redirect to login
                 }

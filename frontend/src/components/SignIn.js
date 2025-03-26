@@ -23,9 +23,7 @@ function LoginPage() {
                 }
             })
 
-            const newAccessToken = response.data.accessToken
-            const refreshToken = response.data.refreshToken
-            localStorage.setItem('user', JSON.stringify({ accessToken: newAccessToken, refreshToken: refreshToken }))
+            localStorage.setItem('user', JSON.stringify(response))
 
             history('/home')
         } catch (error) {

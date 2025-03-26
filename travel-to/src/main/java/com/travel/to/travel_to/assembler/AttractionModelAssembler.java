@@ -36,7 +36,7 @@ public class AttractionModelAssembler implements RepresentationModelAssembler<At
             .setOpenTime(entity.getOpenTime())
             .setCloseTime(entity.getCloseTime())
             .setRating(entity.getRating())
-            .setStatus(entity.getStatus().name());
+            .setStatus(entity.getStatus());
         return attractionModel;
     }
 

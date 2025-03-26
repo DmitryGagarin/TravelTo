@@ -17,7 +17,7 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
     List<Attraction> findAll();
 
     @NotNull
-    List<Attraction> findAllByStatus(@NotNull AttractionStatus status);
+    List<Attraction> findAllByStatus(@NotNull String status);
 
     @NotNull
     @Query(value = "SELECT * FROM Attraction a WHERE a.owner_id = :ownerId",

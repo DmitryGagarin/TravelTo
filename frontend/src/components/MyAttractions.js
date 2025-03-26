@@ -7,7 +7,7 @@ function MyAttractions() {
     const [attractions, setAttractions] = useState([])
     const [attractionName, setAttractionName] = useState(null) 
 
-    const token = JSON.parse(localStorage.getItem('user'))?.accessToken
+    const token = JSON.parse(localStorage.getItem('user')).data.accessToken
 
     useEffect(() => {
         const fetchAttractions = async () => {
@@ -18,11 +18,11 @@ function MyAttractions() {
                     },
                 })
                 setAttractions(response.data._embedded.attractionModelList)
-            } catch (err) {
+            } catch (error) {
                 if (error.response.status === 401) {
                     window.location.href = "http://localhost:3000/"; // Manually redirect to login
                 }
-                console.error("Error fetching attractions:", err)
+                console.error("Error fetching attractions:", error)
             }
         }
         fetchAttractions()
@@ -35,11 +35,11 @@ function MyAttractions() {
                     'Authorization': `Bearer ${token}`,
                 },
             })
-        } catch (err) {
+        } catch (error) {
             if (error.response.status === 401) {
                 window.location.href = "http://localhost:3000/"; // Manually redirect to login
             }
-            console.error("Error deleting attraction:", err)
+            console.error("Error deleting attraction:", error)
         }
     }
 
@@ -71,7 +71,7 @@ function MyAttractions() {
             <div className="my-attractions-container">
                 <div className="cards-container">
                     {attractions.map((attraction) => (
-                        <div key={attraction.id} className="attraction-card my-attraction-card">
+                        <div key={attraction.name} className="attraction-card my-attraction-card">
                             <div className="image-container">
                                 <img
                                     src={`data:image/pngbase64,${attraction.images[0]}`}

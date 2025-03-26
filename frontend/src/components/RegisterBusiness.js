@@ -70,7 +70,7 @@ function RegisterBusiness() {
                 formData,
                 {
                     headers: {
-                        'Authorization': 'Bearer ' + authUser.accessToken,
+                        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).data.accessToken}`,
                         'Content-Type': 'multipart/form-data'
                     }
                 }

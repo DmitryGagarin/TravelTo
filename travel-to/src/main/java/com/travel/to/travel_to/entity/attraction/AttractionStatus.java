@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.entity.attraction;
 
 public enum AttractionStatus {
-    ON_MODERATION,
-    PUBLISHED
+    on_moderation,
+    published
 }

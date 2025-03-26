@@ -14,6 +14,7 @@ import Settings from './Settings';
 import Account from './Account'
 import RegisterBusiness from './RegisterBusiness'
 import Liked from './Liked'
+import AdminModeration from './AdminModeration'
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
                     <Route path="/settings/account" element={<Account/>}/>
                     <Route path="/settings/business" element={<RegisterBusiness/>}/>
                     <Route path="/settings/my" element={<MyAttractions/>}/>
+                    <Route path="/settings/admin/moderation/:type" element={<AdminModeration/>}/>
                 </Routes>
             </Router>
         </div>

@@ -15,6 +15,7 @@ public class AuthUser implements UserDetails {
     private String refreshToken;
     private String name;
     private String surname;
+    private String role;
 
     public String getUuid() {
         return uuid;
@@ -82,5 +83,13 @@ public class AuthUser implements UserDetails {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
