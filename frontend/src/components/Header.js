@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {FaUserAlt, FaCog, FaHeart} from 'react-icons/fa'
+import {FaCog, FaHeart, FaUserAlt} from 'react-icons/fa'
 
 function Header() {
     const [user, setUser] = useState('')

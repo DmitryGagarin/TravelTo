@@ -20,7 +20,7 @@ function MyAttractions() {
                 setAttractions(response.data._embedded.attractionModelList)
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                    window.location.href = "http://localhost:3000/";
                 }
                 console.error("Error fetching attractions:", error)
             }
@@ -37,7 +37,7 @@ function MyAttractions() {
             })
         } catch (error) {
             if (error.response.status === 401) {
-                window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                window.location.href = "http://localhost:3000/";
             }
             console.error("Error deleting attraction:", error)
         }

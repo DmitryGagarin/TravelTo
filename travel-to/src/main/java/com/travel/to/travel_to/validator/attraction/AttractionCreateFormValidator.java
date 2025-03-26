@@ -33,10 +33,11 @@ public class AttractionCreateFormValidator implements Validator {
     public void validate(@NotNull Object target, @NotNull Errors errors) {
         AttractionCreateForm attractionCreateForm = (AttractionCreateForm) target;
 
-        if (attractionService.findByName(attractionCreateForm.getName()).isPresent()) {
+        if (attractionService.findByName(attractionCreateForm.getAttractionName()).isPresent()) {
             errors.rejectValue(ValidationFields.ATTRACTION_NAME, ValidationErrorCodes.ATTRACTION_ALREADY_EXISTS);
         }
 
+        // TODO: не работает проверка на правильность телефона + добавить везде где актуально
         if (!attractionCreateForm.getPhone().matches(RegExConstants.PHONE_NUMBER_PATTERN)) {
             errors.rejectValue(ValidationFields.PHONE_NUMBER, ValidationErrorCodes.PHONE_NUMBER_INCORRECT);
         }

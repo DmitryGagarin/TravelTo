@@ -7,9 +7,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Entity
 @Table(name = "attraction_discussion")
-public class AttractionDiscussion extends UuidAbleTimedEntity {
+public class AttractionDiscussion extends UuidAbleTimedEntity implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 5791404420055931257L;
+
     private String title;
     private String contentLike;
     private String contentDislike;

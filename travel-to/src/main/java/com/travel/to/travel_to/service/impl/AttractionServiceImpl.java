@@ -80,7 +80,7 @@ public class AttractionServiceImpl implements AttractionService {
 
         Attraction attraction = new Attraction();
         attraction
-            .setName(attractionCreateForm.getName())
+            .setName(attractionCreateForm.getAttractionName())
             .setDescription(attractionCreateForm.getDescription())
             .setAddress(attractionCreateForm.getAddress())
             .setPhone(attractionCreateForm.getPhone())

@@ -78,11 +78,13 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
     }
 
     @Override
+    @NotNull
     public AttractionDiscussion getByUuid(String attractionUuid) {
         return attractionDiscussionRepository.getByUuid(attractionUuid);
     }
 
     @Override
+    @NotNull
     public List<AttractionDiscussion> findAllByAttractionUuid(String attractionUuid) {
         return attractionDiscussionRepository.findAllByAttractionId(
             attractionService.getByUuid(attractionUuid).getId()

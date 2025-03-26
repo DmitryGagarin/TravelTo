@@ -8,6 +8,11 @@ GLOBAL AIMS: <br>
 [5] DevOps <br>
 [6] Paid content
 
+Small additions: <br>
+[1] add owner tg to business creation <br>
+[2] add cache for attraction
+
+
 Bags <br>
 [1] Error messages are not shown <br>
 [2] Registration and login in different browsers <br>

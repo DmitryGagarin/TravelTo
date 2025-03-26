@@ -10,9 +10,11 @@ import java.util.List;
 
 @Repository
 public interface AttractionDiscussionRepository extends JpaRepository<AttractionDiscussion, Long> {
+
     @NotNull
     AttractionDiscussion getByUuid(String attractionUuid);
 
+    @NotNull
     @Query(value = "SELECT * FROM attraction_discussion WHERE attraction_id =:attractionId",
     nativeQuery = true)
     List<AttractionDiscussion> findAllByAttractionId(Long attractionId);

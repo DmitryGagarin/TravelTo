@@ -7,11 +7,16 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
 @MappedSuperclass
 public class BaseUser extends UuidAbleTimedEntity implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -6403089469548212861L;
+
     private String password;
     private String email;
     private String name;

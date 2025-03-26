@@ -47,7 +47,7 @@ function Attraction() {
                 setAttractionUuid(response.data.uuid)
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                    window.location.href = "http://localhost:3000/";
                 }
                 setError('Failed to fetch attraction data')
             }
@@ -65,7 +65,7 @@ function Attraction() {
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                    window.location.href = "http://localhost:3000/";
                 }
             }
         }
@@ -159,7 +159,7 @@ function Attraction() {
                 )
             } else {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                    window.location.href = "http://localhost:3000/";
                 }
                 setError('Discussion registration failed, please try again.')
             }

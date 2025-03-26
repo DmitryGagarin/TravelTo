@@ -7,7 +7,7 @@ import java.util.UUID;
 @MappedSuperclass
 public abstract class UuidAbleEntity {
 
-    String uuid;
+    private String uuid;
 
     @PrePersist
     public void prePersist() {

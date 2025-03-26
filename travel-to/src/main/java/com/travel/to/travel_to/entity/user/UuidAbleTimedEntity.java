@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 public class UuidAbleTimedEntity extends UuidAbleEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
-    LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

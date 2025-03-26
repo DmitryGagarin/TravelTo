@@ -23,7 +23,6 @@ public class SettingsController {
     private final UserService userService;
     private final UserProfileFormValidator userProfileFormValidator;
 
-
     @Autowired
     public SettingsController(
         UserService userService,

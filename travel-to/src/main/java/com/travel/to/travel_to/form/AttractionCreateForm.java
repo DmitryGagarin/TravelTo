@@ -1,8 +1,7 @@
 package com.travel.to.travel_to.form;
 
-@SuppressWarnings("FieldMayBeFinal")
 public class AttractionCreateForm {
-    private String name;
+    private String attractionName;
     private String description;
     private String address;
     private String phone;
@@ -11,28 +10,8 @@ public class AttractionCreateForm {
     private String openTime;
     private String closeTime;
 
-    public AttractionCreateForm(
-        String name,
-        String description,
-        String address,
-        String phone,
-        String website,
-        String attractionType,
-        String openTime,
-        String closeTime
-    ) {
-        this.name = name;
-        this.description = description;
-        this.address = address;
-        this.phone = phone;
-        this.website = website;
-        this.attractionType = attractionType;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
-    }
-
-    public String getName() {
-        return name;
+    public String getAttractionName() {
+        return attractionName;
     }
 
     public String getDescription() {

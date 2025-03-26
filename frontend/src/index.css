@@ -49,7 +49,7 @@
   margin: 10px 0 20px 0;
 }
 
-.attractions-container, .my-attraction-container {
+.attractions-container {
   flex: 3; /* Takes up 75% of the container width */
   text-align: center;
   overflow-y: auto; /* Ensures content is scrollable if it overflows vertically */

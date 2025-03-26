@@ -41,6 +41,7 @@ public class AttractionDiscussionImageServiceImpl implements AttractionDiscussio
     }
 
     @Override
+    @NotNull
     public List<byte[]> getAllImagesByDiscussionId(
         @NotNull Long discussionId
     ) {

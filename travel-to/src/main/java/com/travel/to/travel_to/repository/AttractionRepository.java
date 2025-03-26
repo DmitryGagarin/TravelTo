@@ -14,15 +14,17 @@ import java.util.Optional;
 public interface AttractionRepository extends JpaRepository<Attraction, Long> {
 
     @NotNull
-    List<Attraction> findAll();
-
-    @NotNull
     List<Attraction> findAllByStatus(@NotNull String status);
 
     @NotNull
     @Query(value = "SELECT * FROM Attraction a WHERE a.owner_id = :ownerId",
     nativeQuery = true)
     List<Attraction> findAllByOwnerId(@NotNull Long ownerId);
+
+    @NotNull
+    @Query(value = "SELECT a.rating FROM Attraction a WHERE a.id = :attractionId",
+    nativeQuery = true)
+    List<Double> findAllAttractionRatingsById(Long attractionId);
 
     Optional<Attraction> findByName(@NotNull String name);
 
@@ -32,8 +34,4 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
     @NotNull
     Attraction getByName(@NotNull String name);
 
-    @NotNull
-    @Query(value = "SELECT a.rating FROM Attraction a WHERE a.id = :attractionId",
-    nativeQuery = true)
-    List<Double> findAllAttractionRatingsById(Long attractionId);
 }

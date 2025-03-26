@@ -30,28 +30,37 @@ public class AuthUser implements UserDetails {
         return email;
     }
 
-    public void setEmail(String email) {
+    public AuthUser setEmail(String email) {
         this.email = email;
+        return this;
     }
 
-    public void setPassword(String password) {
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public AuthUser setPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public AuthUser setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
+    public AuthUser setSurname(String surname) {
         this.surname = surname;
+        return this;
     }
 
     @Override
@@ -59,10 +68,6 @@ public class AuthUser implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
     @Override
     public String getUsername() {
@@ -73,23 +78,26 @@ public class AuthUser implements UserDetails {
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken) {
+    public AuthUser setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+        return this;
     }
 
     public String getRefreshToken() {
         return refreshToken;
     }
 
-    public void setRefreshToken(String refreshToken) {
+    public AuthUser setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+        return this;
     }
 
     public String getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public AuthUser setRole(String role) {
         this.role = role;
+        return this;
     }
 }

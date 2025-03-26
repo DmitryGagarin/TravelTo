@@ -67,6 +67,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @NotNull
     public AuthUser refreshToken(
         @NotNull UserRefreshTokenForm userRefreshTokenForm
     ) {

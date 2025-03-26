@@ -6,6 +6,7 @@ import com.travel.to.travel_to.service.AttractionImageService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,7 +22,7 @@ public class AttractionModelAssembler implements RepresentationModelAssembler<At
     }
 
     @Override
-    @NotNull
+    @NonNull
     public AttractionModel toModel(@NotNull Attraction entity) {
         AttractionModel attractionModel = new AttractionModel();
         attractionModel
@@ -39,5 +40,4 @@ public class AttractionModelAssembler implements RepresentationModelAssembler<At
             .setStatus(entity.getStatus());
         return attractionModel;
     }
-
 }

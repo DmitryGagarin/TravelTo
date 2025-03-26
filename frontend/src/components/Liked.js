@@ -20,7 +20,7 @@ function Liked() {
             }
         } catch (error) {
             if (error.response.status === 401) {
-                window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                window.location.href = "http://localhost:3000/";
             }
         }
     }, []);

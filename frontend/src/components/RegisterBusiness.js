@@ -87,7 +87,7 @@ function RegisterBusiness() {
                 )
             } else {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/"; // Manually redirect to login
+                    window.location.href = "http://localhost:3000/";
                 }
                 setError('Business registration failed, please try again.')
             }

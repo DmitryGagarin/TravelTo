@@ -41,6 +41,7 @@ public class AttractionImageServiceImpl implements AttractionImageService {
     }
 
     @Override
+    @NotNull
     public List<byte[]> getAllImagesByAttractionId(Long attractionId) {
         return attractionImageRepository.getAllImagesByAttractionId(attractionId);
     }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface AttractionImageService {
+
     @NotNull
     List<AttractionImage> create(
         @NotNull MultipartFile[] images,

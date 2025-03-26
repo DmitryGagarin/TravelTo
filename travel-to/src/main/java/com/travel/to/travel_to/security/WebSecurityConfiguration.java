@@ -40,7 +40,8 @@ public class WebSecurityConfiguration {
                     "/",
                     "/signin/**",
                     "/signup/**",
-                    "/logout")
+                    "/logout",
+                    "/attraction")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

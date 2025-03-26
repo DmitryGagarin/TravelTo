@@ -3,15 +3,20 @@ package com.travel.to.travel_to.entity.attraction;
 import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.entity.user.UuidAbleEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Entity
 @Table(name = "attraction")
-public class Attraction extends UuidAbleEntity {
+public class Attraction extends UuidAbleEntity implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2849542955548186627L;
+
     private String name;
     private String description;
     private String address;

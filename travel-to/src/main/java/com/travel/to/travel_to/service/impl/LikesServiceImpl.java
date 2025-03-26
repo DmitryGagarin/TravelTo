@@ -32,6 +32,7 @@ public class LikesServiceImpl implements LikesService {
     }
 
     @Override
+    @NotNull
     public Likes addLike(
         @NotNull String attractionName,
         @NotNull AuthUser authUser
@@ -47,6 +48,7 @@ public class LikesServiceImpl implements LikesService {
     }
 
     @Override
+    @NotNull
     public List<Likes> getAllByUser(AuthUser authUser) {
         Long id = userService.findByUuid(authUser.getUuid()).getId();
         return likesRepository.findAllByUserId(id);
