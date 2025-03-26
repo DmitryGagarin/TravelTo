@@ -1,20 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import Settings from "./Settings";
-import {useParams} from "react-router-dom";
 
 const AdminModeration = () => {
 
-    const initType = useParams()
-
     const [attractions, setAttractions] = useState([])
-    const [attractionStatus, setAttractionStatus] = useState('On_moderation')
+    const [attractionStatus, setAttractionStatus] = useState('on_moderation')
     const [attractionName, setAttractionName] = useState('')
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
     useEffect(() => {
-        const fetchAttractions = async() => {
+        const fetchAttractions = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/admin/moderation/${attractionStatus}`,
                     {
@@ -30,13 +27,17 @@ const AdminModeration = () => {
                 console.log(error)
             }
         }
+        fetchAttractions()
+    }, [attractionStatus])
 
-        const applyModeration = async() => {
+    useEffect(() => {
+        const applyModeration = async () => {
             try {
-                await axios.post(`http://localhost:8080/admin/apply-moderation/${attractionName}`,
+                console.log(`Bearer ${JSON.parse(localStorage.getItem('user')).data.accessToken}`)
+                    await axios.post(`http://localhost:8080/admin/apply-moderation/${attractionName}`, {},
                     {
                         headers: {
-                            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user'))?.accessToken}`
+                            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).data.accessToken}`,
                         }
                     })
             } catch (error) {
@@ -45,14 +46,11 @@ const AdminModeration = () => {
                 }
                 console.log(error)
             }
+            setAttractionName('');
         }
 
-        fetchAttractions()
-        if (attractionName) {
-            applyModeration()
-            setAttractionName('')
-        }
-    }, [attractionStatus])
+        applyModeration()
+    }, [attractionName])
 
     const handleNextImage = (index, images) => {
         return (index + 1) % images.length
@@ -65,19 +63,19 @@ const AdminModeration = () => {
     const getAttractionCardStyle = (type) => {
         switch (type.toLowerCase()) {
             case 'museum':
-                return { backgroundColor: 'yellow', color: 'black' }
+                return {backgroundColor: 'yellow', color: 'black'}
             case 'gallery':
-                return { backgroundColor: 'orange', color: 'black' }
+                return {backgroundColor: 'orange', color: 'black'}
             case 'park':
-                return { backgroundColor: 'green', color: 'white' }
+                return {backgroundColor: 'green', color: 'white'}
             case 'religious':
-                return { backgroundColor: 'lightgray', color: 'black' }
+                return {backgroundColor: 'lightgray', color: 'black'}
             case 'cafe':
-                return { backgroundColor: 'wheat', color: 'black' }
+                return {backgroundColor: 'wheat', color: 'black'}
             case 'restaurant':
-                return { backgroundColor: 'pink', color: 'black' }
+                return {backgroundColor: 'pink', color: 'black'}
             default:
-                return { backgroundColor: 'lightgray', color: 'black' }
+                return {backgroundColor: 'lightgray', color: 'black'}
         }
     }
 

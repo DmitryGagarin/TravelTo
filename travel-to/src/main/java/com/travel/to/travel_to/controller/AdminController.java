@@ -38,7 +38,7 @@ public class AdminController {
     public PagedModel<AttractionModel> getAttractionsOnModeration(
         @PathVariable String type
     ) {
-        List<Attraction> attractions = attractionService.findAllByStatus(type);
+        List<Attraction> attractions = attractionService.findAllByStatus(type.toLowerCase());
         List<AttractionModel> attractionModels = attractions.stream()
             .map(attractionModelAssembler::toModel)
             .collect(Collectors.toList());

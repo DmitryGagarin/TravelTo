@@ -22,9 +22,8 @@ function Attractions() {
                         'Authorization': `Bearer ${token}`,
                     },
                 })
-                console.log("response data _embedded attractionModelList", response.data._embedded.attractionModelList)
-                setAttractions(response.data._embedded.attractionModelList)
-                console.log("attraction", attractions)
+                const publishedAttractions = response.data._embedded.attractionModelList.filter(attraction => attraction.status === 'published');
+                setAttractions(publishedAttractions)
                 const attractionTypes = response.data._embedded.attractionModelList.map(item => item.type)
                 setTypes([...new Set(attractionTypes)])
             } catch (error) {
@@ -78,9 +77,10 @@ function Attractions() {
 
     const filteredAttractions = attractions.filter(attraction =>
         selectedTypes.length === 0 ||
-        selectedTypes.includes(attraction.type) &&
-        attraction.status === 'PUBLISHED'
+        selectedTypes.includes(attraction.type)
     )
+
+    console.log(filteredAttractions)
 
     // TODO: смена картинок распространяется на все карточки на странице
     // Handle image navigation
@@ -111,114 +111,109 @@ function Attractions() {
         }
     }
 
+    console.log(attractions)
     return (
         <div>
             <Header/>
-            {attractions > 0 ? (
-                <div className="attractions-main-container">
-                    <div className="attractions-container">
-                        <div className="cards-container">
-                            {filteredAttractions.map((attraction) => {
-                                return (
-                                    <div key={attraction.name} className="attraction-card">
-                                        <div className="image-container">
-                                            <img
-                                                src={`data:image/pngbase64,${attraction.images[currentImageIndex]}`}
-                                                alt={attraction.name}
-                                                className="card-image"
-                                            />
-                                            <div className="image-navigation">
-                                                {/* Left Arrow Button */}
-                                                <button
-                                                    className="image-nav-button left"
-                                                    onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, attraction.images))}
-                                                >
-                                                    &lt
-                                                </button>
+            <div className="attractions-main-container">
+                <div className="attractions-container">
+                    <div className="cards-container">
+                        {filteredAttractions.map((attraction) => {
+                            return (
+                                <div key={attraction.name} className="attraction-card">
+                                    <div className="image-container">
+                                        <img
+                                            src={`data:image/pngbase64,${attraction.images[currentImageIndex]}`}
+                                            alt={attraction.name}
+                                            className="card-image"
+                                        />
+                                        <div className="image-navigation">
+                                            {/* Left Arrow Button */}
+                                            <button
+                                                className="image-nav-button left"
+                                                onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, attraction.images))}
+                                            >
+                                                &lt
+                                            </button>
 
-                                                {/* Right Arrow Button */}
-                                                <button
-                                                    className="image-nav-button right"
-                                                    onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, attraction.images))}
-                                                >
-                                                    &gt
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div className="attraction-data">
-                                            <div className="attraction-type"
-                                                 style={getAttractionCardStyle(attraction.type)}>
-                                                {attraction.type}
-                                            </div>
-                                            <div className="like">
-                                                <FaHeart onClick={() => setLikedAttraction(attraction.name)}/>
-                                            </div>
-                                            <div className="rating">
-                                                Rating: {attraction.rating}
-                                            </div>
-                                            <div className="contact-info">
-                                                <p>
-                                                    Website:{" "}
-                                                    <a
-                                                        href={attraction.website}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        Visit
-                                                    </a>
-                                                </p>
-                                                <p>Phone: {attraction.phone}</p>
-                                            </div>
-                                            <div className="name-description">
-                                                <h5>{attraction.name}</h5>
-                                                <p>{attraction.description}</p>
-                                            </div>
-                                            <div className="learn-more">
-                                                <button className="learn-more-button">
-                                                    <Link to={`/attraction/${attraction.name}`}>Learn More</Link>
-                                                </button>
-                                            </div>
-                                            <div className="time">
-                                                <p>Opening Time: {attraction.openTime}</p>
-                                                <p>Closing Time: {attraction.closeTime}</p>
-                                            </div>
+                                            {/* Right Arrow Button */}
+                                            <button
+                                                className="image-nav-button right"
+                                                onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, attraction.images))}
+                                            >
+                                                &gt
+                                            </button>
                                         </div>
                                     </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Filter Container */}
-                    <div className="filter-container">
-                        <h5>Filter</h5>
-                        <div className="checkboxes">
-                            {types.map((type) => (
-                                <div key={type} className="checkbox-container">
-                                    <label>{type}</label>
-                                    <input
-                                        type="checkbox"
-                                        value={type}
-                                        checked={selectedTypes.includes(type)}
-                                        onChange={handleTypeChange}
-                                    />
+                                    <div className="attraction-data">
+                                        <div className="attraction-type"
+                                             style={getAttractionCardStyle(attraction.type)}>
+                                            {attraction.type}
+                                        </div>
+                                        <div className="like">
+                                            <FaHeart onClick={() => setLikedAttraction(attraction.name)}/>
+                                        </div>
+                                        <div className="rating">
+                                            Rating: {attraction.rating}
+                                        </div>
+                                        <div className="contact-info">
+                                            <p>
+                                                Website:{" "}
+                                                <a
+                                                    href={attraction.website}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    Visit
+                                                </a>
+                                            </p>
+                                            <p>Phone: {attraction.phone}</p>
+                                        </div>
+                                        <div className="name-description">
+                                            <h5>{attraction.name}</h5>
+                                            <p>{attraction.description}</p>
+                                        </div>
+                                        <div className="learn-more">
+                                            <button className="learn-more-button">
+                                                <Link to={`/attraction/${attraction.name}`}>Learn More</Link>
+                                            </button>
+                                        </div>
+                                        <div className="time">
+                                            <p>Opening Time: {attraction.openTime}</p>
+                                            <p>Closing Time: {attraction.closeTime}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                        {/* Search Bar Container */}
-                        <MDBInput
-                            type="text"
-                            id="filterInput"
-                            onKeyUp={handleSearch}
-                            placeholder="Search"
-                        />
+                            )
+                        })}
                     </div>
                 </div>
-            ) : (
-                <h2>
-                    Empty
-                </h2>
-            )}
+
+                {/* Filter Container */}
+                <div className="filter-container">
+                    <h5>Filter</h5>
+                    <div className="checkboxes">
+                        {types.map((type) => (
+                            <div key={type} className="checkbox-container">
+                                <label>{type}</label>
+                                <input
+                                    type="checkbox"
+                                    value={type}
+                                    checked={selectedTypes.includes(type)}
+                                    onChange={handleTypeChange}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    {/* Search Bar Container */}
+                    <MDBInput
+                        type="text"
+                        id="filterInput"
+                        onKeyUp={handleSearch}
+                        placeholder="Search"
+                    />
+                </div>
+            </div>
         </div>
     )
 }
