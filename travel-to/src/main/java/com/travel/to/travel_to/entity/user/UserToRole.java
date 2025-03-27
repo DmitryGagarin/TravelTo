@@ -12,7 +12,7 @@ public class UserToRole extends UuidAbleEntity {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "id") // Make sure to reference the Role id
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
     public User getUser() {
