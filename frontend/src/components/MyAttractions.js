@@ -7,7 +7,7 @@ function MyAttractions() {
     const [attractions, setAttractions] = useState([])
     const [attractionName, setAttractionName] = useState(null) 
 
-    const token = JSON.parse(localStorage.getItem('user')).data.accessToken
+    const token = JSON.parse(localStorage.getItem('user')).accessToken
 
     useEffect(() => {
         const fetchAttractions = async () => {

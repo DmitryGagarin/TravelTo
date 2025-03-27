@@ -25,7 +25,7 @@ public class AttractionImageServiceImpl implements AttractionImageService {
     }
 
     @Override
-    public List<AttractionImage> create(
+    public List<AttractionImage> save(
         @NotNull MultipartFile[] images,
         @NotNull Long attractionId
     ) throws IOException {

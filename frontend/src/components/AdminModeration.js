@@ -16,7 +16,7 @@ const AdminModeration = () => {
                 const response = await axios.get(`http://localhost:8080/admin/moderation/${attractionStatus}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).data.accessToken}`
+                            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`
                         }
                     })
                 setAttractions(response.data._embedded.attractionModelList)
@@ -33,11 +33,11 @@ const AdminModeration = () => {
     useEffect(() => {
         const applyModeration = async () => {
             try {
-                console.log(`Bearer ${JSON.parse(localStorage.getItem('user')).data.accessToken}`)
+                console.log(`Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`)
                     await axios.post(`http://localhost:8080/admin/apply-moderation/${attractionName}`, {},
                     {
                         headers: {
-                            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).data.accessToken}`,
+                            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`,
                         }
                     })
             } catch (error) {

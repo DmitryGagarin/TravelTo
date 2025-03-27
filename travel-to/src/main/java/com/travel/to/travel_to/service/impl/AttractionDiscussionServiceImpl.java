@@ -2,12 +2,16 @@ package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
 import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.entity.user.Roles;
+import com.travel.to.travel_to.entity.user.UserToRole;
 import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
 import com.travel.to.travel_to.repository.AttractionDiscussionRepository;
 import com.travel.to.travel_to.service.AttractionDiscussionImageService;
 import com.travel.to.travel_to.service.AttractionDiscussionService;
 import com.travel.to.travel_to.service.AttractionService;
+import com.travel.to.travel_to.service.RoleService;
 import com.travel.to.travel_to.service.UserService;
+import com.travel.to.travel_to.service.UserToRoleService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,21 +25,27 @@ import java.util.List;
 public class AttractionDiscussionServiceImpl implements AttractionDiscussionService {
 
     private final UserService userService;
+    private final RoleService roleService;
     private final AttractionService attractionService;
     private final AttractionDiscussionImageService attractionDiscussionImageService;
     private final AttractionDiscussionRepository attractionDiscussionRepository;
+    private final UserToRoleService userToRoleService;
 
     @Autowired
     public AttractionDiscussionServiceImpl(
         UserService userService,
+        RoleService roleService,
         AttractionService attractionService,
         AttractionDiscussionImageService attractionDiscussionImageService,
-        AttractionDiscussionRepository attractionDiscussionRepository
+        AttractionDiscussionRepository attractionDiscussionRepository,
+        UserToRoleService userToRoleService
     ) {
         this.userService = userService;
+        this.roleService = roleService;
         this.attractionService = attractionService;
         this.attractionDiscussionImageService = attractionDiscussionImageService;
         this.attractionDiscussionRepository = attractionDiscussionRepository;
+        this.userToRoleService = userToRoleService;
     }
 
     @Override
@@ -59,6 +69,14 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
             .setCreatedAt(LocalDateTime.now())
             .setUpdatedAt(LocalDateTime.now());
         attractionDiscussionRepository.save(attractionDiscussion);
+
+        userService.updateUserRole(authUser, Roles.DISCUSSION_OWNER);
+
+        UserToRole userToRole = new UserToRole();
+        userToRole
+            .setUser(userService.findByUuid(authUser.getUuid()))
+            .setRole(roleService.getRoleByName(Roles.DISCUSSION_OWNER.toString()));
+        userToRoleService.save(userToRole);
 
         attractionDiscussionImageService.create(attractionDiscussion.getId(), images);
 

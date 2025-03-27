@@ -20,7 +20,7 @@ function SignUpStepOne() {
                 surname
             }, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`
                 }
             })
             localStorage.setItem('user', JSON.stringify(response.data))
@@ -48,7 +48,6 @@ function SignUpStepOne() {
             <div className="border rounded-lg p-4" style={{width: '600px', height: 'auto'}}>
                 <MDBContainer className="p-3">
                     <h2 className="mb-4 text-center">Sign Up Page</h2>
-                    {/* Render error message if exists */}
                     {error && <p className="text-danger">{error}</p>}
                     <MDBInput wrapperClass='mb-3' placeholder='First name' id='name' value={name} type='text'
                               onChange={(e) => setName(e.target.value)}/>

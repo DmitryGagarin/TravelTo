@@ -17,6 +17,7 @@ public class Attraction extends UuidAbleEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 2849542955548186627L;
 
+    private String ownerTelegram;
     private String name;
     private String description;
     private String address;
@@ -35,6 +36,15 @@ public class Attraction extends UuidAbleEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "liked_by")
     private User likedBy;
+
+    public String getOwnerTelegram() {
+        return ownerTelegram;
+    }
+
+    public Attraction setOwnerTelegram(String ownerTelegram) {
+        this.ownerTelegram = ownerTelegram;
+        return this;
+    }
 
     public String getName() {
         return name;

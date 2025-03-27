@@ -7,11 +7,14 @@ GLOBAL AIMS: <br>
 [4] Edit attraction for owner <br>
 [5] DevOps <br>
 [6] Paid content
+[7] Email confirmation
 
 Small additions: <br>
-[1] add owner tg to business creation <br>
-[2] add cache for attraction
-
+[2] add cache for attraction <br>
+[3] get rid of user in localStorage <br>
+[4] there should be a set of roles, not a single string <br>
+[5] probably need validation whether user completed full registration <br>
+[6] add discussion deletion
 
 Bags <br>
 [1] Error messages are not shown <br>

@@ -6,6 +6,7 @@ import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -23,12 +24,12 @@ public class UserSignInFormValidator implements Validator {
     }
 
     @Override
-    public boolean supports(@NotNull Class<?> clazz) {
+    public boolean supports(@NonNull Class<?> clazz) {
         return UserSignInForm.class.equals(clazz);
     }
 
     @Override
-    public void validate(@NotNull Object target, @NotNull Errors errors) {
+    public void validate(@NonNull Object target, @NonNull Errors errors) {
         UserSignInForm userSignInForm = (UserSignInForm) target;
 
         String email = userSignInForm.getEmail();

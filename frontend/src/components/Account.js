@@ -1,78 +1,81 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
-import {
-    MDBContainer,
-    MDBInput,
-} from "mdb-react-ui-kit";
-import {useNavigate} from "react-router-dom";
-import Settings from "./Settings";
+import {MDBContainer, MDBInput} from "mdb-react-ui-kit"
+import {useNavigate} from "react-router-dom"
+import Settings from "./Settings"
 
 function Account() {
-
-    const [name, setName] = useState('')
-    const [surname, setSurname] = useState('')
-    const [phone, setPhone] = useState('')
-    const [email, setEmail] = useState('')
-    const [error, setError] = useState('')
-
-    const history = useNavigate();
     const authUser = JSON.parse(localStorage.getItem('user'))
 
-    useEffect(() => {
-        setName(authUser.name)
-        setSurname(authUser.surname)
-        setPhone(authUser.phone)
-        setEmail(authUser.email)
-    }, [])
+    const [name, setName] = useState(authUser.name)
+    const [surname, setSurname] = useState(authUser.surname)
+    const [phone, setPhone] = useState(authUser.phone)
+    const [email, setEmail] = useState(authUser.email)
+
+    const [error, setError] = useState('')
+
+    const [deleteButtonClicked, setDeleteButtonClicked] = useState(false)
+
+    const history = useNavigate()
+
+    // useEffect(() => {
+    //     setName(authUser.name)
+    //     setSurname(authUser.surname)
+    //     setPhone(authUser.phone)
+    //     setEmail(authUser.email)
+    // }, [authUser])
 
     const handleChange = async () => {
         try {
-            const response = await
-                axios.post("http://localhost:8080/settings/save-changes",
-                    {
-                        name,
-                        surname,
-                        phone,
-                        email
-                    }, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + authUser.accessToken
-                        }
-                    })
-            localStorage.setItem('user', JSON.stringify(response.data));
-            history('/home');
-        } catch (error) {
-            if (error.response.status === 401) {
-                window.location.href = "http://localhost:3000/";
-            }
-            console.log(authUser)
-            setError("Failed to change data")
-        }
-    }
-
-    const handleDelete = async () => {
-        try {
-            console.log(authUser.token)
-            console.log(`Bearer ${authUser.token}`)
-            await axios.post("http://localhost:8080/user/delete",
+            console.log(name, surname, email, phone)
+            const response = await axios.post("http://localhost:8080/setting/save-changes",
                 {
+                    name, surname, email, phone
+                }, {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authUser.token}`
+                        'Authorization': `Bearer ${authUser.accessToken}`
                     }
                 })
-            localStorage.removeItem('user')
-            history('/')
+            if (response) {
+                localStorage.setItem('user', JSON.stringify(response.data))
+            }
+            history('/home')
         } catch (error) {
-            // console.log(authUser)
+            if (error.response.status === 401) {
+                window.location.href = "http://localhost:3000/"
+            }
+            console.log(error)
             setError("Failed to change data")
         }
     }
 
-    const handleHome = () => {
-        history("/home")
-    }
+    console.log(surname)
+
+    useEffect(() => {
+        if (!deleteButtonClicked) return
+
+        const handleDelete = async () => {
+            try {
+                await axios.post("http://localhost:8080/user/delete", {}, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authUser.accessToken}`
+                    }
+                })
+
+                localStorage.removeItem('user')
+                history('/')
+            } catch (error) {
+                console.log(error)
+                setError("Failed to delete account")
+            }
+        }
+
+        handleDelete()
+
+        setDeleteButtonClicked(false)
+    }, [deleteButtonClicked, authUser.accessToken, history])
 
     return (
         <div className="account-details-main-container">
@@ -88,12 +91,12 @@ function Account() {
                               onChange={(e) => setEmail(e.target.value)}/>
                     {error && <p className="text-danger">{error}</p>}
                     <button onClick={handleChange}>Save changes</button>
-                    <button onClick={handleDelete}>Delete account</button>
+                    <button onClick={() => setDeleteButtonClicked(true)}>Delete account</button>
                 </MDBContainer>
             </div>
             <Settings/>
         </div>
-    );
+    )
 }
 
 export default Account

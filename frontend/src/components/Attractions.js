@@ -7,12 +7,14 @@ import {FaHeart} from "react-icons/fa"
 
 function Attractions() {
     const [attractions, setAttractions] = useState([])
+
     const [types, setTypes] = useState([])
     const [selectedTypes, setSelectedTypes] = useState([])
-    const [likedAttraction, setLikedAttraction] = useState(null)
-    const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-    const token = JSON.parse(localStorage.getItem('user')).data.accessToken
+    const [likedAttraction, setLikedAttraction] = useState(null)
+    const [currentImageIndex, setCurrentImageIndex] = useState(1)
+
+    const token = JSON.parse(localStorage.getItem('user')).accessToken
 
     useEffect(() => {
         const fetchAttractions = async () => {
@@ -80,10 +82,8 @@ function Attractions() {
         selectedTypes.includes(attraction.type)
     )
 
-    console.log(filteredAttractions)
 
     // TODO: смена картинок распространяется на все карточки на странице
-    // Handle image navigation
     const handleNextImage = (index, images) => {
         return (index + 1) % images.length
     }
@@ -111,7 +111,10 @@ function Attractions() {
         }
     }
 
-    console.log(attractions)
+    // TODO: картинки совсем отвалились
+    // console.log("filtered", filteredAttractions)
+    // console.log("image:", filteredAttractions[0].images[currentImageIndex])
+    // console.log(attractions[0].images[currentImageIndex])
     return (
         <div>
             <Header/>

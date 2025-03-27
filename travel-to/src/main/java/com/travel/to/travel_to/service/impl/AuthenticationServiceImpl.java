@@ -7,6 +7,7 @@ import com.travel.to.travel_to.security.jwt.JwtConstants;
 import com.travel.to.travel_to.security.jwt.JwtProvider;
 import com.travel.to.travel_to.service.AuthenticationService;
 import com.travel.to.travel_to.service.UserService;
+import com.travel.to.travel_to.service.UserToRoleService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -26,13 +27,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
+    private final UserToRoleService userToRoleService;
 
     @Autowired
     public AuthenticationServiceImpl(
         AuthenticationManager authenticationManager,
-        UserService userService) {
+        UserService userService, UserToRoleService userToRoleService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
+        this.userToRoleService = userToRoleService;
     }
 
     @Override
@@ -56,7 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         authUser.setEmail(userSignInForm.getEmail());
         authUser.setAccessToken(jwtAccessToken);
         authUser.setRefreshToken(jwtRefreshToken);
-        authUser.setRole(userSignInForm.getEmail().equals("admin@travel.com") ? "ADMIN_USER" : "CUSTOM_USER");
+        authUser.setRoles(userToRoleService.getAllUserRolesByUserUuid(userSignInForm.getEmail()));
         authUser.setName(
             userService.findByEmail(userSignInForm.getEmail()).isPresent()
             ? userService.findByEmail(userSignInForm.getEmail()).get().getName()

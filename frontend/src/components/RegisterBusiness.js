@@ -6,7 +6,9 @@ import Settings from "./Settings";
 
 function RegisterBusiness() {
 
-    const [name, setName] = useState('')
+    const [ownerTelegram, setOwnerTelegram] = useState('')
+
+    const [attractionName, setAttractionName] = useState('')
     const [description, setDescription] = useState('')
     const [city, setCity] = useState('')
     const [street, setStreet] = useState('')
@@ -20,10 +22,20 @@ function RegisterBusiness() {
     const [error, setError] = useState('')
 
     const history = useNavigate()
-    const authUser = JSON.parse(localStorage.getItem('user'))
 
     const validateForm = () => {
-        return name && description && city && street && household && phone && type && openTime && closeTime;
+        return (
+            ownerTelegram &&
+            attractionName &&
+            description &&
+            city &&
+            street &&
+            household &&
+            phone &&
+            type &&
+            openTime &&
+            closeTime
+        );
     }
 
     const handleImageChange = (e) => {
@@ -42,7 +54,8 @@ function RegisterBusiness() {
             const formData = new FormData()
 
             const formJson = {
-                name,
+                ownerTelegram,
+                attractionName,
                 description,
                 address: city + ", " + street + ", " + household,
                 phone,
@@ -60,8 +73,8 @@ function RegisterBusiness() {
             )
 
             if (images.length > 0) {
-                images.forEach((image, index) => {
-                    formData.append('images', image) // Each file gets appended as 'images' with a unique key
+                images.forEach((image) => {
+                    formData.append('images', image)
                 })
             }
 
@@ -70,7 +83,7 @@ function RegisterBusiness() {
                 formData,
                 {
                     headers: {
-                        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).data.accessToken}`,
+                        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`,
                         'Content-Type': 'multipart/form-data'
                     }
                 }
@@ -100,12 +113,22 @@ function RegisterBusiness() {
                 <MDBContainer>
                     <MDBInput
                         wrapperClass='mb-4'
-                        placeholder='Name'
-                        id='name'
-                        value={name}
+                        placeholder='Your telegram account'
+                        id='ownerTelegram'
+                        value={ownerTelegram}
                         type='text'
                         required
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => setOwnerTelegram(e.target.value)}
+                    />
+                    <hr className="divider-vertical"/>
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Attraction Name'
+                        id='attractionName'
+                        value={attractionName}
+                        type='text'
+                        required
+                        onChange={(e) => setAttractionName(e.target.value)}
                     />
                     <MDBInput
                         wrapperClass='mb-4'

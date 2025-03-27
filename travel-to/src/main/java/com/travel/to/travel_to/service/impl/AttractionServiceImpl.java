@@ -4,13 +4,16 @@ import com.travel.to.travel_to.constants.DefaultInitialValues;
 import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.attraction.AttractionStatus;
 import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
-import com.travel.to.travel_to.entity.user.UserType;
+import com.travel.to.travel_to.entity.user.UserToRole;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.repository.AttractionRepository;
 import com.travel.to.travel_to.service.AttractionImageService;
 import com.travel.to.travel_to.service.AttractionService;
+import com.travel.to.travel_to.service.RoleService;
 import com.travel.to.travel_to.service.UserService;
+import com.travel.to.travel_to.service.UserToRoleService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,17 +29,23 @@ public class AttractionServiceImpl implements AttractionService {
 
     private final AttractionRepository attractionRepository;
     private final UserService userService;
+    private final RoleService roleService;
     private final AttractionImageService attractionImageService;
+    private final UserToRoleService userToRoleService;
 
     @Autowired
     public AttractionServiceImpl(
         AttractionRepository attractionRepository,
         UserService userService,
-        AttractionImageService attractionImageService
+        RoleService roleService,
+        AttractionImageService attractionImageService,
+        UserToRoleService userToRoleService
     ) {
         this.attractionRepository = attractionRepository;
         this.userService = userService;
+        this.roleService = roleService;
         this.attractionImageService = attractionImageService;
+        this.userToRoleService = userToRoleService;
     }
 
     @Override
@@ -76,10 +85,11 @@ public class AttractionServiceImpl implements AttractionService {
         @NotNull AuthUser authUser,
         @NotNull MultipartFile[] images
     ) {
-        userService.updateUserType(authUser, UserType.BUSINESS_OWNER);
+        userService.updateUserRole(authUser, Roles.OWNER);
 
         Attraction attraction = new Attraction();
         attraction
+            .setOwnerTelegram(attractionCreateForm.getOwnerTelegram())
             .setName(attractionCreateForm.getAttractionName())
             .setDescription(attractionCreateForm.getDescription())
             .setAddress(attractionCreateForm.getAddress())
@@ -93,8 +103,14 @@ public class AttractionServiceImpl implements AttractionService {
             .setStatus(AttractionStatus.on_moderation.name());
         attractionRepository.save(attraction);
 
+        UserToRole userToRole = new UserToRole();
+        userToRole
+            .setRole(roleService.getRoleByName(Roles.OWNER.toString()))
+            .setUser(userService.findByUuid(authUser.getUuid()));
+        userToRoleService.save(userToRole);
+
         try {
-            attractionImageService.create(images, attraction.getId());
+            attractionImageService.save(images, attraction.getId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -149,7 +165,7 @@ public class AttractionServiceImpl implements AttractionService {
         attractionRepository.delete(getByName(name));
         if (findAllByOwner(authUser).isEmpty()) {
             User user = userService.findByUuid(authUser.getUuid());
-            userService.updateUserType(authUser, UserType.VISITOR);
+            userService.updateUserRole(authUser, Roles.USER);
         }
     }
 }

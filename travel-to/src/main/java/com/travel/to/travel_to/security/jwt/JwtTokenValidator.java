@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import org.apache.hc.core5.http.HttpHeaders;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,14 +32,14 @@ public class JwtTokenValidator extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(
         @NotNull HttpServletRequest request,
-        @NotNull HttpServletResponse response,
-        @NotNull FilterChain filterChain
+        @NonNull HttpServletResponse response,
+        @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
         if (
-            requestURI.startsWith(URLConstants.SIGNIN)
-            || requestURI.startsWith(URLConstants.SIGNUP)
+            requestURI.equals(URLConstants.SIGNIN)
+            || requestURI.equals(URLConstants.SIGNUP)
         ) {
             filterChain.doFilter(request, response);
             return;

@@ -6,16 +6,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class AuthUser implements UserDetails {
     private String uuid;
     private String email;
+    private String phone;
     private String password;
     private String accessToken;
     private String refreshToken;
     private String name;
     private String surname;
-    private String role;
+    private Set<String> roles;
 
     public String getUuid() {
         return uuid;
@@ -32,6 +34,15 @@ public class AuthUser implements UserDetails {
 
     public AuthUser setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public AuthUser setPhone(String phone) {
+        this.phone = phone;
         return this;
     }
 
@@ -92,12 +103,12 @@ public class AuthUser implements UserDetails {
         return this;
     }
 
-    public String getRole() {
-        return role;
+    public Set<String> getRoles() {
+        return roles;
     }
 
-    public AuthUser setRole(String role) {
-        this.role = role;
+    public AuthUser setRoles(Set<String> roles) {
+        this.roles = roles;
         return this;
     }
 }

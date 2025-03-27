@@ -1,12 +1,36 @@
-import React from 'react'
-import {useNavigate} from "react-router-dom"
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom"
 import Header from "./Header"
+import axios from "axios";
 
 function Settings() {
 
-    const isAdmin = JSON.parse(localStorage.getItem('user')).data.role === "ADMIN_USER"
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [isOwner, setIsOwner] = useState(false)
+
+    const authUser = JSON.parse(localStorage.getItem('user'))
 
     const history = useNavigate()
+
+    useEffect(() => {
+        const getUser = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/user/get', {
+                    headers: {
+                        'Authorization': `Bearer ${authUser.accessToken}`
+                    }
+                })
+
+                setIsOwner(response.data.role === "OWNER_USER")
+                setIsAdmin(response.data.role === "ADMIN_USER")
+
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        getUser()
+    }, [authUser.accessToken])
 
     const handleAccount = () => {
         history('/settings/account')
@@ -30,64 +54,40 @@ function Settings() {
 
     return (
         <div>
-            <Header/>
-            {isAdmin ? (
-                <div className="settings">
+            <Header />
+            <div className="settings">
+                <div className="text-center">
+                    <button type="button" className="btn btn-primary mt-3 settings-button"
+                            onClick={handleAccount}>Account
+                    </button>
+                </div>
+                {isOwner && (
                     <div className="text-center">
                         <button type="button" className="btn btn-primary mt-3 settings-button"
-                                onClick={handleAccount}>Account
+                                onClick={handleMyBusiness}>My Business
                         </button>
                     </div>
-                    <div className="text-center">
-                        <button type="button" className="btn btn-primary mt-3 settings-button"
-                                onClick={handleMyBusiness}>My
-                            business
-                        </button>
-                    </div>
-                    <div className="text-center">
-                        <button type="button" className="btn btn-primary mt-3 settings-button"
-                                onClick={handleBusinessOwner}>Are you a business owner?
-                        </button>
-                    </div>
-                    <div className="text-center">
-                        <button type="button" className="btn btn-primary mt-3 settings-button"
-                                onClick={handleLogout}>Logout
-                        </button>
-                    </div>
+                )}
+                <div className="text-center">
+                    <button type="button" className="btn btn-primary mt-3 settings-button"
+                            onClick={handleBusinessOwner}>Are you a business owner?
+                    </button>
+                </div>
+                <div className="text-center">
+                    <button type="button" className="btn btn-primary mt-3 settings-button"
+                            onClick={handleLogout}>Logout
+                    </button>
+                </div>
+                {isAdmin && (
                     <div className="text-center">
                         <button type="button" className="btn btn-primary mt-3 settings-button"
                                 onClick={handleAdminModeration}>Moderation
                         </button>
                     </div>
-                </div>
-            ) : (
-                <div className="settings">
-                    <div className="text-center">
-                        <button type="button" className="btn btn-primary mt-3 settings-button"
-                                onClick={handleAccount}>Account
-                        </button>
-                    </div>
-                    <div className="text-center">
-                        <button type="button" className="btn btn-primary mt-3 settings-button"
-                                onClick={handleMyBusiness}>My
-                            business
-                        </button>
-                    </div>
-                    <div className="text-center">
-                        <button type="button" className="btn btn-primary mt-3 settings-button"
-                                onClick={handleBusinessOwner}>Are you a business owner?
-                        </button>
-                    </div>
-                    <div className="text-center">
-                        <button type="button" className="btn btn-primary mt-3 settings-button"
-                                onClick={handleLogout}>Logout
-                        </button>
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     )
 }
-
 
 export default Settings

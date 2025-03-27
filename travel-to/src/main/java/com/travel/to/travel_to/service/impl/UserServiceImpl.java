@@ -1,15 +1,18 @@
 package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.entity.user.Role;
+import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
-import com.travel.to.travel_to.entity.user.UserType;
+import com.travel.to.travel_to.entity.user.UserToRole;
 import com.travel.to.travel_to.form.UserProfileForm;
 import com.travel.to.travel_to.form.UserSignUpFirstForm;
 import com.travel.to.travel_to.form.UserSignUpSecondForm;
 import com.travel.to.travel_to.repository.UserRepository;
+import com.travel.to.travel_to.repository.UserToRoleRepository;
 import com.travel.to.travel_to.security.jwt.JwtProvider;
+import com.travel.to.travel_to.service.RoleService;
 import com.travel.to.travel_to.service.UserService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,21 +22,29 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserToRoleRepository userToRoleRepository;
+    private final RoleService roleService;
 
     @Autowired
     public UserServiceImpl(
         UserRepository userRepository,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        UserToRoleRepository userToRoleRepository,
+        RoleService roleService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userToRoleRepository = userToRoleRepository;
+        this.roleService = roleService;
     }
 
     @Override
@@ -48,17 +59,24 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = passwordEncoder.encode(userSignupFormFirst.getPassword());
 
         user
-            .setUserType(UserType.VISITOR)
             .setPassword(encodedPassword)
             .setEmail(userSignupFormFirst.getEmail())
             .setCreatedAt(LocalDateTime.now())
             .setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
 
+        UserToRole userToRole = new UserToRole();
+        userToRole
+            .setRole(roleService.getRoleByName(Roles.USER.toString()))
+            .setUser(user);
+        userToRoleRepository.save(userToRole);
+
         AuthUser authUser = new AuthUser();
-        authUser.setUuid(user.getUuid());
-        authUser.setEmail(user.getEmail());
-        authUser.setPassword(encodedPassword);
+        authUser
+            .setUuid(user.getUuid())
+            .setEmail(user.getEmail())
+            .setPassword(encodedPassword)
+            .setRoles(Collections.singleton(Roles.USER.toString()));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 authUser,
@@ -89,8 +107,10 @@ public class UserServiceImpl implements UserService {
             .setSurname(userSignupFormSecond.getSurname());
         userRepository.save(user);
 
-        authUser.setName(userSignupFormSecond.getName());
-        authUser.setSurname(userSignupFormSecond.getSurname());
+        authUser
+            .setName(userSignupFormSecond.getName())
+            .setSurname(userSignupFormSecond.getSurname())
+            .setRoles(Collections.singleton(Roles.USER.toString()));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 authUser,
@@ -110,9 +130,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @NotNull
-    public User updateUserType(AuthUser authUser, UserType userType) {
+    public User updateUserRole(
+        @NotNull AuthUser authUser,
+        @NotNull Roles newRole
+    ) {
         User user = findByUuid(authUser.getUuid());
-        user.setUserType(userType);
+        Set<Role> currentRoles = user.getRoles();
+        currentRoles.add(roleService.getRoleByName(newRole.toString()));
+        user.setRoles(currentRoles);
+
+        UserToRole userToRole = new UserToRole();
+        userToRole
+            .setUser(user)
+            .setRole(roleService.getRoleByName(newRole.toString()));
+        userToRoleRepository.save(userToRole);
+
         return userRepository.save(user);
     }
 
@@ -126,8 +158,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @NotNull
-    @Transactional
-    public User saveChanges(
+    public AuthUser saveChanges(
         @NotNull UserProfileForm userProfileForm,
         @NotNull AuthUser authUser
     ) {
@@ -138,7 +169,30 @@ public class UserServiceImpl implements UserService {
             .setSurname(userProfileForm.getSurname())
             .setPhone(userProfileForm.getPhone())
             .setUpdatedAt(LocalDateTime.now());
-        return user;
+
+        authUser
+            .setEmail(user.getEmail())
+            .setName(user.getName())
+            .setSurname(user.getSurname())
+            .setPhone(user.getPhone());
+
+        return authUser;
+    }
+
+    @Override
+    @NotNull
+    public User getCurrentUser(
+        @NotNull AuthUser authUser
+    ) {
+        return userRepository.findByUuid(authUser.getUuid());
+    }
+
+    @Override
+    @NotNull
+    public User save(
+        @NotNull User user
+    ) {
+        return userRepository.save(user);
     }
 
     @Override

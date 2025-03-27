@@ -4,6 +4,8 @@ import com.travel.to.travel_to.constants.ValidationConstants;
 import com.travel.to.travel_to.constants.ValidationErrorCodes;
 import com.travel.to.travel_to.constants.ValidationFields;
 import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -12,12 +14,12 @@ import org.springframework.validation.Validator;
 public class AttractionDiscussionCreateFormValidator implements Validator {
 
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(@NonNull Class<?> clazz) {
         return AttractionDiscussionCreateForm.class.equals(clazz);
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(@NonNull Object target, @NonNull Errors errors) {
         AttractionDiscussionCreateForm form = (AttractionDiscussionCreateForm) target;
 
         if (

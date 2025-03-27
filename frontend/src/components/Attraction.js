@@ -36,7 +36,7 @@ function Attraction() {
     useEffect(() => {
         const fetchAttraction = async () => {
             try {
-                const token = JSON.parse(localStorage.getItem('user')).data.accessToken
+                const token = JSON.parse(localStorage.getItem('user')).accessToken
                 const response =
                     await axios.get(`http://localhost:8080/attraction/${name}`, {
                         headers: {
@@ -55,7 +55,7 @@ function Attraction() {
 
         const fetchDiscussions = async () => {
             try {
-                const token = JSON.parse(localStorage.getItem('user')).data.accessToken
+                const token = JSON.parse(localStorage.getItem('user')).accessToken
                 const response =
                     await axios.get(`http://localhost:8080/attraction-discussion/${attractionUuid}`, {
                         headers: {
@@ -70,7 +70,7 @@ function Attraction() {
             }
         }
 
-        console.log(discussions)
+        // console.log(discussions)
 
         // const fetchAddress = async() => {
         //     let coords = []

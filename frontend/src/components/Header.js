@@ -3,16 +3,15 @@ import {useNavigate} from 'react-router-dom'
 import {FaCog, FaHeart, FaUserAlt} from 'react-icons/fa'
 
 function Header() {
-    const [user, setUser] = useState('')
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const handleAccountClick = () => {
-        navigate('/settings/account'); // Redirect to the account page
-    };
+        navigate('/settings/account')
+    }
 
     const handleSettingsClick = () => {
-        navigate('/settings'); // Redirect to the settings page
-    };
+        navigate('/settings')
+    }
 
     const handleLiked = () => {
         navigate('/likes')
@@ -37,7 +36,7 @@ function Header() {
             </button>
             <div className="d-flex align-items-center">
                 <p className="mb-0 me-3">
-                    Hello, {JSON.parse(localStorage.getItem('user')).data.name}!
+                    Hello, {JSON.parse(localStorage.getItem('user')).name}!
                 </p>
                 <button onClick={handleAccountClick} className="btn btn-light me-3">
                     <FaUserAlt size={24}/>
@@ -50,7 +49,7 @@ function Header() {
                 </button>
             </div>
         </header>
-    );
+    )
 }
 
-export default Header;
+export default Header

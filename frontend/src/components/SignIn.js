@@ -23,7 +23,7 @@ function LoginPage() {
                 }
             })
 
-            localStorage.setItem('user', JSON.stringify(response))
+            localStorage.setItem('user', JSON.stringify(response.data))
 
             history('/home')
         } catch (error) {

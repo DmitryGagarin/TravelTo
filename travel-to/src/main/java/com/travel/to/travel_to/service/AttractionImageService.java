@@ -10,7 +10,7 @@ import java.util.List;
 public interface AttractionImageService {
 
     @NotNull
-    List<AttractionImage> create(
+    List<AttractionImage> save(
         @NotNull MultipartFile[] images,
         @NotNull Long attractionId
     ) throws IOException;

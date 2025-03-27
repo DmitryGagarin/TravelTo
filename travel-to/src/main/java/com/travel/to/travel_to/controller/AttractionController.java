@@ -11,6 +11,7 @@ import com.travel.to.travel_to.validator.attraction.AttractionCreateFormValidato
 import com.travel.to.travel_to.validator.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -79,6 +80,7 @@ public class AttractionController {
         return attractionModelAssembler.toModel(attractionService.getByName(name));
     }
 
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @GetMapping("/my")
     public PagedModel<AttractionModel> getAttractionsByOwner(
         @AuthenticationPrincipal AuthUser authUser
@@ -116,6 +118,7 @@ public class AttractionController {
         );
     }
 
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PostMapping("/delete/{name}")
     public void deleteAttraction(
         @PathVariable String name,

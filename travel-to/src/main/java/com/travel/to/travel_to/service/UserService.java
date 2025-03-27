@@ -1,8 +1,8 @@
 package com.travel.to.travel_to.service;
 
 import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
-import com.travel.to.travel_to.entity.user.UserType;
 import com.travel.to.travel_to.form.UserProfileForm;
 import com.travel.to.travel_to.form.UserSignUpFirstForm;
 import com.travel.to.travel_to.form.UserSignUpSecondForm;
@@ -21,13 +21,19 @@ public interface UserService {
     AuthUser addUserInformation(@NotNull UserSignUpSecondForm userSignupFormSecond, @NotNull AuthUser authUser);
 
     @NotNull
-    User updateUserType(@NotNull AuthUser authUser, @NotNull UserType userType);
+    AuthUser saveChanges(@NotNull UserProfileForm userProfileForm, AuthUser authUser);
+
+    @NotNull
+    User updateUserRole(@NotNull AuthUser authUser, @NotNull Roles newRole);
 
     @NotNull
     User findByUuid(@NotNull String userUuid);
 
     @NotNull
-    User saveChanges(@NotNull UserProfileForm userProfileForm, AuthUser authUser);
+    User getCurrentUser(@NotNull AuthUser authUser);
+
+    @NotNull
+    User save(@NotNull User user);
 
     Optional<User> findByEmail(@NotNull String email);
 

@@ -9,6 +9,7 @@ import com.travel.to.travel_to.service.AttractionDiscussionService;
 import com.travel.to.travel_to.validator.attraction_discussion.AttractionDiscussionCreateFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -76,7 +77,6 @@ public class AttractionDiscussionController {
         BindingResult bindingResult,
         @RequestPart(value = "images", required = false)
         MultipartFile[] images,
-        // TODO: AuthUser не меняется в зависимости от реально залогиненого пользователя
         @AuthenticationPrincipal AuthUser authUser,
         @PathVariable String attractionUuid
     ) throws BindException, IOException {
@@ -88,6 +88,7 @@ public class AttractionDiscussionController {
         );
     }
 
+    @PreAuthorize("hasAnyRole('DISCUSSION_OWNER', 'ADMIN')")
     @PostMapping("/delete/{attractionUuid}")
     public void deleteAttractionDiscussion(
         @PathVariable String attractionUuid,
