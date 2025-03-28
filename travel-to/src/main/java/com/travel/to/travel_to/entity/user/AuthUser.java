@@ -17,7 +17,7 @@ public class AuthUser implements UserDetails {
     private String refreshToken;
     private String name;
     private String surname;
-    private Set<String> roles;
+    private Set<GrantedAuthority> authorities;
 
     public String getUuid() {
         return uuid;
@@ -76,7 +76,7 @@ public class AuthUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return authorities;
     }
 
 
@@ -103,12 +103,8 @@ public class AuthUser implements UserDetails {
         return this;
     }
 
-    public Set<String> getRoles() {
-        return roles;
-    }
-
-    public AuthUser setRoles(Set<String> roles) {
-        this.roles = roles;
+    public AuthUser setAuthorities(Set<GrantedAuthority> authorities) {
+        this.authorities = authorities;
         return this;
     }
 }

@@ -6,29 +6,39 @@ import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.service.UserToRoleService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
 public class UserToRoleServiceImpl implements UserToRoleService {
 
     private final UserToRoleRepository userToRoleRepository;
-    private final UserService userService;
 
     @Autowired
     public UserToRoleServiceImpl(
-        UserToRoleRepository userToRoleRepository,
-        UserService userService
+        UserToRoleRepository userToRoleRepository
     ) {
         this.userToRoleRepository = userToRoleRepository;
-        this.userService = userService;
     }
 
     @Override
     @NotNull
-    public Set<String> getAllUserRolesByUserUuid(@NotNull String uuid) {
-        return userToRoleRepository.getUserRolesByUserId(userService.findByUuid(uuid).getId());
+    public Set<GrantedAuthority> getAllUserRolesByUserId(@NotNull Long id) {
+        Set<GrantedAuthority> roles = new HashSet<>();
+        Set<String> rolesIds = userToRoleRepository.getUserRolesByUserId(id);
+        for (String roleId : rolesIds) {
+            switch (roleId) {
+                case "1" -> roles.add(new SimpleGrantedAuthority("ROLE_USER"));
+                case "2" -> roles.add(new SimpleGrantedAuthority("ROLE_OWNER"));
+                case "3" -> roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                case "4" -> roles.add(new SimpleGrantedAuthority("ROLE_DISCUSSION_OWNER"));
+            }
+        }
+        return roles;
     }
 
     @Override

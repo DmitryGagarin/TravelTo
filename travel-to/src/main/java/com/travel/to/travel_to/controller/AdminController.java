@@ -33,7 +33,7 @@ public class AdminController {
         this.attractionService = attractionService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/moderation/{type}")
     public PagedModel<AttractionModel> getAttractionsOnModeration(
         @PathVariable String type
@@ -53,7 +53,7 @@ public class AdminController {
         return PagedModel.of(attractionModels, pageMetadata);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/apply-moderation/{name}")
     public AttractionModel getAttractionsApplyModeration(
         @PathVariable String name

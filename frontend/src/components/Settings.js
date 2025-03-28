@@ -7,6 +7,7 @@ function Settings() {
 
     const [isAdmin, setIsAdmin] = useState(false)
     const [isOwner, setIsOwner] = useState(false)
+    const [response, setResponse] = useState([])
 
     const authUser = JSON.parse(localStorage.getItem('user'))
 
@@ -21,8 +22,10 @@ function Settings() {
                     }
                 })
 
-                setIsOwner(response.data.role === "OWNER_USER")
-                setIsAdmin(response.data.role === "ADMIN_USER")
+                setResponse(response.data)
+                const roles = response.data.role.map(role => role.authority);
+                setIsOwner(roles.includes("ROLE_ADMIN"))
+                setIsAdmin(roles.includes("ROLE_OWNER"))
 
             } catch (error) {
                 console.error(error)
@@ -31,6 +34,14 @@ function Settings() {
 
         getUser()
     }, [authUser.accessToken])
+
+    useEffect(() => {
+        console.log(response)
+    }, [response]);
+
+    // console.log("isAdmin", isAdmin)
+    // console.log("isOwner", isOwner)
+    console.log("response", response.data)
 
     const handleAccount = () => {
         history('/settings/account')
@@ -73,11 +84,6 @@ function Settings() {
                             onClick={handleBusinessOwner}>Are you a business owner?
                     </button>
                 </div>
-                <div className="text-center">
-                    <button type="button" className="btn btn-primary mt-3 settings-button"
-                            onClick={handleLogout}>Logout
-                    </button>
-                </div>
                 {isAdmin && (
                     <div className="text-center">
                         <button type="button" className="btn btn-primary mt-3 settings-button"
@@ -85,6 +91,11 @@ function Settings() {
                         </button>
                     </div>
                 )}
+                <div className="text-center">
+                    <button type="button" className="btn btn-primary mt-3 settings-button"
+                            onClick={handleLogout}>Logout
+                    </button>
+                </div>
             </div>
         </div>
     )

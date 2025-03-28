@@ -32,7 +32,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     public AuthenticationServiceImpl(
         AuthenticationManager authenticationManager,
-        UserService userService, UserToRoleService userToRoleService) {
+        UserService userService,
+        UserToRoleService userToRoleService
+    ) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.userToRoleService = userToRoleService;
@@ -43,10 +45,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthUser login(
         @NotNull UserSignInForm userSignInForm
     ) {
+        Long userId = userService.findByEmail(userSignInForm.getEmail()).get().getId();
+
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 userSignInForm.getEmail(),
-                userSignInForm.getPassword()
+                userSignInForm.getPassword(),
+                userToRoleService.getAllUserRolesByUserId(userId)
             )
         );
 
@@ -55,11 +60,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String jwtAccessToken = JwtProvider.generateAccessToken(authentication);
         String jwtRefreshToken = JwtProvider.generateRefreshToken(authentication);
 
+
         AuthUser authUser = new AuthUser();
         authUser.setEmail(userSignInForm.getEmail());
         authUser.setAccessToken(jwtAccessToken);
         authUser.setRefreshToken(jwtRefreshToken);
-        authUser.setRoles(userToRoleService.getAllUserRolesByUserUuid(userSignInForm.getEmail()));
+        authUser.setAuthorities(userToRoleService.getAllUserRolesByUserId(userId));
         authUser.setName(
             userService.findByEmail(userSignInForm.getEmail()).isPresent()
             ? userService.findByEmail(userSignInForm.getEmail()).get().getName()
@@ -74,11 +80,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthUser refreshToken(
         @NotNull UserRefreshTokenForm userRefreshTokenForm
     ) {
+        Long userId = userService.findByEmail(userRefreshTokenForm.getEmail()).get().getId();
         String email = extractEmailFromRefreshToken(userRefreshTokenForm.getRefreshToken());
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 userRefreshTokenForm.getEmail(),
-                userRefreshTokenForm.getPassword()
+                userRefreshTokenForm.getPassword(),
+                userToRoleService.getAllUserRolesByUserId(userId)
             )
         );
 

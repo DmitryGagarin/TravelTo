@@ -12,7 +12,7 @@ import java.util.Set;
 public interface UserToRoleRepository extends JpaRepository<UserToRole, Long> {
 
     @NotNull
-    @Query(value = "SELECT role FROM user_to_role where user_id = :id",
+    @Query(value = "SELECT user_to_role.role_id FROM user_to_role where user_id = :id",
         nativeQuery = true)
     Set<String> getUserRolesByUserId(@NotNull long id);
 

@@ -80,7 +80,7 @@ public class AttractionController {
         return attractionModelAssembler.toModel(attractionService.getByName(name));
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_OWNER', 'ROLE_ADMIN')")
     @GetMapping("/my")
     public PagedModel<AttractionModel> getAttractionsByOwner(
         @AuthenticationPrincipal AuthUser authUser
@@ -118,7 +118,7 @@ public class AttractionController {
         );
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_OWNER', 'ROLE_ADMIN')")
     @PostMapping("/delete/{name}")
     public void deleteAttraction(
         @PathVariable String name,

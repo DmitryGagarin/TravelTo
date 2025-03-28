@@ -88,7 +88,7 @@ public class AttractionDiscussionController {
         );
     }
 
-    @PreAuthorize("hasAnyRole('DISCUSSION_OWNER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_DISCUSSION_OWNER', 'ROLE_ADMIN')")
     @PostMapping("/delete/{attractionUuid}")
     public void deleteAttractionDiscussion(
         @PathVariable String attractionUuid,

@@ -103,12 +103,6 @@ public class AttractionServiceImpl implements AttractionService {
             .setStatus(AttractionStatus.on_moderation.name());
         attractionRepository.save(attraction);
 
-        UserToRole userToRole = new UserToRole();
-        userToRole
-            .setRole(roleService.getRoleByName(Roles.OWNER.toString()))
-            .setUser(userService.findByUuid(authUser.getUuid()));
-        userToRoleService.save(userToRole);
-
         try {
             attractionImageService.save(images, attraction.getId());
         } catch (IOException e) {

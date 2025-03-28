@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.model;
 
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -11,7 +12,7 @@ public class UserModel extends PagedModel<UserModel> {
     private String email;
     private String phone;
     private LocalDateTime createdAt;
-    private Set<String> roles;
+    private Set<GrantedAuthority> roles;
     private String accessToken;
 
     public String getName() {
@@ -59,11 +60,11 @@ public class UserModel extends PagedModel<UserModel> {
         return this;
     }
 
-    public Set<String> getRole() {
+    public Set<GrantedAuthority> getRole() {
         return roles;
     }
 
-    public UserModel setRole(Set<String> roles) {
+    public UserModel setRole(Set<GrantedAuthority> roles) {
         this.roles = roles;
         return this;
     }

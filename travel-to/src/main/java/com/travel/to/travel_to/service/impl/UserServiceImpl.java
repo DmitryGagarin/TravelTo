@@ -13,6 +13,7 @@ import com.travel.to.travel_to.repository.UserToRoleRepository;
 import com.travel.to.travel_to.security.jwt.JwtProvider;
 import com.travel.to.travel_to.service.RoleService;
 import com.travel.to.travel_to.service.UserService;
+import com.travel.to.travel_to.service.UserToRoleService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,18 +33,21 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserToRoleRepository userToRoleRepository;
     private final RoleService roleService;
+    private final UserToRoleService userToRoleService;
 
     @Autowired
     public UserServiceImpl(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         UserToRoleRepository userToRoleRepository,
-        RoleService roleService
+        RoleService roleService,
+        UserToRoleService userToRoleService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userToRoleRepository = userToRoleRepository;
         this.roleService = roleService;
+        this.userToRoleService = userToRoleService;
     }
 
     @Override
@@ -54,7 +57,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @NotNull
-    public AuthUser registration(@NotNull UserSignUpFirstForm userSignupFormFirst) {
+    public AuthUser registration(
+        @NotNull UserSignUpFirstForm userSignupFormFirst
+    ) {
         User user = new User();
         String encodedPassword = passwordEncoder.encode(userSignupFormFirst.getPassword());
 
@@ -76,7 +81,7 @@ public class UserServiceImpl implements UserService {
             .setUuid(user.getUuid())
             .setEmail(user.getEmail())
             .setPassword(encodedPassword)
-            .setRoles(Collections.singleton(Roles.USER.toString()));
+            .setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 authUser,
@@ -110,7 +115,7 @@ public class UserServiceImpl implements UserService {
         authUser
             .setName(userSignupFormSecond.getName())
             .setSurname(userSignupFormSecond.getSurname())
-            .setRoles(Collections.singleton(Roles.USER.toString()));
+            .setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 authUser,

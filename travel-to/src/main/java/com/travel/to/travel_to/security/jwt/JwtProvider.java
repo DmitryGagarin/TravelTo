@@ -25,6 +25,7 @@ public class JwtProvider {
         authUserMap.put("uuid", ((AuthUser) auth.getPrincipal()).getUuid());
         authUserMap.put("email", ((AuthUser) auth.getPrincipal()).getEmail());
         authUserMap.put("password", ((AuthUser) auth.getPrincipal()).getPassword());
+        authUserMap.put("roles", roles);
 
         return Jwts.builder()
                 .issuedAt(new Date())

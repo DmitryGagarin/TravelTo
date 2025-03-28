@@ -12,7 +12,7 @@ function Attraction() {
     const {name} = useParams()
 
     const [error, setError] = useState('')
-    const [loading, setLoading] = useState(true) // Loading state to track fetching status
+    // const [loading, setLoading] = useState(true) // Loading state to track fetching status
 
     const [attraction, setAttraction] = useState('')
     const [discussions, setDiscussions] = useState([])
@@ -64,9 +64,9 @@ function Attraction() {
                     })
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
             } catch (error) {
-                if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/";
-                }
+                // if (error.response.status === 401) {
+                //     window.location.href = "http://localhost:3000/";
+                // }
             }
         }
 
@@ -143,7 +143,7 @@ function Attraction() {
                 formData,
                 {
                     headers: {
-                        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
+                        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`,
                         'Content-Type': 'multipart/form-data'
                     }
                 }
@@ -178,14 +178,9 @@ function Attraction() {
         setImages([...e.target.files]) // Set the file object
     }
 
-    // If loading, show loading message or spinner
-    if (loading) {
-        return <div>Loading...</div>
-    }
-
-    if (!attraction) {
-        return <div>No attraction data available</div> // If attraction data is null, show an error message
-    }
+    // if (loading) {
+    //     return <div>Loading...</div>
+    // }
 
     return (
         <div>
@@ -197,7 +192,7 @@ function Attraction() {
                             <div className="image-container">
                                 <img
                                     // TODO: реакт почему то не видит стейте в этом скоупе
-                                    src={`data:image/pngbase64,${attraction.images[currentAttractionImageIndex]}`}
+                                    // src={`data:image/pngbase64,${attraction.images[currentAttractionImageIndex]}`}
                                     alt={attraction.name}
                                     className="card-image"
                                 />
@@ -207,7 +202,7 @@ function Attraction() {
                                         onClick={() => setCurrentAttractionImageIndex(
                                             handlePrevImage(currentAttractionImageIndex, attraction.images)
                                         )}
-                                        disabled={attraction.images.length <= 1}
+                                        // disabled={attraction.images.length <= 1}
                                     >
                                         &lt
                                     </button>
@@ -217,7 +212,7 @@ function Attraction() {
                                         onClick={() => setCurrentAttractionImageIndex(
                                             handleNextImage(currentAttractionImageIndex, attraction.images)
                                         )}
-                                        disabled={attraction.images.length <= 1}
+                                        // disabled={attraction.images.length <= 1}
                                     >
                                         &gt
                                     </button>
