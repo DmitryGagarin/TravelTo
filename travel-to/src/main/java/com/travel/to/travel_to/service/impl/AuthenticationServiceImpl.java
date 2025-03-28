@@ -1,6 +1,8 @@
 package com.travel.to.travel_to.service.impl;
 
+import com.travel.to.travel_to.configuration.CustomAuthenticationProvider;
 import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.entity.user.BaseUser;
 import com.travel.to.travel_to.form.UserRefreshTokenForm;
 import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.security.jwt.JwtConstants;
@@ -13,29 +15,31 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private final AuthenticationManager authenticationManager;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
     private final UserService userService;
     private final UserToRoleService userToRoleService;
 
     @Autowired
     public AuthenticationServiceImpl(
-        AuthenticationManager authenticationManager,
+        CustomAuthenticationProvider customAuthenticationProvider,
         UserService userService,
         UserToRoleService userToRoleService
     ) {
-        this.authenticationManager = authenticationManager;
+        this.customAuthenticationProvider = customAuthenticationProvider;
         this.userService = userService;
         this.userToRoleService = userToRoleService;
     }
@@ -45,32 +49,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthUser login(
         @NotNull UserSignInForm userSignInForm
     ) {
-        Long userId = userService.findByEmail(userSignInForm.getEmail()).get().getId();
+        Long userId = userService.findByEmail(userSignInForm.getEmail())
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"))
+            .getId();
 
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                userSignInForm.getEmail(),
-                userSignInForm.getPassword(),
-                userToRoleService.getAllUserRolesByUserId(userId)
-            )
+        Set<GrantedAuthority> authorities = userToRoleService.getAllUserRolesByUserId(userId);
+
+        AuthUser authUser = new AuthUser();
+        authUser.setEmail(userSignInForm.getEmail());
+        authUser.setPassword(userSignInForm.getPassword());
+        authUser.setAuthorities(authorities);
+
+        authUser.setName(
+            userService.findByEmail(userSignInForm.getEmail())
+                .map(BaseUser::getName)
+                .orElse(null)
         );
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            authUser,
+            userSignInForm.getPassword(),
+            authUser.getAuthorities()
+        );
+
+        authentication = customAuthenticationProvider.authenticate(authentication);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwtAccessToken = JwtProvider.generateAccessToken(authentication);
         String jwtRefreshToken = JwtProvider.generateRefreshToken(authentication);
 
-
-        AuthUser authUser = new AuthUser();
-        authUser.setEmail(userSignInForm.getEmail());
         authUser.setAccessToken(jwtAccessToken);
         authUser.setRefreshToken(jwtRefreshToken);
-        authUser.setAuthorities(userToRoleService.getAllUserRolesByUserId(userId));
-        authUser.setName(
-            userService.findByEmail(userSignInForm.getEmail()).isPresent()
-            ? userService.findByEmail(userSignInForm.getEmail()).get().getName()
-            : null
-        );
 
         return authUser;
     }
@@ -82,7 +92,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     ) {
         Long userId = userService.findByEmail(userRefreshTokenForm.getEmail()).get().getId();
         String email = extractEmailFromRefreshToken(userRefreshTokenForm.getRefreshToken());
-        Authentication authentication = authenticationManager.authenticate(
+        Authentication authentication = customAuthenticationProvider.authenticate(
             new UsernamePasswordAuthenticationToken(
                 userRefreshTokenForm.getEmail(),
                 userRefreshTokenForm.getPassword(),

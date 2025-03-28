@@ -33,7 +33,7 @@ const AdminModeration = () => {
     useEffect(() => {
         const applyModeration = async () => {
             try {
-                console.log(`Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`)
+                // console.log(`Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`)
                     await axios.post(`http://localhost:8080/admin/apply-moderation/${attractionName}`, {},
                     {
                         headers: {

@@ -25,7 +25,7 @@ function LoginPage() {
 
             localStorage.setItem('user', JSON.stringify(response.data))
 
-            history('/home')
+            history('/attractions')
         } catch (error) {
             console.log(error)
         }

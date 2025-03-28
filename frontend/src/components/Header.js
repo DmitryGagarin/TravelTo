@@ -44,9 +44,9 @@ function Header() {
             navigate('/attractions')
         }
 
-        const handleHomeClick = () => {
-            navigate('/home')
-        }
+        // const handleHomeClick = () => {
+        //     navigate('/home')
+        // }
 
         return (
             <header className="d-flex justify-content-between align-items-center p-3 shadow-sm"
@@ -54,9 +54,9 @@ function Header() {
                 <button onClick={handleAttractionsClick} className="btn btn-light me-3">
                     Attractions
                 </button>
-                <button onClick={handleHomeClick} className="btn btn-light me-3">
-                    Home
-                </button>
+                {/*<button onClick={handleHomeClick} className="btn btn-light me-3">*/}
+                {/*    Home*/}
+                {/*</button>*/}
                 <div className="d-flex align-items-center">
                     <p className="mb-0 me-3">
                         Hello, {userName}!

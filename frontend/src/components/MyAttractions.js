@@ -8,6 +8,7 @@ function MyAttractions() {
     const [attractionName, setAttractionName] = useState(null) 
 
     const token = JSON.parse(localStorage.getItem('user')).accessToken
+    console.log(token)
 
     useEffect(() => {
         const fetchAttractions = async () => {
@@ -48,8 +49,6 @@ function MyAttractions() {
             const confirmation = window.confirm("Are you sure you want to delete this attraction?")
             if (confirmation) {
                 handleDelete(attractionName)
-            } else {
-                console.log("User canceled deletion.")
             }
             setAttractionName(null)
         }
@@ -111,7 +110,6 @@ function MyAttractions() {
                             </div>
                             <div className="delete-button">
                                 <button onClick={() => {
-                                    console.log(`Delete button clicked for ${attraction.name}`)
                                     setAttractionName(attraction.name)
                                 }}>Delete</button>
                             </div>

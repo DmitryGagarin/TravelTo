@@ -27,7 +27,7 @@ function Account() {
 
     const handleChange = async () => {
         try {
-            console.log(name, surname, email, phone)
+            // console.log(name, surname, email, phone)
             const response = await axios.post("http://localhost:8080/setting/save-changes",
                 {
                     name, surname, email, phone
@@ -40,7 +40,7 @@ function Account() {
             if (response) {
                 localStorage.setItem('user', JSON.stringify(response.data))
             }
-            history('/home')
+            // history('/home')
         } catch (error) {
             if (error.response.status === 401) {
                 window.location.href = "http://localhost:3000/"
@@ -50,7 +50,7 @@ function Account() {
         }
     }
 
-    console.log(surname)
+    // console.log(surname)
 
     useEffect(() => {
         if (!deleteButtonClicked) return

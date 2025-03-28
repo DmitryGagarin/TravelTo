@@ -89,7 +89,7 @@ function RegisterBusiness() {
                 }
             )
 
-            history('/home')
+            history('/settings/my')
         } catch (error) {
             if (error.response && error.response.data) {
                 const errorMessages = error.response.data

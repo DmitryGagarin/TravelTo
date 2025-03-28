@@ -79,7 +79,6 @@ public class AuthUser implements UserDetails {
         return authorities;
     }
 
-
     @Override
     public String getUsername() {
         return email;

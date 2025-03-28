@@ -80,7 +80,7 @@ public class AttractionController {
         return attractionModelAssembler.toModel(attractionService.getByName(name));
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_OWNER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_OWNER', 'ROLE_ADMIN')")
     @GetMapping("/my")
     public PagedModel<AttractionModel> getAttractionsByOwner(
         @AuthenticationPrincipal AuthUser authUser

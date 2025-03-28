@@ -35,13 +35,13 @@ function Settings() {
         getUser()
     }, [authUser.accessToken])
 
-    useEffect(() => {
-        console.log(response)
-    }, [response]);
+    // useEffect(() => {
+    //     console.log(response)
+    // }, [response]);
 
     // console.log("isAdmin", isAdmin)
     // console.log("isOwner", isOwner)
-    console.log("response", response.data)
+    // console.log("response", response.data)
 
     const handleAccount = () => {
         history('/settings/account')
@@ -56,7 +56,7 @@ function Settings() {
     }
 
     const handleLogout = () => {
-        history('/')
+        history('/signin')
     }
 
     const handleAdminModeration = () => {

@@ -46,7 +46,8 @@ public class JwtTokenValidator extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         if (
             requestURI.equals(URLConstants.SIGNIN)
-                || requestURI.equals(URLConstants.SIGNUP)
+            || requestURI.equals(URLConstants.SIGNUP)
+            || requestURI.equals(URLConstants.LOGOUT)
         ) {
             filterChain.doFilter(request, response);
             return;
@@ -73,7 +74,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                     .setEmail(String.valueOf(authUserMap.get("email")))
                     .setPassword(String.valueOf(authUserMap.get("password")));
 
-                String authorities = String.valueOf(claims.get("roles"));
+                String authorities = String.valueOf(authUserMap.get("roles"));
                 List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(

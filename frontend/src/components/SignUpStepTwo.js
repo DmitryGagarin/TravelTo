@@ -24,7 +24,7 @@ function SignUpStepOne() {
                 }
             })
             localStorage.setItem('user', JSON.stringify(response.data))
-            history('/home')
+            history('/attractions')
         } catch (error) {
             if (error.response && error.response.data) {
                 const errorMessages = error.response.data
