@@ -6,14 +6,12 @@ import com.travel.to.travel_to.entity.attraction.AttractionStatus;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
-import com.travel.to.travel_to.entity.user.UserToRole;
 import com.travel.to.travel_to.form.AttractionCreateForm;
+import com.travel.to.travel_to.form.AttractionEditForm;
 import com.travel.to.travel_to.repository.AttractionRepository;
 import com.travel.to.travel_to.service.AttractionImageService;
 import com.travel.to.travel_to.service.AttractionService;
-import com.travel.to.travel_to.service.RoleService;
 import com.travel.to.travel_to.service.UserService;
-import com.travel.to.travel_to.service.UserToRoleService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,23 +27,17 @@ public class AttractionServiceImpl implements AttractionService {
 
     private final AttractionRepository attractionRepository;
     private final UserService userService;
-    private final RoleService roleService;
     private final AttractionImageService attractionImageService;
-    private final UserToRoleService userToRoleService;
 
     @Autowired
     public AttractionServiceImpl(
         AttractionRepository attractionRepository,
         UserService userService,
-        RoleService roleService,
-        AttractionImageService attractionImageService,
-        UserToRoleService userToRoleService
+        AttractionImageService attractionImageService
     ) {
         this.attractionRepository = attractionRepository;
         this.userService = userService;
-        this.roleService = roleService;
         this.attractionImageService = attractionImageService;
-        this.userToRoleService = userToRoleService;
     }
 
     @Override
@@ -105,6 +97,33 @@ public class AttractionServiceImpl implements AttractionService {
 
         try {
             attractionImageService.save(images, attraction.getId());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return attraction;
+    }
+
+    @Override
+    @NotNull
+    public Attraction editAttraction(
+        @NotNull AttractionEditForm attractionEditForm,
+        @NotNull MultipartFile[] images,
+        @NotNull String currentName
+    ) {
+        Attraction attraction = getByName(currentName);
+        attraction
+            .setName(attractionEditForm.getAttractionName())
+            .setDescription(attractionEditForm.getDescription())
+            .setAddress(attractionEditForm.getAddress())
+            .setPhone(attractionEditForm.getPhone())
+            .setWebsite(attractionEditForm.getWebsite())
+            .setType(attractionEditForm.getAttractionType())
+            .setOpenTime(attractionEditForm.getOpenTime())
+            .setCloseTime(attractionEditForm.getCloseTime());
+
+        try {
+            attractionImageService.edit(images, attraction.getId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

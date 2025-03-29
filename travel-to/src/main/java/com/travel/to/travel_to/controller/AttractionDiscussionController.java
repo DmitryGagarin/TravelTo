@@ -88,7 +88,7 @@ public class AttractionDiscussionController {
         );
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_DISCUSSION_OWNER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_DISCUSSION_OWNER', 'ROLE_ADMIN')")
     @PostMapping("/delete/{attractionUuid}")
     public void deleteAttractionDiscussion(
         @PathVariable String attractionUuid,
@@ -96,4 +96,6 @@ public class AttractionDiscussionController {
     ) {
         attractionDiscussionService.delete(authUser, attractionUuid);
     }
+
+
 }

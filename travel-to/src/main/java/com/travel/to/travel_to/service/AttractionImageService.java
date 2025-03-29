@@ -16,6 +16,12 @@ public interface AttractionImageService {
     ) throws IOException;
 
     @NotNull
+    List<AttractionImage> edit(
+        @NotNull MultipartFile[] images,
+        @NotNull Long attractionId
+    ) throws IOException;
+
+    @NotNull
     List<byte[]> getAllImagesByAttractionId(
         @NotNull Long attractionId
     );

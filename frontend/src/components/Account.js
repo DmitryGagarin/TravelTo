@@ -3,6 +3,7 @@ import axios from 'axios'
 import {MDBContainer, MDBInput} from "mdb-react-ui-kit"
 import {useNavigate} from "react-router-dom"
 import Settings from "./Settings"
+import Inputmask from "inputmask";
 
 function Account() {
     const authUser = JSON.parse(localStorage.getItem('user'))
@@ -18,16 +19,13 @@ function Account() {
 
     const history = useNavigate()
 
-    // useEffect(() => {
-    //     setName(authUser.name)
-    //     setSurname(authUser.surname)
-    //     setPhone(authUser.phone)
-    //     setEmail(authUser.email)
-    // }, [authUser])
+    useEffect(() => {
+        const phoneInput = document.getElementById("phone")
+        Inputmask("+9 (999) 999-99-99").mask(phoneInput)
+    }, [])
 
     const handleChange = async () => {
         try {
-            // console.log(name, surname, email, phone)
             const response = await axios.post("http://localhost:8080/setting/save-changes",
                 {
                     name, surname, email, phone
@@ -40,7 +38,6 @@ function Account() {
             if (response) {
                 localStorage.setItem('user', JSON.stringify(response.data))
             }
-            // history('/home')
         } catch (error) {
             if (error.response.status === 401) {
                 window.location.href = "http://localhost:3000/"
@@ -49,8 +46,6 @@ function Account() {
             setError("Failed to change data")
         }
     }
-
-    // console.log(surname)
 
     useEffect(() => {
         if (!deleteButtonClicked) return
@@ -81,14 +76,38 @@ function Account() {
         <div className="account-details-main-container">
             <div className="account-details-container">
                 <MDBContainer>
-                    <MDBInput wrapperClass='mb-4' placeholder='Name' id='name' value={name} type='text'
-                              onChange={(e) => setName(e.target.value)}/>
-                    <MDBInput wrapperClass='mb-4' placeholder='Surname' id='surname' value={surname} type='text'
-                              onChange={(e) => setSurname(e.target.value)}/>
-                    <MDBInput wrapperClass='mb-4' placeholder='Phone' id='phone' value={phone} type='tel'
-                              onChange={(e) => setPhone(e.target.value)}/>
-                    <MDBInput wrapperClass='mb-4' placeholder='Email' id='email' value={email} type='email'
-                              onChange={(e) => setEmail(e.target.value)}/>
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Name'
+                        id='name'
+                        value={name}
+                        type='text'
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Surname'
+                        id='surname'
+                        value={surname}
+                        type='text'
+                        onChange={(e) => setSurname(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Phone'
+                        id='phone'
+                        value={phone}
+                        type='tel'
+                        onChange={(e) => setPhone(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Email'
+                        id='email'
+                        value={email}
+                        type='email'
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                     {error && <p className="text-danger">{error}</p>}
                     <button onClick={handleChange}>Save changes</button>
                     <button onClick={() => setDeleteButtonClicked(true)}>Delete account</button>

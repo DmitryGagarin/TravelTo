@@ -178,10 +178,6 @@ function Attraction() {
         setImages([...e.target.files]) // Set the file object
     }
 
-    // if (loading) {
-    //     return <div>Loading...</div>
-    // }
-
     return (
         <div>
             <Header/>

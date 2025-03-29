@@ -25,6 +25,7 @@ public class AttractionImageServiceImpl implements AttractionImageService {
     }
 
     @Override
+    @NotNull
     public List<AttractionImage> save(
         @NotNull MultipartFile[] images,
         @NotNull Long attractionId
@@ -42,7 +43,17 @@ public class AttractionImageServiceImpl implements AttractionImageService {
 
     @Override
     @NotNull
-    public List<byte[]> getAllImagesByAttractionId(Long attractionId) {
+    public List<AttractionImage> edit(
+        @NotNull MultipartFile[] images,
+        Long attractionId
+    ) throws IOException {
+        attractionImageRepository.deleteAllByAttractionId(attractionId);
+        return save(images, attractionId);
+    }
+
+    @Override
+    @NotNull
+    public List<byte[]> getAllImagesByAttractionId(@NotNull Long attractionId) {
         return attractionImageRepository.getAllImagesByAttractionId(attractionId);
     }
 

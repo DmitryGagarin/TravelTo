@@ -5,6 +5,8 @@ import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.exception.exception.FileExtensionException;
 import com.travel.to.travel_to.form.AttractionCreateForm;
+import com.travel.to.travel_to.form.AttractionEditForm;
+import com.travel.to.travel_to.validator.attraction.AttractionEditFormValidator;
 import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.validator.attraction.AttractionCreateFormValidator;
@@ -35,6 +37,7 @@ public class AttractionController {
 
     private final AttractionService attractionService;
     private final AttractionCreateFormValidator attractionCreateFormValidator;
+    private final AttractionEditFormValidator attractionEditFormValidator;
     private final ValidationUtils validationUtils;
     private final AttractionModelAssembler attractionModelAssembler;
 
@@ -42,18 +45,25 @@ public class AttractionController {
     public AttractionController(
         AttractionService attractionService,
         AttractionCreateFormValidator attractionCreateFormValidator,
+        AttractionEditFormValidator attractionEditFormValidator,
         ValidationUtils validationUtils,
         AttractionModelAssembler attractionModelAssembler
     ) {
         this.attractionService = attractionService;
         this.attractionCreateFormValidator = attractionCreateFormValidator;
+        this.attractionEditFormValidator = attractionEditFormValidator;
         this.validationUtils = validationUtils;
         this.attractionModelAssembler = attractionModelAssembler;
     }
 
-    @InitBinder("registerBusinessBinder")
-    public void attractionFormValidatorBinder(WebDataBinder binder) {
+    @InitBinder("attractionCreateForm")
+    public void attractionCreateFormValidatorBinder(WebDataBinder binder) {
         binder.addValidators(attractionCreateFormValidator);
+    }
+
+    @InitBinder("attractionEditForm")
+    public void attractionEditFormValidatorBinder(WebDataBinder binder) {
+        binder.addValidators(attractionEditFormValidator);
     }
 
     @GetMapping
@@ -118,13 +128,26 @@ public class AttractionController {
         );
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_OWNER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_OWNER', 'ROLE_ADMIN')")
     @PostMapping("/delete/{name}")
     public void deleteAttraction(
         @PathVariable String name,
         @AuthenticationPrincipal AuthUser authUser
     ) {
         attractionService.deleteAttractionByName(name, authUser);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_OWNER')")
+    @PostMapping("/edit/{currentName}")
+    public AttractionModel editAttraction(
+        @Validated @RequestPart("attractionEditForm") AttractionEditForm attractionEditForm,
+        BindingResult bindingResult,
+        @RequestPart(value = "images") MultipartFile[] images,
+        @PathVariable String currentName
+    ) {
+        return attractionModelAssembler.toModel(
+            attractionService.editAttraction(attractionEditForm, images, currentName)
+        );
     }
 
 }

@@ -3,6 +3,7 @@ package com.travel.to.travel_to.repository;
 import com.travel.to.travel_to.entity.attraction.AttractionImage;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +16,9 @@ public interface AttractionImageRepository extends JpaRepository<AttractionImage
     @Query(value = "SELECT image FROM attraction_image WHERE attraction_id = :attractionId",
     nativeQuery = true)
     List<byte[]> getAllImagesByAttractionId(Long attractionId);
+
+    @Query(value = "DELETE FROM attraction_image WHERE attraction_id = :attractionId",
+    nativeQuery = true)
+    void deleteAllByAttractionId(Long attractionId);
 
 }

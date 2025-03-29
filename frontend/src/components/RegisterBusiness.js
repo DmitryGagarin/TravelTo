@@ -1,8 +1,9 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {MDBContainer, MDBInput} from "mdb-react-ui-kit"
 import axios from "axios"
 import {useNavigate} from "react-router-dom"
-import Settings from "./Settings";
+import Settings from "./Settings"
+import Inputmask from "inputmask"
 
 function RegisterBusiness() {
 
@@ -23,6 +24,11 @@ function RegisterBusiness() {
 
     const history = useNavigate()
 
+    useEffect(() => {
+        const phoneInput = document.getElementById("phone")
+        Inputmask("+9 (999) 999-99-99").mask(phoneInput)
+    }, [])
+
     const validateForm = () => {
         return (
             ownerTelegram &&
@@ -35,7 +41,7 @@ function RegisterBusiness() {
             type &&
             openTime &&
             closeTime
-        );
+        )
     }
 
     const handleImageChange = (e) => {
@@ -100,7 +106,7 @@ function RegisterBusiness() {
                 )
             } else {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/";
+                    window.location.href = "http://localhost:3000/"
                 }
                 setError('Business registration failed, please try again.')
             }

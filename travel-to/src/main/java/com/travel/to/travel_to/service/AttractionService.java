@@ -4,6 +4,7 @@ import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.attraction.AttractionStatus;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.form.AttractionCreateForm;
+import com.travel.to.travel_to.form.AttractionEditForm;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +33,13 @@ public interface AttractionService {
         @NotNull AttractionCreateForm attractionCreateForm,
         @NotNull AuthUser authUser,
         @NotNull MultipartFile[] image
+    );
+
+    @NotNull
+    Attraction editAttraction(
+        @NotNull AttractionEditForm attractionEditForm,
+        @NotNull MultipartFile[] images,
+        @NotNull String currentName
     );
 
     @NotNull

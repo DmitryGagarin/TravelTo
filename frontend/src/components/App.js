@@ -15,6 +15,7 @@ import Account from './Account'
 import RegisterBusiness from './RegisterBusiness'
 import Liked from './Liked'
 import AdminModeration from './AdminModeration'
+import EditAttraction from "./EditAttraction";
 
 function App() {
     return (
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/signup/name" element={<SignUpStepTwo/>}/>
                     <Route path="/attractions" element={<Attractions/>}/>
                     <Route path="/attraction/:name" element={<Attraction/>}/>
+                    <Route path="/attraction/edit/:name" element={<EditAttraction/>}/>
                     <Route path="/settings" element={<Settings/>}/>
                     <Route path="/settings/account" element={<Account/>}/>
                     <Route path="/settings/business" element={<RegisterBusiness/>}/>

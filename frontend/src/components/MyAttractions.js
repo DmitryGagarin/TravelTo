@@ -8,7 +8,6 @@ function MyAttractions() {
     const [attractionName, setAttractionName] = useState(null) 
 
     const token = JSON.parse(localStorage.getItem('user')).accessToken
-    console.log(token)
 
     useEffect(() => {
         const fetchAttractions = async () => {
@@ -98,6 +97,11 @@ function MyAttractions() {
                             <div className="learn-more">
                                 <button className="learn-more-button">
                                     <Link to={`/attraction/${attraction.name}`}>Learn More</Link>
+                                </button>
+                            </div>
+                            <div className="edit">
+                                <button className="edit-button">
+                                    <Link to={`/attraction/edit/${attraction.name}`}>Edit</Link>
                                 </button>
                             </div>
                             <div className="name-description">
