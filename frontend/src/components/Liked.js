@@ -15,12 +15,11 @@ function Liked() {
                         'Authorization': `Bearer ${token}`
                     }
                 })
-                // console.log(response)
                 setLikes(response.data._embedded.likesModelList || [])
             }
         } catch (error) {
             if (error.response.status === 401) {
-                window.location.href = "http://localhost:3000/";
+                window.location.href = "http://localhost:3000/signin";
             }
         }
     }, []);

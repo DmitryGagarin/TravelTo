@@ -42,7 +42,7 @@ function EditAttraction() {
                 setHousehold(addressData[2])
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/"
+                    window.location.href = "http://localhost:3000/signin";
                 }
                 setError('Failed to fetch attraction data')
             }

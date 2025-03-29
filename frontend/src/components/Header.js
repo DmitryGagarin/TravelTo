@@ -17,6 +17,7 @@ function Header() {
                         'Authorization': `Bearer ${authUser.accessToken}`
                     }
                 })
+                console.log(response)
                 setUserName(response.data.name)
             } catch (error) {
                 console.error(error)

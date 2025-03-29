@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(AuthUser authUser) {
-        userRepository.delete(findByUuid(authUser.getUuid()));
+        userRepository.delete(getByUuid(authUser.getUuid()));
     }
 
     @Override
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
         @NotNull UserSignUpSecondForm userSignupFormSecond,
         @NotNull AuthUser authUser
     ) {
-        User user = findByUuid(authUser.getUuid());
+        User user = getByUuid(authUser.getUuid());
 
         user
             .setName(userSignupFormSecond.getName())
@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
         @NotNull AuthUser authUser,
         @NotNull Roles newRole
     ) {
-        User user = findByUuid(authUser.getUuid());
+        User user = getByUuid(authUser.getUuid());
         Set<Role> currentRoles = user.getRoles();
         currentRoles.add(roleService.getRoleByName(newRole.toString()));
         user.setRoles(currentRoles);
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @NotNull
-    public User findByUuid(
+    public User getByUuid(
         @NotNull String userUuid
     ) {
         return userRepository.findByUuid(userUuid);
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
         @NotNull UserProfileForm userProfileForm,
         @NotNull AuthUser authUser
     ) {
-        User user = findByUuid(authUser.getUuid());
+        User user = getByUuid(authUser.getUuid());
         user
             .setEmail(userProfileForm.getEmail())
             .setName(userProfileForm.getName())

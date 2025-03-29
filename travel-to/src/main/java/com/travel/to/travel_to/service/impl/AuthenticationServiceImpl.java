@@ -90,7 +90,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthUser refreshToken(
         @NotNull UserRefreshTokenForm userRefreshTokenForm
     ) {
-        Long userId = userService.findByEmail(userRefreshTokenForm.getEmail()).get().getId();
+        Long userId = null;
+        if (userService.findByEmail(userRefreshTokenForm.getEmail()).isPresent()) {
+            userId = userService.findByEmail(userRefreshTokenForm.getEmail()).get().getId();
+        }
         String email = extractEmailFromRefreshToken(userRefreshTokenForm.getRefreshToken());
         Authentication authentication = customAuthenticationProvider.authenticate(
             new UsernamePasswordAuthenticationToken(

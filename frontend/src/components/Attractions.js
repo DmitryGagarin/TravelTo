@@ -1,36 +1,40 @@
 import React, {useEffect, useState} from 'react'
-import axios from "axios"
+import axios from 'axios'
 import {Link} from 'react-router-dom'
 import Header from './Header'
-import {MDBInput} from "mdb-react-ui-kit"
-import {FaHeart} from "react-icons/fa"
+import {MDBInput} from 'mdb-react-ui-kit'
+import {FaHeart} from 'react-icons/fa'
 
 function Attractions() {
     const [attractions, setAttractions] = useState([])
-
     const [types, setTypes] = useState([])
-    const [selectedTypes, setSelectedTypes] = useState([])
 
     const [likedAttraction, setLikedAttraction] = useState(null)
-    const [currentImageIndex, setCurrentImageIndex] = useState(1)
+
+    const [selectedTypes, setSelectedTypes] = useState([])
+    const [searchQuery, setSearchQuery] = useState('')
+
+    const [currentImageIndexes, setCurrentImageIndexes] = useState({})
 
     const token = JSON.parse(localStorage.getItem('user')).accessToken
 
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/attraction", {
+                const response = await axios.get('http://localhost:8080/attraction', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
                 })
-                const publishedAttractions = response.data._embedded.attractionModelList.filter(attraction => attraction.status === 'published');
+                const publishedAttractions = response?.data?._embedded?.attractionModelList.filter(
+                    (attraction) => attraction.status === 'published'
+                )
                 setAttractions(publishedAttractions)
-                const attractionTypes = response.data._embedded.attractionModelList.map(item => item.type)
+                const attractionTypes = publishedAttractions.map((attraction) => attraction.type)
                 setTypes([...new Set(attractionTypes)])
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/";
+                    window.location.href = 'http://localhost:3000/signin'
                 }
                 console.error(error)
             }
@@ -50,7 +54,7 @@ function Attractions() {
                     })
                 } catch (error) {
                     if (error.response.status === 401) {
-                        window.location.href = "http://localhost:3000/";
+                        window.location.href = 'http://localhost:3000/signin'
                     }
                     console.error('Error liking attraction:', error)
                 }
@@ -60,35 +64,42 @@ function Attractions() {
         }
     }, [likedAttraction])
 
+    const handleSearch = (event) => {
+        setSearchQuery(event.target.value)
+    }
+
+    const filteredAttractions = attractions.filter((attraction) => {
+        const matchesSearch =
+            attraction.name.toLowerCase().includes(searchQuery.toLowerCase())
+        const matchesType =
+            selectedTypes.length === 0 || selectedTypes.includes(attraction.type)
+
+        return matchesSearch && matchesType
+    })
+
     const handleTypeChange = (event) => {
         const type = event.target.value
-        setSelectedTypes(prevSelectedTypes =>
+        setSelectedTypes((prevSelectedTypes) =>
             prevSelectedTypes.includes(type)
-                ? prevSelectedTypes.filter(item => item !== type)
+                ? prevSelectedTypes.filter((item) => item !== type)
                 : [...prevSelectedTypes, type]
         )
     }
 
-    const handleSearch = () => {
-        const searchText = document.getElementById('filterInput').value.toLowerCase()
-        const filteredAttractions = attractions.filter(attraction =>
-            attraction.name.toLowerCase().includes(searchText)
-        )
-        setAttractions(filteredAttractions)
+    const handleNextImage = (index, images, attractionName) => {
+        const newIndex = (index + 1) % images.length
+        setCurrentImageIndexes((prev) => ({
+            ...prev,
+            [attractionName]: newIndex,
+        }))
     }
 
-    const filteredAttractions = attractions.filter(attraction =>
-        selectedTypes.length === 0 ||
-        selectedTypes.includes(attraction.type)
-    )
-
-    // TODO: смена картинок распространяется на все карточки на странице
-    const handleNextImage = (index, images) => {
-        return (index + 1) % images.length
-    }
-
-    const handlePrevImage = (index, images) => {
-        return (index - 1 + images.length) % images.length
+    const handlePrevImage = (index, images, attractionName) => {
+        const newIndex = (index - 1 + images.length) % images.length
+        setCurrentImageIndexes((prev) => ({
+            ...prev,
+            [attractionName]: newIndex,
+        }))
     }
 
     const getAttractionCardStyle = (type) => {
@@ -116,7 +127,13 @@ function Attractions() {
             <div className="attractions-main-container">
                 <div className="attractions-container">
                     <div className="cards-container">
+                        {(filteredAttractions.length === 0 || !filteredAttractions) && (
+                            <div>
+                                <h2>Nothing found</h2>
+                            </div>
+                        )}
                         {filteredAttractions.map((attraction) => {
+                            const currentImageIndex = currentImageIndexes[attraction.name] || 0
                             return (
                                 <div key={attraction.name} className="attraction-card">
                                     <div className="image-container">
@@ -129,7 +146,9 @@ function Attractions() {
                                             {/* Left Arrow Button */}
                                             <button
                                                 className="image-nav-button left"
-                                                onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, attraction.images))}
+                                                onClick={() =>
+                                                    handlePrevImage(currentImageIndex, attraction.images, attraction.name)
+                                                }
                                             >
                                                 ←
                                             </button>
@@ -137,31 +156,29 @@ function Attractions() {
                                             {/* Right Arrow Button */}
                                             <button
                                                 className="image-nav-button right"
-                                                onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, attraction.images))}
+                                                onClick={() =>
+                                                    handleNextImage(currentImageIndex, attraction.images, attraction.name)
+                                                }
                                             >
                                                 →
                                             </button>
                                         </div>
                                     </div>
                                     <div className="attraction-data">
-                                        <div className="attraction-type"
-                                             style={getAttractionCardStyle(attraction.type)}>
+                                        <div
+                                            className="attraction-type"
+                                            style={getAttractionCardStyle(attraction.type)}
+                                        >
                                             {attraction.type}
                                         </div>
                                         <div className="like">
                                             <FaHeart onClick={() => setLikedAttraction(attraction.name)}/>
                                         </div>
-                                        <div className="rating">
-                                            Rating: {attraction.rating}
-                                        </div>
+                                        <div className="rating">Rating: {attraction.rating}</div>
                                         <div className="contact-info">
                                             <p>
                                                 Website:{" "}
-                                                <a
-                                                    href={attraction.website}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
+                                                <a href={attraction.website} target="_blank" rel="noopener noreferrer">
                                                     Visit
                                                 </a>
                                             </p>
@@ -203,11 +220,11 @@ function Attractions() {
                             </div>
                         ))}
                     </div>
-                    {/* Search Bar Container */}
                     <MDBInput
                         type="text"
                         id="filterInput"
-                        onKeyUp={handleSearch}
+                        value={searchQuery}
+                        onChange={handleSearch}
                         placeholder="Search"
                     />
                 </div>

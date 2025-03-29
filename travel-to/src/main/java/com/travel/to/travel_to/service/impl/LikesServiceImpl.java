@@ -43,14 +43,14 @@ public class LikesServiceImpl implements LikesService {
             .setUpdatedAt(LocalDateTime.now());
         like
             .setAttractionId(attractionService.getByName(attractionName).getId())
-            .setUserId(userService.findByUuid(authUser.getUuid()).getId());
+            .setUserId(userService.getByUuid(authUser.getUuid()).getId());
         return likesRepository.save(like);
     }
 
     @Override
     @NotNull
     public List<Likes> getAllByUser(AuthUser authUser) {
-        Long id = userService.findByUuid(authUser.getUuid()).getId();
+        Long id = userService.getByUuid(authUser.getUuid()).getId();
         return likesRepository.findAllByUserId(id);
     }
 }

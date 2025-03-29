@@ -33,7 +33,7 @@ public class SignInController {
         this.authenticationService = authenticationService;
     }
 
-    @InitBinder("userSignInFormBinder")
+    @InitBinder("userSignInForm")
     private void userSignInFormBinder(WebDataBinder binder) {
         binder.setValidator(userSignInFormValidator);
     }

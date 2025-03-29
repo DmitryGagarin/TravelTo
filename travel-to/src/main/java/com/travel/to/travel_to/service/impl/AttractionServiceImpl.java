@@ -61,7 +61,7 @@ public class AttractionServiceImpl implements AttractionService {
     @Override
     @NotNull
     public List<Attraction> findAllByOwner(@NotNull AuthUser authUser) {
-        return attractionRepository.findAllByOwnerId(userService.findByUuid(authUser.getUuid()).getId());
+        return attractionRepository.findAllByOwnerId(userService.getByUuid(authUser.getUuid()).getId());
     }
 
     @Override
@@ -91,7 +91,7 @@ public class AttractionServiceImpl implements AttractionService {
             .setCloseTime(attractionCreateForm.getCloseTime())
             .setType(attractionCreateForm.getAttractionType())
             .setRating(DefaultInitialValues.INITIAL_ATTRACTION_RATING)
-            .setOwner(userService.findByUuid(authUser.getUuid()))
+            .setOwner(userService.getByUuid(authUser.getUuid()))
             .setStatus(AttractionStatus.on_moderation.name());
         attractionRepository.save(attraction);
 
@@ -177,7 +177,7 @@ public class AttractionServiceImpl implements AttractionService {
     ) {
         attractionRepository.delete(getByName(name));
         if (findAllByOwner(authUser).isEmpty()) {
-            User user = userService.findByUuid(authUser.getUuid());
+            User user = userService.getByUuid(authUser.getUuid());
             userService.updateUserRole(authUser, Roles.USER);
         }
     }

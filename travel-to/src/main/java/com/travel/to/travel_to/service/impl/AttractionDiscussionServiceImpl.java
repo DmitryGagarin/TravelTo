@@ -64,7 +64,7 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
             .setContentDislike(attractionDiscussionCreateForm.getContentDislike())
             .setContent(attractionDiscussionCreateForm.getContent())
             .setRating(attractionDiscussionCreateForm.getRating())
-            .setAuthorId(userService.findByUuid(authUser.getUuid()))
+            .setAuthorId(userService.getByUuid(authUser.getUuid()))
             .setAttractionId(attractionId)
             .setCreatedAt(LocalDateTime.now())
             .setUpdatedAt(LocalDateTime.now());
@@ -74,7 +74,7 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
 
         UserToRole userToRole = new UserToRole();
         userToRole
-            .setUser(userService.findByUuid(authUser.getUuid()))
+            .setUser(userService.getByUuid(authUser.getUuid()))
             .setRole(roleService.getRoleByName(Roles.DISCUSSION_OWNER.toString()));
         userToRoleService.save(userToRole);
 

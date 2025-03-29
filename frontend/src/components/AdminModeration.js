@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from 'react'
-import axios from "axios";
-import Settings from "./Settings";
+import React, { useEffect, useState } from 'react'
+import axios from "axios"
+import Settings from "./Settings"
 
 const AdminModeration = () => {
 
     const [attractions, setAttractions] = useState([])
     const [attractionStatus, setAttractionStatus] = useState('on_moderation')
     const [attractionName, setAttractionName] = useState('')
-
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
     useEffect(() => {
@@ -19,12 +18,11 @@ const AdminModeration = () => {
                             'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`
                         }
                     })
-                setAttractions(response.data._embedded.attractionModelList)
+                setAttractions(response?.data?._embedded?.attractionModelList || [])
             } catch (error) {
-                if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/";
+                if (error.response && error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/signin"
                 }
-                console.log(error)
             }
         }
         fetchAttractions()
@@ -33,33 +31,40 @@ const AdminModeration = () => {
     useEffect(() => {
         const applyModeration = async () => {
             try {
-                // console.log(`Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`)
-                    await axios.post(`http://localhost:8080/admin/apply-moderation/${attractionName}`, {},
+                await axios.post(`http://localhost:8080/admin/apply-moderation/${attractionName}`, {},
                     {
                         headers: {
                             'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`,
                         }
                     })
             } catch (error) {
-                if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/";
+                if (error.response && error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/signin"
+                } else {
+                    console.log(error.response?.status)
                 }
-                console.log(error)
-            } finally {
-                // window.location.reload()
             }
-            setAttractionName('');
+
+            setAttractionName('')
         }
 
-        applyModeration()
+        if (attractionName) {
+            applyModeration()
+        }
     }, [attractionName])
 
     const handleNextImage = (index, images) => {
-        return (index + 1) % images.length
+        if (images && images.length > 0) {
+            return (index + 1) % images.length
+        }
+        return index
     }
 
     const handlePrevImage = (index, images) => {
-        return (index - 1 + images.length) % images.length
+        if (images && images.length > 0) {
+            return (index - 1 + images.length) % images.length
+        }
+        return index
     }
 
     const getAttractionCardStyle = (type) => {
@@ -85,21 +90,31 @@ const AdminModeration = () => {
         <div>
             <div className="attractions-main-container">
                 <div className="attractions-container">
+                    {(attractions.length === 0 || !attractions) && (
+                        <div>
+                            <h2>Nothing to moderate</h2>
+                        </div>
+                    )}
                     <div className="cards-container">
                         {attractions.map((attraction) => {
+                            const images = attraction.images || []
                             return (
                                 <div key={attraction.name} className="attraction-card">
                                     <div className="image-container">
-                                        <img
-                                            src={`data:image/png;base64,${attraction.images[currentImageIndex]}`}
-                                            alt={attraction.name}
-                                            className="card-image"
-                                        />
+                                        {images.length > 0 ? (
+                                            <img
+                                                src={`data:image/pngbase64,${images[currentImageIndex]}`}
+                                                alt={attraction.name}
+                                                className="card-image"
+                                            />
+                                        ) : (
+                                            <p>No images available</p>
+                                        )}
                                         <div className="image-navigation">
                                             {/* Left Arrow Button */}
                                             <button
                                                 className="image-nav-button left"
-                                                onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, attraction.images))}
+                                                onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, images))}
                                             >
                                                 &lt
                                             </button>
@@ -107,7 +122,7 @@ const AdminModeration = () => {
                                             {/* Right Arrow Button */}
                                             <button
                                                 className="image-nav-button right"
-                                                onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, attraction.images))}
+                                                onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, images))}
                                             >
                                                 &gt
                                             </button>

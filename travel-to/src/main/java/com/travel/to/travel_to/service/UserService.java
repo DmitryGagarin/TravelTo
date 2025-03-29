@@ -27,7 +27,7 @@ public interface UserService {
     User updateUserRole(@NotNull AuthUser authUser, @NotNull Roles newRole);
 
     @NotNull
-    User findByUuid(@NotNull String userUuid);
+    User getByUuid(@NotNull String userUuid);
 
     @NotNull
     User getCurrentUser(@NotNull AuthUser authUser);

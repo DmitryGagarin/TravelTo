@@ -47,7 +47,7 @@ function Attraction() {
                 setAttractionUuid(response.data.uuid)
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/";
+                    window.location.href = "http://localhost:3000/signin"
                 }
                 setError('Failed to fetch attraction data')
             }
@@ -64,13 +64,11 @@ function Attraction() {
                     })
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
             } catch (error) {
-                // if (error.response.status === 401) {
-                //     window.location.href = "http://localhost:3000/";
-                // }
+                if (error.response.status === 401) {
+                    window.location.href = "http://localhost:3000/";
+                }
             }
         }
-
-        // console.log(discussions)
 
         // const fetchAddress = async() => {
         //     let coords = []
@@ -159,7 +157,7 @@ function Attraction() {
                 )
             } else {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/";
+                    window.location.href = "http://localhost:3000/signin";
                 }
                 setError('Discussion registration failed, please try again.')
             }
