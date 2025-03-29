@@ -7,7 +7,7 @@ function Settings() {
 
     const [isAdmin, setIsAdmin] = useState(false)
     const [isOwner, setIsOwner] = useState(false)
-    const [response, setResponse] = useState([])
+    // const [response, setResponse] = useState([])
 
     const authUser = JSON.parse(localStorage.getItem('user'))
 
@@ -22,7 +22,7 @@ function Settings() {
                     }
                 })
 
-                setResponse(response.data)
+                // setResponse(response.data)
                 const roles = response.data.role.map(role => role.authority);
                 setIsOwner(roles.includes("ROLE_ADMIN"))
                 setIsAdmin(roles.includes("ROLE_OWNER"))
@@ -34,10 +34,6 @@ function Settings() {
 
         getUser()
     }, [authUser.accessToken])
-
-    // useEffect(() => {
-    //     console.log(response)
-    // }, [response]);
 
     // console.log("isAdmin", isAdmin)
     // console.log("isOwner", isOwner)

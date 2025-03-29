@@ -10,5 +10,7 @@ public class ValidationConstants {
 
     public static final List<String> ALLOWED_IMAGE_FORMATS = List.of("png", "jpg", "jpeg", "svg", "webp", "HEIC", "JPG");
     public static final List<String> ALLOWED_EMAIL_DOMAINS = List.of("com", "org", "ru", "net");
+
     public static final long MAX_FILE_SIZE = 2 * 1024 * 1024;
+    public static final int MAX_IMAGE_NUMBER = 8;
 }

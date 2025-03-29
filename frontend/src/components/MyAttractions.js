@@ -72,7 +72,7 @@ function MyAttractions() {
                         <div key={attraction.name} className="attraction-card my-attraction-card">
                             <div className="image-container">
                                 <img
-                                    src={`data:image/pngbase64,${attraction.images[0]}`}
+                                    src={`data:image/png;base64,${attraction.images[0]}`}
                                     alt={attraction.name}
                                     className="card-image"
                                 />

@@ -4,6 +4,8 @@ import axios from "axios"
 import {useNavigate} from "react-router-dom"
 import Settings from "./Settings"
 import Inputmask from "inputmask"
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 function RegisterBusiness() {
 
@@ -26,7 +28,7 @@ function RegisterBusiness() {
 
     useEffect(() => {
         const phoneInput = document.getElementById("phone")
-        Inputmask("+9 (999) 999-99-99").mask(phoneInput)
+        Inputmask("+9 999 999-9999").mask(phoneInput)
     }, [])
 
     const validateForm = () => {

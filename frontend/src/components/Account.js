@@ -60,7 +60,7 @@ function Account() {
                 })
 
                 localStorage.removeItem('user')
-                history('/')
+                history('/signin')
             } catch (error) {
                 console.log(error)
                 setError("Failed to delete account")

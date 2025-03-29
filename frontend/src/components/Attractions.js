@@ -82,7 +82,6 @@ function Attractions() {
         selectedTypes.includes(attraction.type)
     )
 
-
     // TODO: смена картинок распространяется на все карточки на странице
     const handleNextImage = (index, images) => {
         return (index + 1) % images.length
@@ -111,10 +110,6 @@ function Attractions() {
         }
     }
 
-    // TODO: картинки совсем отвалились
-    // console.log("filtered", filteredAttractions)
-    // console.log("image:", filteredAttractions[0].images[currentImageIndex])
-    // console.log(attractions[0].images[currentImageIndex])
     return (
         <div>
             <Header/>
@@ -126,7 +121,7 @@ function Attractions() {
                                 <div key={attraction.name} className="attraction-card">
                                     <div className="image-container">
                                         <img
-                                            src={`data:image/pngbase64,${attraction.images[currentImageIndex]}`}
+                                            src={`data:image/png;base64,${attraction.images[currentImageIndex]}`}
                                             alt={attraction.name}
                                             className="card-image"
                                         />
@@ -136,7 +131,7 @@ function Attractions() {
                                                 className="image-nav-button left"
                                                 onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, attraction.images))}
                                             >
-                                                &lt
+                                                ←
                                             </button>
 
                                             {/* Right Arrow Button */}
@@ -144,7 +139,7 @@ function Attractions() {
                                                 className="image-nav-button right"
                                                 onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, attraction.images))}
                                             >
-                                                &gt
+                                                →
                                             </button>
                                         </div>
                                     </div>

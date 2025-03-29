@@ -58,7 +58,7 @@ function SignUpStepOne() {
                             onClick={handleSignup}>Sign Up
                     </button>
                     <div className="text-center">
-                        <p>Already Register? <a href="/">Login</a></p>
+                        <p>Already Register? <a href="/signin">Login</a></p>
                     </div>
                 </MDBContainer>
             </div>

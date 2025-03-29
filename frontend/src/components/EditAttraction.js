@@ -77,7 +77,6 @@ function EditAttraction() {
             )
 
             attraction.images.forEach((image) => {
-                console.log(typeof image)
                 formData.append('images', image)
             })
 
@@ -280,7 +279,7 @@ function EditAttraction() {
                                         />
                                     ) : (
                                         <img
-                                            src={`data:image/pngbase64,${image}`} // display base64 images fetched from backend
+                                            src={`data:image/png;base64,${image}`} // display base64 images fetched from backend
                                             alt={`image-${index}`}
                                             className="card-image"
                                         />

@@ -47,23 +47,38 @@ function SignUpStepOne() {
             <div className="border rounded-lg p-4" style={{width: '600px', height: 'auto'}}>
                 <MDBContainer className="p-3">
                     <h2 className="mb-4 text-center">Sign Up Page</h2>
-                    {/* Render error message if exists */}
                     {error && <p className="text-danger">{error}</p>}
-                    <MDBInput wrapperClass='mb-3' placeholder='Email Address' id='email' value={email} type='email'
-                              onChange={(e) => setEmail(e.target.value)}/>
-                    <MDBInput wrapperClass='mb-3' placeholder='Password' id='password' type='password' value={password}
-                              onChange={(e) => setPassword(e.target.value)}/>
-                    <MDBInput wrapperClass='mb-3' placeholder='Confirm Password' id='confirmPassword' type='password'
-                              value={confirmPassword}
-                              onChange={(e) => setConfirmPassword(e.target.value)}/>
-
+                    <MDBInput
+                        wrapperClass='mb-3'
+                        placeholder='Email Address'
+                        id='email'
+                        value={email}
+                        type='email'
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-3'
+                        placeholder='Password'
+                        id='password'
+                        type='password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <MDBInput
+                        wrapperClass='mb-3'
+                        placeholder='Confirm Password'
+                        id='confirmPassword'
+                        type='password'
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
                     <button className="mb-4 d-block mx-auto fixed-action-btn btn-primary"
                             style={{height: '40px', width: '100%'}}
                             onClick={handleSignup}>Sign Up
                     </button>
 
                     <div className="text-center">
-                        <p>Already Register? <a href="/">Login</a></p>
+                        <p>Already Register? <a href="/signin">Login</a></p>
                     </div>
 
                 </MDBContainer>

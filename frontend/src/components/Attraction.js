@@ -188,7 +188,7 @@ function Attraction() {
                             <div className="image-container">
                                 <img
                                     // TODO: реакт почему то не видит стейте в этом скоупе
-                                    // src={`data:image/pngbase64,${attraction.images[currentAttractionImageIndex]}`}
+                                    src={`data:image/png;base64,${attraction.images[currentAttractionImageIndex]}`}
                                     alt={attraction.name}
                                     className="card-image"
                                 />
@@ -347,7 +347,7 @@ function Attraction() {
                                 </div>
                                 <img
                                     // TODO: реакт почему то не видит стейте в этом скоупе
-                                    src={`data:image/pngbase64,${discussion.images[currentDiscussionImageIndex]}`}
+                                    src={`data:image/png;base64,${discussion.images[currentDiscussionImageIndex]}`}
                                     alt={attraction.name}
                                     className="card-image"
                                 />

@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.assembler.AttractionModelAssembler;
+import com.travel.to.travel_to.constants.ValidationConstants;
 import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.exception.exception.FileExtensionException;
@@ -119,6 +120,9 @@ public class AttractionController {
     ) throws BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
+        }
+        if (images.length > ValidationConstants.MAX_IMAGE_NUMBER) {
+            throw new FileExtensionException("Only 10 images are allowed");
         }
         if (!validationUtils.validateImageFileFormat(images, bindingResult)) {
             throw new FileExtensionException("This image format not allowed");

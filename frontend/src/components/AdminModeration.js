@@ -45,6 +45,8 @@ const AdminModeration = () => {
                     window.location.href = "http://localhost:3000/";
                 }
                 console.log(error)
+            } finally {
+                // window.location.reload()
             }
             setAttractionName('');
         }
@@ -89,7 +91,7 @@ const AdminModeration = () => {
                                 <div key={attraction.name} className="attraction-card">
                                     <div className="image-container">
                                         <img
-                                            src={`data:image/pngbase64,${attraction.images[currentImageIndex]}`}
+                                            src={`data:image/png;base64,${attraction.images[currentImageIndex]}`}
                                             alt={attraction.name}
                                             className="card-image"
                                         />
