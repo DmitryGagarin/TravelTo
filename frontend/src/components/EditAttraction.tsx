@@ -1,9 +1,9 @@
 import {useNavigate, useParams} from "react-router-dom"
-import React, {useEffect, useState} from "react"
 import axios from "axios"
 import Header from "./Header"
 import {MDBInput} from "mdb-react-ui-kit"
 import {MdDelete} from "react-icons/md"
+import {useEffect, useState} from "react";
 
 function EditAttraction() {
     const {name} = useParams()
@@ -16,7 +16,7 @@ function EditAttraction() {
         closeTime: "",
         address: "",
         type: "",
-        images: [],
+        images: [] as File[]
     })
     const [city, setCity] = useState('')
     const [street, setStreet] = useState('')
@@ -40,15 +40,41 @@ function EditAttraction() {
                 setCity(addressData[0])
                 setStreet(addressData[1])
                 setHousehold(addressData[2])
+
+                const files: File[] = [];
+                response.data.images.forEach((image: string) => {
+                    // Decode the base64 string
+                    const byteCharacters = atob(image);
+                    const byteArrays = [];
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteArrays.push(byteCharacters.charCodeAt(i));
+                    }
+                    const byteArray = new Uint8Array(byteArrays);
+
+                    // Create a Blob from the byte array
+                    const blob = new Blob([byteArray], { type: "image/png" }); // You may need to adjust the MIME type based on the image format
+
+                    // Convert the Blob to a File
+                    const file = new File([blob], `image_${Math.random().toString(36).substring(7)}.png`, { type: "image/png" });
+
+                    // Push the file to the array
+                    files.push(file);
+                });
+
+                // Update the state with the array of File objects
+                setAttraction((prevState) => ({
+                    ...prevState,
+                    images: files
+                }));
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/signin";
+                    window.location.href = "http://localhost:3000/signin"
                 }
                 setError('Failed to fetch attraction data')
             }
         }
         fetchAttraction()
-    }, [name])
+    }, [name, token])
 
     const handleAttractionEdit = async () => {
         if (!validateForm()) {
@@ -123,16 +149,19 @@ function EditAttraction() {
         setAttraction((prev) => ({
             ...prev,
             images: prev.images.filter((img) => img !== image),
-        }));
-    };
+        }))
+    }
 
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // Ensure e.target.files is properly typed
+        const files = e.target.files ? Array.from(e.target.files) : [];
+
         setAttraction((prev) => ({
             ...prev,
             images: [...prev.images, ...files], // Append the files to the existing images array
         }));
     };
+
 
     return (
         <div>
@@ -270,16 +299,16 @@ function EditAttraction() {
                         </div>
                         <div>
                             {attraction.images.map((image, index) => (
-                                <div className="image-container" key={index}>
+                                <div className="image-container-edit" key={index}>
                                     {image instanceof File ? (
                                         <img
-                                            src={URL.createObjectURL(image)} // display uploaded image
+                                            src={URL.createObjectURL(image)}
                                             alt={`image-${index}`}
                                             className="card-image"
                                         />
                                     ) : (
                                         <img
-                                            src={`data:image/png;base64,${image}`} // display base64 images fetched from backend
+                                            src={`data:image/png;base64,${image}`}
                                             alt={`image-${index}`}
                                             className="card-image"
                                         />
@@ -289,11 +318,12 @@ function EditAttraction() {
                                     </button>
                                 </div>
                             ))}
+                            {error && <p className="text-danger">{error}</p>}
+                            <button className="save-changes-button" onClick={handleAttractionEdit}> Save edit</button>
                         </div>
                     </div>
                 </div>
-                {error && <p className="text-danger">{error}</p>}
-                <button onClick={handleAttractionEdit}> Save edit</button>
+
             </div>
         </div>
     )

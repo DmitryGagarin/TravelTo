@@ -21,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -135,6 +136,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @NotNull
+    @Transactional
     public User updateUserRole(
         @NotNull AuthUser authUser,
         @NotNull Roles newRole
@@ -174,6 +176,7 @@ public class UserServiceImpl implements UserService {
             .setSurname(userProfileForm.getSurname())
             .setPhone(userProfileForm.getPhone())
             .setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
 
         authUser
             .setEmail(user.getEmail())

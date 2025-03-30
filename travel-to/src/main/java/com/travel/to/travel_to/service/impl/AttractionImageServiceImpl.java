@@ -6,11 +6,13 @@ import com.travel.to.travel_to.service.AttractionImageService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AttractionImageServiceImpl implements AttractionImageService {
@@ -36,6 +38,9 @@ public class AttractionImageServiceImpl implements AttractionImageService {
                 new AttractionImage()
                     .setAttractionId(attractionId)
                     .setImage(image.getBytes())
+                    .setImageFormat(
+                        Objects.requireNonNull(image.getOriginalFilename())
+                            .substring(1 + image.getOriginalFilename().lastIndexOf(".")))
             );
         }
         return attractionImageRepository.saveAll(attractionImages);
@@ -43,9 +48,10 @@ public class AttractionImageServiceImpl implements AttractionImageService {
 
     @Override
     @NotNull
+    @Transactional
     public List<AttractionImage> edit(
         @NotNull MultipartFile[] images,
-        Long attractionId
+        @NotNull Long attractionId
     ) throws IOException {
         attractionImageRepository.deleteAllByAttractionId(attractionId);
         return save(images, attractionId);

@@ -15,6 +15,7 @@ import com.travel.to.travel_to.service.UserToRoleService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -49,6 +50,8 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
     }
 
     @Override
+    @NotNull
+    @Transactional
     public AttractionDiscussion create(
         @NotNull AttractionDiscussionCreateForm attractionDiscussionCreateForm,
         @NotNull AuthUser authUser,

@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 public class AttractionImage extends UuidAbleEntity {
     private Long attractionId;
     private byte[] image;
+    private String imageFormat;
 
     public Long getAttractionId() {
         return attractionId;
@@ -25,6 +26,15 @@ public class AttractionImage extends UuidAbleEntity {
 
     public AttractionImage setImage(byte[] image) {
         this.image = image;
+        return this;
+    }
+
+    public String getImageFormat() {
+        return imageFormat;
+    }
+
+    public AttractionImage setImageFormat(String imageFormat) {
+        this.imageFormat = imageFormat;
         return this;
     }
 }

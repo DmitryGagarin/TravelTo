@@ -107,8 +107,8 @@
 }
 
 .my-attraction-card {
-  min-height: 700px;
-  max-height: 700px;
+  min-height: 880px;
+  max-height: 880px;
 }
 
 .attraction-card:hover {
@@ -121,6 +121,15 @@
   object-fit: contain;
   background: lightgray;
   border-radius: 4px;
+}
+
+.image-container-edit {
+  width: 50%;
+  height: 20%;
+  object-fit: contain;
+  background: lightgray;
+  border-radius: 4px;
+  margin-top: 64px
 }
 
 .card-image {
@@ -140,9 +149,13 @@
   font-size: 14px;
 }
 
-.learn-more-button {
+.learn-more-button, .save-changes-button {
   border-radius: 4px;
   background: lightgreen;
+}
+
+.save-changes-button {
+  margin-top: 32px;
 }
 
 .name-description h5, .name-description p {

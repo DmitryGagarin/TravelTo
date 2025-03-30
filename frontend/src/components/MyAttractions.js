@@ -35,6 +35,7 @@ function MyAttractions() {
                     'Authorization': `Bearer ${token}`,
                 },
             })
+            window.location.reload();
         } catch (error) {
             if (error.response.status === 401) {
                 window.location.href = "http://localhost:3000/signin";

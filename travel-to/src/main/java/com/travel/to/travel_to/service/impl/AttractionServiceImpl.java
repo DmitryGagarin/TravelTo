@@ -15,6 +15,7 @@ import com.travel.to.travel_to.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -72,12 +73,15 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     @NotNull
+    @Transactional
     public Attraction createAttraction(
         @NotNull AttractionCreateForm attractionCreateForm,
         @NotNull AuthUser authUser,
         @NotNull MultipartFile[] images
     ) {
-        userService.updateUserRole(authUser, Roles.OWNER);
+        if (findAllByOwner(authUser).isEmpty()) {
+            userService.updateUserRole(authUser, Roles.OWNER);
+        }
 
         Attraction attraction = new Attraction();
         attraction

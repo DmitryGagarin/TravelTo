@@ -15,7 +15,7 @@ import Account from './Account'
 import RegisterBusiness from './RegisterBusiness'
 import Liked from './Liked'
 import AdminModeration from './AdminModeration'
-import EditAttraction from "./EditAttraction";
+import EditAttraction from "./EditAttraction.tsx";
 
 function App() {
     return (
