@@ -79,7 +79,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                     authUser,
-                    null,
+                    authUser.getPassword(),
                     auth
                 );
 

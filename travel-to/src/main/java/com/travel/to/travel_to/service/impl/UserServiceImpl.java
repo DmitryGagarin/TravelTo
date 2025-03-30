@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.service.impl;
 
+import com.travel.to.travel_to.configuration.CustomAuthenticationProvider;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.Role;
 import com.travel.to.travel_to.entity.user.Roles;
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final UserToRoleRepository userToRoleRepository;
     private final RoleService roleService;
     private final UserToRoleService userToRoleService;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
 
     @Autowired
     public UserServiceImpl(
@@ -42,13 +44,15 @@ public class UserServiceImpl implements UserService {
         PasswordEncoder passwordEncoder,
         UserToRoleRepository userToRoleRepository,
         RoleService roleService,
-        UserToRoleService userToRoleService
+        UserToRoleService userToRoleService,
+        CustomAuthenticationProvider customAuthenticationProvider
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userToRoleRepository = userToRoleRepository;
         this.roleService = roleService;
         this.userToRoleService = userToRoleService;
+        this.customAuthenticationProvider = customAuthenticationProvider;
     }
 
     @Override
@@ -183,6 +187,18 @@ public class UserServiceImpl implements UserService {
             .setName(user.getName())
             .setSurname(user.getSurname())
             .setPhone(user.getPhone());
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            authUser,
+            SecurityContextHolder.getContext().getAuthentication().getCredentials().toString(),
+            authUser.getAuthorities()
+        );
+
+        String jwtAccessToken = JwtProvider.generateAccessToken(authentication);
+        String jwtRefreshToken = JwtProvider.generateRefreshToken(authentication);
+
+        authUser.setAccessToken(jwtAccessToken);
+        authUser.setRefreshToken(jwtRefreshToken);
 
         return authUser;
     }
