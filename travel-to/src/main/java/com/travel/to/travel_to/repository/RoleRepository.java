@@ -14,7 +14,7 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     nativeQuery = true)
     Role getRoleByRoleName(String role);
 
-    @Query(value = "SELECT role FROM role",
+    @Query(value = "SELECT * FROM role",
     nativeQuery = true)
     Set<Role> getAllRoles();
 }

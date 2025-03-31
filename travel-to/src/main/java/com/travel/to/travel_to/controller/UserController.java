@@ -34,7 +34,6 @@ public class UserController {
         return userModelAssembler.toModel(userService.getCurrentUser(authUser));
     }
 
-    // TODO: не работает удаление
     @PostMapping("/delete")
     public void deleteUser(
         @AuthenticationPrincipal AuthUser authUser

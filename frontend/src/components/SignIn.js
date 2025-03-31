@@ -27,7 +27,16 @@ function LoginPage() {
 
             history('/attractions')
         } catch (error) {
-            console.log(error)
+            if (error.response && error.response.data) {
+                const errorMessages = error.response.data
+                setError(
+                    Object.entries(errorMessages)
+                        .map(([field, message]) => `${field}: ${message}`)
+                        .join(', ')
+                )
+            } else {
+                setError('Registration failed, please try again.')
+            }
         }
     }
 
@@ -52,7 +61,7 @@ function LoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    {error && <p className="text-danger">{error}</p>} {/* Render error message if exists */}
+                    {error && <p className="text-danger">{error}</p>}
                     <button className="mb-4 d-block btn-primary" style={{ height: '50px', width: '100%' }} onClick={handleLogin}>Sign in</button>
                     <div className="text-center">
                         <p>Not a member? <a href="/signup">Register</a></p>

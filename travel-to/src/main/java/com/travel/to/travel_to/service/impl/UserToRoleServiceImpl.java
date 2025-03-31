@@ -2,7 +2,6 @@ package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.entity.user.UserToRole;
 import com.travel.to.travel_to.repository.UserToRoleRepository;
-import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.service.UserToRoleService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -28,13 +28,13 @@ public class UserToRoleServiceImpl implements UserToRoleService {
     @Override
     @NotNull
     public Set<GrantedAuthority> getAllUserRolesByUserId(@NotNull Long id) {
-        Set<GrantedAuthority> roles = new HashSet<>();
-        Set<String> rolesIds = userToRoleRepository.getUserRolesByUserId(id);
+        Set<GrantedAuthority> roles = new LinkedHashSet<>();
+        List<String> rolesIds = userToRoleRepository.getUserRolesByUserId(id);
         for (String roleId : rolesIds) {
             switch (roleId) {
-                case "1" -> roles.add(new SimpleGrantedAuthority("ROLE_USER"));
+                case "1" -> roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
                 case "2" -> roles.add(new SimpleGrantedAuthority("ROLE_OWNER"));
-                case "3" -> roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                case "3" -> roles.add(new SimpleGrantedAuthority("ROLE_USER"));
                 case "4" -> roles.add(new SimpleGrantedAuthority("ROLE_DISCUSSION_OWNER"));
             }
         }

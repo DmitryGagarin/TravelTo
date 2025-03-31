@@ -16,7 +16,6 @@ function Liked() {
                         'Authorization': `Bearer ${token}`
                     }
                 })
-                console.log(response.data._embedded.likesModelList)
                 setLikes(response.data._embedded.likesModelList || [])
             } catch
                 (error) {

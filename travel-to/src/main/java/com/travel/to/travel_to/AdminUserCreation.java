@@ -1,14 +1,11 @@
 package com.travel.to.travel_to;
 
-import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
-import com.travel.to.travel_to.entity.user.UserToRole;
 import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.form.UserSignUpFirstForm;
 import com.travel.to.travel_to.service.AuthenticationService;
 import com.travel.to.travel_to.service.RoleService;
 import com.travel.to.travel_to.service.UserService;
-import com.travel.to.travel_to.service.UserToRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -19,19 +16,16 @@ public class AdminUserCreation implements CommandLineRunner {
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final RoleService roleService;
-    private final UserToRoleService userToRoleService;
 
     @Autowired
     public AdminUserCreation(
         UserService userService,
         AuthenticationService authenticationService,
-        RoleService roleService,
-        UserToRoleService userToRoleService
+        RoleService roleService
     ) {
         this.userService = userService;
         this.authenticationService = authenticationService;
         this.roleService = roleService;
-        this.userToRoleService = userToRoleService;
     }
 
     @Override
@@ -48,12 +42,6 @@ public class AdminUserCreation implements CommandLineRunner {
                 .setRoles(roleService.getAllRoles())
                 .setName("ADMIN");
             userService.save(admin);
-
-            UserToRole userToRole = new UserToRole();
-            userToRole
-                .setRole(roleService.getRoleByName(Roles.ADMIN.name()))
-                .setUser(admin);
-            userToRoleService.save(userToRole);
 
             UserSignInForm userSignInForm = new UserSignInForm();
             userSignInForm

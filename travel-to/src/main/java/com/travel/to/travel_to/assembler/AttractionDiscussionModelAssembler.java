@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.assembler;
 
-import com.travel.to.travel_to.constants.TimeFormatterConstants;
+import com.travel.to.travel_to.constants.FormatConstants;
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
 import com.travel.to.travel_to.model.AttractionDiscussionModel;
 import com.travel.to.travel_to.service.AttractionDiscussionImageService;
@@ -47,7 +47,7 @@ public class AttractionDiscussionModelAssembler implements RepresentationModelAs
             .setContent(entity.getContent())
             .setRating(entity.getRating())
             .setAuthor(authorName)
-            .setCreatedAt(TimeFormatterConstants.DAY_MONTH_YEAR_FORMATTER.format(entity.getCreatedAt()))
+            .setCreatedAt(FormatConstants.DAY_MONTH_YEAR_FORMATTER.format(entity.getCreatedAt()))
             .setImages(attractionDiscussionImageService.getAllImagesByDiscussionId(entity.getId()));
         return attractionDiscussionModel;
     }

@@ -7,7 +7,7 @@ function Settings() {
 
     const [isAdmin, setIsAdmin] = useState(false)
     const [isOwner, setIsOwner] = useState(false)
-    // const [response, setResponse] = useState([])
+    const [response, setResponse] = useState([])
 
     const authUser = JSON.parse(localStorage.getItem('user'))
 
@@ -22,10 +22,10 @@ function Settings() {
                     }
                 })
 
-                // setResponse(response.data)
+                setResponse(response.data)
                 const roles = response.data.role.map(role => role.authority);
-                setIsOwner(roles.includes("ROLE_ADMIN"))
-                setIsAdmin(roles.includes("ROLE_OWNER"))
+                setIsOwner(roles.includes("ROLE_OWNER"))
+                setIsAdmin(roles.includes("ROLE_ADMIN"))
 
             } catch (error) {
                 console.error(error)
@@ -35,9 +35,9 @@ function Settings() {
         getUser()
     }, [authUser.accessToken])
 
-    // console.log("isAdmin", isAdmin)
-    // console.log("isOwner", isOwner)
-    // console.log("response", response.data)
+    console.log("isAdmin", isAdmin)
+    console.log("isOwner", isOwner)
+    console.log("response", response.data)
 
     const handleAccount = () => {
         history('/settings/account')

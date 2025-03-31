@@ -26,12 +26,19 @@ function Attractions() {
                         'Authorization': `Bearer ${token}`,
                     },
                 })
-                const publishedAttractions = response?.data?._embedded?.attractionModelList.filter(
-                    (attraction) => attraction.status === 'published'
-                )
-                setAttractions(publishedAttractions)
-                const attractionTypes = publishedAttractions.map((attraction) => attraction.type)
-                setTypes([...new Set(attractionTypes)])
+                const attractionsData = response?.data?._embedded?.attractionModelList;
+                if (Array.isArray(attractionsData)) {
+                    const publishedAttractions = attractionsData.filter(
+                        (attraction) => attraction?.status === 'published'
+                    )
+                    setAttractions(publishedAttractions);
+
+                    const attractionTypes = publishedAttractions.map((attraction) => attraction.type)
+                    setTypes([...new Set(attractionTypes)])
+                } else {
+                    setAttractions([])
+                    setTypes([])
+                }
             } catch (error) {
                 if (error.response.status === 401) {
                     window.location.href = 'http://localhost:3000/signin'

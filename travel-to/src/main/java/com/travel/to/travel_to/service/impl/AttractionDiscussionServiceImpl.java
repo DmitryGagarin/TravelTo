@@ -1,8 +1,10 @@
 package com.travel.to.travel_to.service.impl;
 
+import com.travel.to.travel_to.constants.FormatConstants;
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.Roles;
+import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.entity.user.UserToRole;
 import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
 import com.travel.to.travel_to.repository.AttractionDiscussionRepository;
@@ -14,6 +16,8 @@ import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.service.UserToRoleService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class AttractionDiscussionServiceImpl implements AttractionDiscussionService {
@@ -75,20 +81,31 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
 
         userService.updateUserRole(authUser, Roles.DISCUSSION_OWNER);
 
-        // TODO: сделать проверку имеется ли у юзера уже такая роль
-        UserToRole userToRole = new UserToRole();
-        userToRole
-            .setUser(userService.getByUuid(authUser.getUuid()))
-            .setRole(roleService.getRoleByName(Roles.DISCUSSION_OWNER.toString()));
-        userToRoleService.save(userToRole);
+        Set<GrantedAuthority> roles = null;
+        Optional<User> userOptional = userService.findByEmail(authUser.getEmail());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            roles = userToRoleService.getAllUserRolesByUserId(user.getId());
+        }
+
+        if (roles != null && !roles.contains(new SimpleGrantedAuthority("ROLE_" + Roles.DISCUSSION_OWNER))) {
+            UserToRole userToRole = new UserToRole();
+            userToRole
+                .setUser(userService.getByUuid(authUser.getUuid()))
+                .setRole(roleService.getRoleByName(Roles.DISCUSSION_OWNER.toString()));
+            userToRoleService.save(userToRole);
+        }
 
         attractionDiscussionImageService.create(attractionDiscussion.getId(), images);
 
-        // TODO: подсчет рейтинга не совсем правильно работает
         List<Double> ratings = attractionService.findAllAttractionRatingByAttractionId(attractionId);
         ratings.add(attractionDiscussion.getRating());
         double totalRating = ratings.stream().mapToDouble(i -> i).sum();
-        attractionService.updateRating(attractionUuid, totalRating / attractionDiscussionRepository.findAll().size());
+        double averageRating = totalRating / attractionDiscussionRepository.findAll().size();
+        String formattedAverageRating = FormatConstants.ONE_FLOATING_POINT_FORMATTER.format(averageRating);
+
+        attractionService.updateRating(attractionUuid, Double.parseDouble(formattedAverageRating.replace(',','.')));
 
         return attractionDiscussion;
     }

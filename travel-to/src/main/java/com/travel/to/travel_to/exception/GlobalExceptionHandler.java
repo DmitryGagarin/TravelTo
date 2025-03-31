@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.exception;
 
 import com.travel.to.travel_to.exception.exception.FileExtensionException;
+import com.travel.to.travel_to.exception.exception.InvalidEmailOrPasswordException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -23,6 +24,15 @@ public class GlobalExceptionHandler {
     error -> errorMessages.put(error.getField(), error.getDefaultMessage())
         );
 
+        return ResponseEntity.badRequest().body(errorMessages);
+    }
+
+    // 401
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(InvalidEmailOrPasswordException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidEmailOrPasswordException(InvalidEmailOrPasswordException ex) {
+        Map<String, String> errorMessages = new HashMap<>();
+        errorMessages.put("error", ex.getMessage());
         return ResponseEntity.badRequest().body(errorMessages);
     }
 
