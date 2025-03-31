@@ -63,4 +63,9 @@ public class AttractionImageServiceImpl implements AttractionImageService {
         return attractionImageRepository.getAllImagesByAttractionId(attractionId);
     }
 
+    @Override
+    public List<String> getAllImagesFormatsByAttractionId(Long attractionId) {
+        return attractionImageRepository.getAllImagesFormatsByAttractionId(attractionId);
+    }
+
 }

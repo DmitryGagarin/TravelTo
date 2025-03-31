@@ -10,6 +10,7 @@ public class AttractionModel extends PagedModel<AttractionModel> {
     private String description;
     private String address;
     private List<byte[]> images;
+    private List<String> imagesFormats;
     private String phone;
     private String website;
     private String type;
@@ -60,6 +61,15 @@ public class AttractionModel extends PagedModel<AttractionModel> {
 
     public AttractionModel setImages(List<byte[]> images) {
         this.images = images;
+        return this;
+    }
+
+    public List<String> getImagesFormats() {
+        return imagesFormats;
+    }
+
+    public AttractionModel setImagesFormats(List<String> imagesFormats) {
+        this.imagesFormats = imagesFormats;
         return this;
     }
 

@@ -75,6 +75,7 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
 
         userService.updateUserRole(authUser, Roles.DISCUSSION_OWNER);
 
+        // TODO: сделать проверку имеется ли у юзера уже такая роль
         UserToRole userToRole = new UserToRole();
         userToRole
             .setUser(userService.getByUuid(authUser.getUuid()))

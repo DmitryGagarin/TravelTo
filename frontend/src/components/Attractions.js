@@ -121,6 +121,15 @@ function Attractions() {
         }
     }
 
+    const getImageFormat = (format) => {
+        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg'];
+        if (formats.includes(format.toLowerCase())) {
+            return format.toLowerCase()
+        } else {
+            return 'jpeg'
+        }
+    }
+
     return (
         <div>
             <Header/>
@@ -138,7 +147,7 @@ function Attractions() {
                                 <div key={attraction.name} className="attraction-card">
                                     <div className="image-container">
                                         <img
-                                            src={`data:image/png;base64,${attraction.images[currentImageIndex]}`}
+                                            src={`data:image/${getImageFormat(attraction.imagesFormats[currentImageIndex])};base64,${attraction.images[currentImageIndex]}`}
                                             alt={attraction.name}
                                             className="card-image"
                                         />

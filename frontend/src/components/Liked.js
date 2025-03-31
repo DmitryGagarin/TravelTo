@@ -30,7 +30,7 @@ function Liked() {
 
     likes.map((attraction) => console.log(attraction[0]))
 
-    if (likes == null) {
+    if (!likes) {
         return (
             <div>
                 <Header/>
@@ -40,6 +40,16 @@ function Liked() {
             </div>
         )
     }
+
+    const getImageFormat = (format) => {
+        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg'];
+        if (formats.includes(format.toLowerCase())) {
+            return format.toLowerCase()
+        } else {
+            return 'jpeg'
+        }
+    }
+
     return (
         <div>
             <Header/>
@@ -51,7 +61,7 @@ function Liked() {
                                 <div key={attraction.name || index} className="attraction-card">
                                     <div className="image-container">
                                         <img
-                                            src={`data:image/png;base64,${attraction.images[0]}`}
+                                            src={`data:image/${getImageFormat(attraction.imagesFormat[0])};base64,${attraction.images[0]}`}
                                             alt={attraction.name}
                                             className="card-image"
                                         />

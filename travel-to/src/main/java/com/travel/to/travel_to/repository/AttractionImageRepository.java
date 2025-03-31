@@ -17,6 +17,11 @@ public interface AttractionImageRepository extends JpaRepository<AttractionImage
     nativeQuery = true)
     List<byte[]> getAllImagesByAttractionId(Long attractionId);
 
+    @NotNull
+    @Query(value = "SELECT image_format FROM attraction_image WHERE attraction_id = :attractionId",
+    nativeQuery = true)
+    List<String> getAllImagesFormatsByAttractionId(Long attractionId);
+
     @Modifying
     @Query(value = "DELETE FROM attraction_image WHERE attraction_id = :attractionId",
     nativeQuery = true)

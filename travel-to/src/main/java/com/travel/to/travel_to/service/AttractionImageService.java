@@ -25,4 +25,9 @@ public interface AttractionImageService {
     List<byte[]> getAllImagesByAttractionId(
         @NotNull Long attractionId
     );
+
+    @NotNull
+    List<String> getAllImagesFormatsByAttractionId(
+        @NotNull Long attractionId
+    );
 }

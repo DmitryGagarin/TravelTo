@@ -44,6 +44,8 @@ function MyAttractions() {
         }
     }
 
+    console.log(attractions)
+
     useEffect(() => {
         if (attractionName) {
             const confirmation = window.confirm("Are you sure you want to delete this attraction?")
@@ -65,6 +67,15 @@ function MyAttractions() {
         }
     }
 
+    const getImageFormat = (format) => {
+        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg'];
+        if (formats.includes(format.toLowerCase())) {
+            return format.toLowerCase()
+        } else {
+            return 'jpeg'
+        }
+    }
+
     return (
         <div className="my-attractions-main-container">
             <div className="my-attractions-container">
@@ -73,7 +84,7 @@ function MyAttractions() {
                         <div key={attraction.name} className="attraction-card my-attraction-card">
                             <div className="image-container">
                                 <img
-                                    src={`data:image/png;base64,${attraction.images[0]}`}
+                                    src={`data:image/${getImageFormat(attraction.imagesFormats[0])};base64,${attraction.images[0]}`}
                                     alt={attraction.name}
                                     className="card-image"
                                 />

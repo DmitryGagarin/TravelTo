@@ -44,6 +44,7 @@ const AdminModeration = () => {
                     console.log(error.response?.status)
                 }
             }
+            window.location.reload()
 
             setAttractionName('')
         }
@@ -86,6 +87,15 @@ const AdminModeration = () => {
         }
     }
 
+    const getImageFormat = (format) => {
+        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg'];
+        if (formats.includes(format.toLowerCase())) {
+            return format.toLowerCase()
+        } else {
+            return 'jpeg'
+        }
+    }
+
     return (
         <div>
             <div className="attractions-main-container">
@@ -103,7 +113,7 @@ const AdminModeration = () => {
                                     <div className="image-container">
                                         {images.length > 0 ? (
                                             <img
-                                                src={`data:image/pngbase64,${images[currentImageIndex]}`}
+                                                src={`data:image/${getImageFormat(attraction.imagesFormats[currentImageIndex])};base64,${images[currentImageIndex]}`}
                                                 alt={attraction.name}
                                                 className="card-image"
                                             />

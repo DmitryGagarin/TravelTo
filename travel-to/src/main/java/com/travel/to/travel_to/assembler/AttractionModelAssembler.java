@@ -31,6 +31,7 @@ public class AttractionModelAssembler implements RepresentationModelAssembler<At
             .setDescription(entity.getDescription())
             .setAddress(entity.getAddress())
             .setImages(attractionImageService.getAllImagesByAttractionId(entity.getId()))
+            .setImagesFormats(attractionImageService.getAllImagesFormatsByAttractionId(entity.getId()))
             .setPhone(entity.getPhone())
             .setWebsite(entity.getWebsite())
             .setType(entity.getType())

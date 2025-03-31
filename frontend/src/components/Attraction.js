@@ -19,8 +19,9 @@ function Attraction() {
     const [attractionUuid, setAttractionUuid] = useState('')
 
     const [showCreateDiscussionForm, setShowCreateDiscussionForm] = useState(false)
-    const [currentAttractionImageIndex, setCurrentAttractionImageIndex] = useState(0) // Initialize the current image index state
+    const [currentAttractionImageIndex, setCurrentAttractionImageIndex] = useState(0)
     const [currentDiscussionImageIndex, setCurrentDiscussionImageIndex] = useState(0)
+
 
     const [title, setTitle] = useState('')
     const [contentLike, setContentLike] = useState('')
@@ -64,9 +65,7 @@ function Attraction() {
                     })
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
             } catch (error) {
-                if (error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/";
-                }
+                console.log(error)
             }
         }
 
@@ -96,11 +95,10 @@ function Attraction() {
     }, [balloon]) // This effect runs whenever 'balloon' changes
 
     useEffect(() => {
-        // Check if attraction is properly fetched and images is available
         if (attraction && Array.isArray(attraction.images) && attraction.images.length > 0) {
-            setCurrentAttractionImageIndex(0) // Set to the first image initially
+            setCurrentAttractionImageIndex(0)
         }
-    }, [attraction])  // Trigger this effect when attraction is updated
+    }, [attraction])
 
     const handleLeaveDiscussion = () => {
         if (showCreateDiscussionForm) {
@@ -165,15 +163,26 @@ function Attraction() {
     }
 
     const handleNextImage = (index, images) => {
-        return (index + 1) % images.length // Wrap around the image array
+        const newIndex = (index + 1) % images.length
+        return newIndex
     }
 
     const handlePrevImage = (index, images) => {
-        return (index - 1 + images.length) % images.length // Wrap around the image array
+        const newIndex = (index - 1 + images.length) % images.length
+        return newIndex
     }
 
     const handleImageChange = (e) => {
         setImages([...e.target.files]) // Set the file object
+    }
+
+    const getImageFormat = (format) => {
+        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg'];
+        if (formats.includes(format.toLowerCase())) {
+            return format.toLowerCase()
+        } else {
+            return 'jpeg'
+        }
     }
 
     return (
@@ -184,58 +193,61 @@ function Attraction() {
                     <div className="cards-container">
                         <div className="attraction-card">
                             <div className="image-container">
-                                <img
-                                    // TODO: реакт почему то не видит стейте в этом скоупе
-                                    src={`data:image/png;base64,${attraction.images[currentAttractionImageIndex]}`}
-                                    alt={attraction.name}
-                                    className="card-image"
-                                />
-                                <div className="image-navigation">
-                                    <button
-                                        className="image-nav-button left"
-                                        onClick={() => setCurrentAttractionImageIndex(
-                                            handlePrevImage(currentAttractionImageIndex, attraction.images)
-                                        )}
-                                        // disabled={attraction.images.length <= 1}
-                                    >
-                                        &lt
-                                    </button>
+                                {attraction.images && attraction.images.length > 0 && (
+                                    <>
+                                        <img
+                                            src={`data:image/${getImageFormat(attraction.imagesFormats[currentAttractionImageIndex])};base64,${attraction.images[currentAttractionImageIndex]}`}
+                                            alt={attraction.name}
+                                            className="card-image"
+                                        />
+                                        <div className="image-navigation">
+                                            {/* Left Arrow Button */}
+                                            <button
+                                                className="image-nav-button left"
+                                                onClick={() =>
+                                                    setCurrentAttractionImageIndex(handlePrevImage(currentAttractionImageIndex, attraction.images))
+                                                }
+                                            >
+                                                ←
+                                            </button>
 
-                                    <button
-                                        className="image-nav-button right"
-                                        onClick={() => setCurrentAttractionImageIndex(
-                                            handleNextImage(currentAttractionImageIndex, attraction.images)
-                                        )}
-                                        // disabled={attraction.images.length <= 1}
-                                    >
-                                        &gt
-                                    </button>
-                                </div>
+                                            {/* Right Arrow Button */}
+                                            <button
+                                                className="image-nav-button right"
+                                                onClick={() =>
+                                                    setCurrentAttractionImageIndex(handleNextImage(currentAttractionImageIndex, attraction.images, attraction.name))
+                                                }
+                                            >
+                                                →
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                            <div className="rating">
-                                Rating: {attraction.rating}
-                            </div>
-                            <div className="contact-info">
-                                <p>
-                                    Website:{" "}
-                                    <a
-                                        href={attraction.website}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        Visit
-                                    </a>
-                                </p>
-                                <p>Phone: {attraction.phone}</p>
-                            </div>
-                            <div className="name-description">
-                                <h5>{attraction.name}</h5>
-                                <p>{attraction.description}</p>
-                            </div>
-                            <div className="opening-time">
-                                <p>Opening Time: {attraction.openTime}</p>
-                                <p>Closing Time: {attraction.closeTime}</p>
-                            </div>
+                        </div>
+                        <div className="rating">
+                            Rating: {attraction.rating}
+                        </div>
+                        <div className="contact-info">
+                            <p>
+                                Website:{" "}
+                                <a
+                                    href={attraction.website}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Visit
+                                </a>
+                            </p>
+                            <p>Phone: {attraction.phone}</p>
+                        </div>
+                        <div className="name-description">
+                            <h5>{attraction.name}</h5>
+                            <p>{attraction.description}</p>
+                        </div>
+                        <div className="opening-time">
+                            <p>Opening Time: {attraction.openTime}</p>
+                            <p>Closing Time: {attraction.closeTime}</p>
                         </div>
                     </div>
                 </div>
@@ -344,7 +356,6 @@ function Attraction() {
                                     Overall: {discussion.rating}
                                 </div>
                                 <img
-                                    // TODO: реакт почему то не видит стейте в этом скоупе
                                     src={`data:image/png;base64,${discussion.images[currentDiscussionImageIndex]}`}
                                     alt={attraction.name}
                                     className="card-image"
