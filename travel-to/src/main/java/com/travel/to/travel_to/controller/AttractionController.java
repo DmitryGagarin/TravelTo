@@ -7,6 +7,7 @@ import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.exception.exception.FileExtensionException;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.form.AttractionEditForm;
+import com.travel.to.travel_to.service.cache.AttractionCacheUtil;
 import com.travel.to.travel_to.validator.attraction.AttractionEditFormValidator;
 import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.service.AttractionService;
@@ -29,7 +30,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,6 +44,7 @@ public class AttractionController {
     private final AttractionEditFormValidator attractionEditFormValidator;
     private final ValidationUtils validationUtils;
     private final AttractionModelAssembler attractionModelAssembler;
+    private final AttractionCacheUtil attractionCacheUtil;
 
     @Autowired
     public AttractionController(
@@ -48,13 +52,14 @@ public class AttractionController {
         AttractionCreateFormValidator attractionCreateFormValidator,
         AttractionEditFormValidator attractionEditFormValidator,
         ValidationUtils validationUtils,
-        AttractionModelAssembler attractionModelAssembler
-    ) {
+        AttractionModelAssembler attractionModelAssembler,
+        AttractionCacheUtil attractionCacheUtil) {
         this.attractionService = attractionService;
         this.attractionCreateFormValidator = attractionCreateFormValidator;
         this.attractionEditFormValidator = attractionEditFormValidator;
         this.validationUtils = validationUtils;
         this.attractionModelAssembler = attractionModelAssembler;
+        this.attractionCacheUtil = attractionCacheUtil;
     }
 
     @InitBinder("attractionCreateForm")
@@ -69,10 +74,22 @@ public class AttractionController {
 
     @GetMapping
     public PagedModel<AttractionModel> getAttractions() {
-        List<Attraction> attractions = attractionService.findAll();
-        List<AttractionModel> attractionModels = attractions.stream()
-            .map(attractionModelAssembler::toModel)
-            .collect(Collectors.toList());
+        List<Attraction> attractions;
+
+        if (Objects.isNull(attractionCacheUtil.findAll()) || attractionCacheUtil.findAll().isEmpty()) {
+            attractions = attractionService.findAll();
+            attractionCacheUtil.saveAll(attractions);
+        } else {
+            attractions = attractionCacheUtil.findAll();
+        }
+
+        System.out.println("Attractions list structure: " + attractions.getClass().getName());
+
+        List<AttractionModel> attractionModels = new ArrayList<>();
+        for (Attraction attraction : attractions) {
+            AttractionModel attractionModel = attractionModelAssembler.toModel(attraction);
+            attractionModels.add(attractionModel);
+        }
 
         int pageSize = attractionModels.size();
         int currentPage = 0;
