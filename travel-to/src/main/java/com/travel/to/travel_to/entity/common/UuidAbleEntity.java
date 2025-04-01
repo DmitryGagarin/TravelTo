@@ -1,4 +1,4 @@
-package com.travel.to.travel_to.entity.user;
+package com.travel.to.travel_to.entity.common;
 
 import jakarta.persistence.*;
 

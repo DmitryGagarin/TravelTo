@@ -83,8 +83,6 @@ public class AttractionController {
             attractions = attractionCacheUtil.findAll();
         }
 
-        System.out.println("Attractions list structure: " + attractions.getClass().getName());
-
         List<AttractionModel> attractionModels = new ArrayList<>();
         for (Attraction attraction : attractions) {
             AttractionModel attractionModel = attractionModelAssembler.toModel(attraction);

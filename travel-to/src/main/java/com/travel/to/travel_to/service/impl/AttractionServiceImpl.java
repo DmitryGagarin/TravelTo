@@ -12,6 +12,7 @@ import com.travel.to.travel_to.repository.AttractionRepository;
 import com.travel.to.travel_to.service.AttractionImageService;
 import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.service.UserService;
+import com.travel.to.travel_to.service.cache.AttractionCacheUtil;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,16 +30,18 @@ public class AttractionServiceImpl implements AttractionService {
     private final AttractionRepository attractionRepository;
     private final UserService userService;
     private final AttractionImageService attractionImageService;
+    private final AttractionCacheUtil attractionCacheUtil;
 
     @Autowired
     public AttractionServiceImpl(
         AttractionRepository attractionRepository,
         UserService userService,
-        AttractionImageService attractionImageService
-    ) {
+        AttractionImageService attractionImageService,
+        AttractionCacheUtil attractionCacheUtil) {
         this.attractionRepository = attractionRepository;
         this.userService = userService;
         this.attractionImageService = attractionImageService;
+        this.attractionCacheUtil = attractionCacheUtil;
     }
 
     @Override
@@ -98,6 +101,7 @@ public class AttractionServiceImpl implements AttractionService {
             .setOwner(userService.getByUuid(authUser.getUuid()))
             .setStatus(AttractionStatus.on_moderation.name());
         attractionRepository.save(attraction);
+        attractionCacheUtil.save(attraction);
 
         try {
             attractionImageService.save(images, attraction.getId());

@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.entity.attraction;
 
-import com.travel.to.travel_to.entity.user.UuidAbleEntity;
+import com.travel.to.travel_to.entity.common.UuidAbleEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 

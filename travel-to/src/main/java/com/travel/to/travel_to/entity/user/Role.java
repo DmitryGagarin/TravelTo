@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.entity.user;
 
+import com.travel.to.travel_to.entity.common.UuidAbleEntity;
 import jakarta.persistence.Entity;
 
 import java.io.Serial;
