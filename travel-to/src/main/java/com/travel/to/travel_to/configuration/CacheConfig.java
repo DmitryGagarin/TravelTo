@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -26,18 +28,24 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @EnableCaching
 public class CacheConfig {
 
+    @Value("${spring.data.redis.host}")
+    private String REDIS_HOST;
+
+    @Value("${spring.data.redis.port}")
+    private int REDIS_PORT;
+
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory() {
+    public LettuceConnectionFactory lettuceConnectionFactory() {
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
-        redisConfig.setHostName("localhost");
-        redisConfig.setPort(6379);
-        return new JedisConnectionFactory(redisConfig);
+        redisConfig.setHostName(REDIS_HOST);
+        redisConfig.setPort(REDIS_PORT);
+        return new LettuceConnectionFactory(redisConfig);
     }
 
     @Bean
     public <T> RedisTemplate<String, T> redisTemplate() {
         RedisTemplate<String, T> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        redisTemplate.setConnectionFactory(lettuceConnectionFactory());
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper(), Object.class));

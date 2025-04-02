@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import React from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
 
 import LoginPage from './SignIn';
 import SignUpStepOne from './SignUpStepOne';
@@ -22,6 +22,7 @@ function App() {
         <div className="App">
             <Router>
                 <Routes>
+                    <Route path="/" element={<Navigate to="/signin"/>} />
                     <Route path="/signin" element={<LoginPage/>}/>
                     {/*<Route path="/home" element={<Home/>}/>*/}
                     <Route path="/likes" element={<Liked/>}/>
