@@ -48,6 +48,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             requestURI.equals(URLConstants.SIGNIN)
             || requestURI.equals(URLConstants.SIGNUP)
             || requestURI.equals(URLConstants.LOGOUT)
+            || requestURI.equals(URLConstants.RESET_PASSWORD)
         ) {
             filterChain.doFilter(request, response);
             return;

@@ -1,31 +1,25 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
-import { MDBContainer, MDBInput } from 'mdb-react-ui-kit'
+import React, {useState} from 'react'
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {MDBContainer, MDBInput} from "mdb-react-ui-kit";
 
-function LoginPage() {
+function ResetPassword() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [passwordRepeat, setPasswordRepeat] = useState('')
     const [error, setError] = useState('')
+
     const history = useNavigate()
 
-
-    const handleLogin = async () => {
+    const resetPassword = async () => {
+        if (password !== passwordRepeat) {
+            setError("Passwords are different")
+            return
+        }
         try {
-            if (!email || !password) {
-                setError('Please enter both email and password.')
-                return
-            }
-
-            const response = await axios.post('http://localhost:8080/signin', { email, password }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-
+            const response = await axios.post('http://localhost:8080/user/reset-password', {email, password})
             localStorage.setItem('user', JSON.stringify(response.data))
-
-            history('/attractions')
+            history('/signin')
         } catch (error) {
             if (error.response && error.response.data) {
                 const errorMessages = error.response.data
@@ -35,16 +29,16 @@ function LoginPage() {
                         .join(', ')
                 )
             } else {
-                setError('Registration failed, please try again.')
+                setError('Failed to reset password, please try again.')
             }
         }
     }
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
-            <div className="border rounded-lg p-4" style={{ width: '500px', height: 'auto' }}>
+            <div className="border rounded-lg p-4" style={{width: '500px', height: 'auto'}}>
                 <MDBContainer className="p-3">
-                    <h2 className="mb-4 text-center">Login Page</h2>
+                    <h2 className="mb-4 text-center">Reset Password Page</h2>
                     <MDBInput
                         wrapperClass='mb-4'
                         placeholder='Email address'
@@ -61,13 +55,25 @@ function LoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                    <MDBInput
+                        wrapperClass='mb-4'
+                        placeholder='Repeat password'
+                        id='password-repeat'
+                        type='password'
+                        value={passwordRepeat}
+                        onChange={(e) => setPasswordRepeat(e.target.value)}
+                    />
                     {error && <p className="text-danger">{error}</p>}
-                    <button className="mb-4 d-block btn-primary" style={{ height: '50px', width: '100%' }} onClick={handleLogin}>Sign in</button>
+                    <button
+                        className="mb-4 d-block btn-primary"
+                        style={{height: '50px', width: '100%'}}
+                        onClick={resetPassword}
+                    >
+                        Reset Password
+                    </button>
                     <div className="text-center">
+                        <p>Already have account? <a href="/signin">Sign in</a></p>
                         <p>Not a member? <a href="/signup">Register</a></p>
-                    </div>
-                    <div className="text-center">
-                        <p>Forget password? <a href="/reset-password">Reset Password</a></p>
                     </div>
                 </MDBContainer>
             </div>
@@ -75,4 +81,4 @@ function LoginPage() {
     )
 }
 
-export default LoginPage
+export default ResetPassword

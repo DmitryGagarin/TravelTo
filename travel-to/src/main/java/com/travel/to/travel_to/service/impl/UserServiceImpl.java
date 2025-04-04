@@ -6,6 +6,7 @@ import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.entity.user.UserToRole;
 import com.travel.to.travel_to.form.UserProfileForm;
+import com.travel.to.travel_to.form.UserRefreshPasswordForm;
 import com.travel.to.travel_to.form.UserSignUpFirstForm;
 import com.travel.to.travel_to.form.UserSignUpSecondForm;
 import com.travel.to.travel_to.repository.UserRepository;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -88,6 +90,41 @@ public class UserServiceImpl implements UserService {
                 authUser,
                 encodedPassword,
                 authUser.getAuthorities()
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwtAccessToken = JwtProvider.generateAccessToken(authentication);
+        String jwtRefreshToken = JwtProvider.generateRefreshToken(authentication);
+        authUser.setAccessToken(jwtAccessToken);
+        authUser.setRefreshToken(jwtRefreshToken);
+
+        return authUser;
+    }
+
+    @Override
+    @NotNull
+    @Transactional
+    public AuthUser resetPassword(
+        @NotNull UserRefreshPasswordForm userRefreshPasswordForm
+    ) {
+        String encodedPassword = passwordEncoder.encode(userRefreshPasswordForm.getPassword());
+        User user = Objects.requireNonNull(findByEmail(userRefreshPasswordForm.getEmail()).get());
+
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        AuthUser authUser = new AuthUser();
+        authUser
+            .setUuid(user.getUuid())
+            .setEmail(user.getEmail())
+            .setPassword(encodedPassword)
+            .setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()));
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            authUser,
+            encodedPassword,
+            authUser.getAuthorities()
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

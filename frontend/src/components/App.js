@@ -16,6 +16,7 @@ import RegisterBusiness from './RegisterBusiness'
 import Liked from './Liked'
 import AdminModeration from './AdminModeration'
 import EditAttraction from "./EditAttraction.tsx";
+import ResetPassword from "./ResetPassword";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Navigate to="/signin"/>} />
                     <Route path="/signin" element={<LoginPage/>}/>
+                    <Route path="/reset-password" element={<ResetPassword/>}/>
                     {/*<Route path="/home" element={<Home/>}/>*/}
                     <Route path="/likes" element={<Liked/>}/>
                     <Route path="/signup" element={<SignUpStepOne/>}/>

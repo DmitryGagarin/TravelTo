@@ -63,6 +63,7 @@ public class WebSecurityConfiguration {
                     "/signin/**",
                     "/signup/**",
                     "/logout",
+                    "/user/reset-password",
                     "/attraction")
                 .permitAll()
                 .anyRequest()
