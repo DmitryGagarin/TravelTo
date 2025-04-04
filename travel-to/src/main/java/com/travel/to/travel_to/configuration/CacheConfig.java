@@ -6,12 +6,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.travel.to.travel_to.entity.attraction.Attraction;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
@@ -42,16 +43,23 @@ public class CacheConfig {
         return new LettuceConnectionFactory(redisConfig);
     }
 
+    // RedisTemplate for Attraction objects
     @Bean
-    public <T> RedisTemplate<String, T> redisTemplate() {
+    @Qualifier("attractionTemplate")
+    public RedisTemplate<String, Attraction> attractionRedisTemplate() {
+        return createRedisTemplate(Attraction.class);
+    }
+
+    // General method to create RedisTemplate for any class
+    private <T> RedisTemplate<String, T> createRedisTemplate(Class<T> clazz) {
         RedisTemplate<String, T> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory());
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper(), Object.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper(), clazz));
 
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper(), Object.class));
+        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper(), clazz));
 
         redisTemplate.setEnableTransactionSupport(true);
         redisTemplate.afterPropertiesSet();

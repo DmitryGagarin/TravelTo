@@ -3,6 +3,7 @@ package com.travel.to.travel_to.service.cache;
 import com.travel.to.travel_to.constants.CacheKeys;
 import com.travel.to.travel_to.entity.attraction.Attraction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ public class AttractionCacheUtil extends CacheUtilBase<Attraction> {
 
     @Autowired
     public AttractionCacheUtil(
+        @Qualifier("attractionTemplate")
         RedisTemplate<String, Attraction> redisTemplate
     ) {
         this.redisTemplate = redisTemplate;

@@ -1,6 +1,5 @@
 package com.travel.to.travel_to.entity.user;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
 import com.travel.to.travel_to.entity.common.UuidAbleTimedEntity;
@@ -28,7 +27,6 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
     private String surname;
     private String phone;
 
-    @JsonBackReference
     @OneToMany(mappedBy = "owner")
     private List<Attraction> ownerAttractions;
     @OneToMany(mappedBy = "likedBy")
