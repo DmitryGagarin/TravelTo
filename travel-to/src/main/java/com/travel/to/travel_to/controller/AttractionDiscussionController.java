@@ -7,6 +7,7 @@ import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
 import com.travel.to.travel_to.model.AttractionDiscussionModel;
 import com.travel.to.travel_to.service.AttractionDiscussionService;
 import com.travel.to.travel_to.validator.attraction_discussion.AttractionDiscussionCreateFormValidator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +29,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(
+    name = "Attraction discussion controller",
+    description = "Controller is responsible for discussions below attraction actions"
+)
 @RestController
 @RequestMapping("/attraction-discussion")
 public class AttractionDiscussionController {

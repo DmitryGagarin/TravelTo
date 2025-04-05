@@ -5,6 +5,7 @@ import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.attraction.AttractionStatus;
 import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.service.AttractionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(
+    name = "Admin controller",
+    description = "Controller for admin actions"
+)
 @RestController
 @RequestMapping("/admin")
 public class AdminController {

@@ -2,17 +2,20 @@ package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.assembler.UserModelAssembler;
 import com.travel.to.travel_to.entity.user.AuthUser;
-import com.travel.to.travel_to.form.UserRefreshPasswordForm;
 import com.travel.to.travel_to.model.UserModel;
 import com.travel.to.travel_to.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(
+    name = "User controller",
+    description = "Controller is responsible for user actions, returns UserModel"
+)
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -42,12 +45,4 @@ public class UserController {
     ) {
         userService.delete(authUser);
     }
-
-    @PostMapping("/reset-password")
-    public AuthUser refreshUser(
-        @RequestBody UserRefreshPasswordForm userRefreshPasswordForm
-    ) {
-        return userService.resetPassword(userRefreshPasswordForm);
-    }
-
 }

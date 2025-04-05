@@ -9,10 +9,11 @@ import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.form.AttractionEditForm;
 import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.service.AttractionService;
-import com.travel.to.travel_to.service.cache.AttractionCacheUtil;
+import com.travel.to.travel_to.cache.AttractionCacheUtil;
 import com.travel.to.travel_to.validator.attraction.AttractionCreateFormValidator;
 import com.travel.to.travel_to.validator.attraction.AttractionEditFormValidator;
 import com.travel.to.travel_to.validator.utils.ValidationUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +36,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Tag(
+    name = "Attraction controller",
+    description = "Controller responsible for attraction actions"
+)
 @RestController
 @RequestMapping("/attraction")
 public class AttractionController {

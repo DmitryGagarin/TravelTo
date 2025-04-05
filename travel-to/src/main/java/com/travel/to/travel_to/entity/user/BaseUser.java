@@ -26,6 +26,7 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
     private String name;
     private String surname;
     private String phone;
+    private Boolean isVerified;
 
     @OneToMany(mappedBy = "owner")
     private List<Attraction> ownerAttractions;
@@ -84,6 +85,15 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
 
     public BaseUser setPhone(String phone) {
         this.phone = phone;
+        return this;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public BaseUser setVerified(Boolean verified) {
+        isVerified = verified;
         return this;
     }
 

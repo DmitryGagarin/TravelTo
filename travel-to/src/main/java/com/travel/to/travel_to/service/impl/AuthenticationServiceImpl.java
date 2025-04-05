@@ -3,6 +3,7 @@ package com.travel.to.travel_to.service.impl;
 import com.travel.to.travel_to.configuration.CustomAuthenticationProvider;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.BaseUser;
+import com.travel.to.travel_to.exception.exception.UserNotVerifiedException;
 import com.travel.to.travel_to.form.UserRefreshTokenForm;
 import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.security.jwt.JwtConstants;
@@ -60,11 +61,27 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         authUser.setPassword(userSignInForm.getPassword());
         authUser.setAuthorities(authorities);
 
-        authUser.setName(
-            userService.findByEmail(userSignInForm.getEmail())
-                .map(BaseUser::getName)
-                .orElse(null)
-        );
+        authUser
+            .setName(
+                userService.findByEmail(userSignInForm.getEmail())
+                    .map(BaseUser::getName)
+                    .orElse(null)
+            )
+            .setSurname(
+                userService.findByEmail(userSignInForm.getEmail())
+                    .map(BaseUser::getSurname)
+                    .orElse(null)
+            )
+            .setVerified(
+                userService.findByEmail(userSignInForm.getEmail())
+                    .map(BaseUser::getVerified)
+                    .orElse(false)
+            );
+
+        // TODO: correct redirect in case of not verified
+        if (!authUser.getVerified() || authUser.getVerified() == null) {
+            throw new UserNotVerifiedException("not verified");
+        }
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
             authUser,

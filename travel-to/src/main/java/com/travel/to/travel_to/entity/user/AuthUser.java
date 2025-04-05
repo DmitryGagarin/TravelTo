@@ -17,6 +17,7 @@ public class AuthUser implements UserDetails {
     private String refreshToken;
     private String name;
     private String surname;
+    private Boolean isVerified;
     private Set<GrantedAuthority> authorities;
 
     public String getUuid() {
@@ -99,6 +100,15 @@ public class AuthUser implements UserDetails {
 
     public AuthUser setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+        return this;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public AuthUser setVerified(Boolean verified) {
+        isVerified = verified;
         return this;
     }
 

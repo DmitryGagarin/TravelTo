@@ -9,6 +9,7 @@ import com.travel.to.travel_to.form.UserSignUpFirstForm;
 import com.travel.to.travel_to.form.UserSignUpSecondForm;
 import jakarta.validation.constraints.NotNull;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 public interface UserService {
@@ -42,5 +43,10 @@ public interface UserService {
     Optional<User> findByEmail(@NotNull String email);
 
     Optional<User> findById(@NotNull Long id);
+
+    @NotNull
+    byte[] generateVerificationToken(@NotNull String email) throws NoSuchAlgorithmException;
+
+    void verifyAccount(@NotNull String email);
 
 }

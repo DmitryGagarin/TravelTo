@@ -4,6 +4,7 @@ import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.form.UserProfileForm;
 import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.validator.user.UserProfileFormValidator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
@@ -16,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(
+    name = "Settings controller",
+    description = "Controller is responsible for settings actions"
+)
 @RestController
 @RequestMapping("/setting")
 public class SettingsController {

@@ -50,6 +50,13 @@ public class CacheConfig {
         return createRedisTemplate(Attraction.class);
     }
 
+    // RedisTemplate for String objects (account validation token)
+    @Bean
+    @Qualifier("tokenTemplate")
+    public RedisTemplate<String, String> validationTokenRedisTemplate() {
+        return createRedisTemplate(String.class);
+    }
+
     // General method to create RedisTemplate for any class
     private <T> RedisTemplate<String, T> createRedisTemplate(Class<T> clazz) {
         RedisTemplate<String, T> redisTemplate = new RedisTemplate<>();

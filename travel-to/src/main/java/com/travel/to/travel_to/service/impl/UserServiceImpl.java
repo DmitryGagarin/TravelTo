@@ -1,5 +1,7 @@
 package com.travel.to.travel_to.service.impl;
 
+import com.travel.to.travel_to.cache.ValidationTokenCacheUtil;
+import com.travel.to.travel_to.email.EmailService;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.Role;
 import com.travel.to.travel_to.entity.user.Roles;
@@ -20,12 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -37,6 +42,8 @@ public class UserServiceImpl implements UserService {
     private final UserToRoleRepository userToRoleRepository;
     private final RoleService roleService;
     private final UserToRoleService userToRoleService;
+    private final EmailService emailService;
+    private final ValidationTokenCacheUtil validationTokenCacheUtil;
 
     @Autowired
     public UserServiceImpl(
@@ -44,13 +51,16 @@ public class UserServiceImpl implements UserService {
         PasswordEncoder passwordEncoder,
         UserToRoleRepository userToRoleRepository,
         RoleService roleService,
-        UserToRoleService userToRoleService
-    ) {
+        UserToRoleService userToRoleService,
+        EmailService emailService,
+        ValidationTokenCacheUtil validationTokenCacheUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userToRoleRepository = userToRoleRepository;
         this.roleService = roleService;
         this.userToRoleService = userToRoleService;
+        this.emailService = emailService;
+        this.validationTokenCacheUtil = validationTokenCacheUtil;
     }
 
     @Override
@@ -71,6 +81,9 @@ public class UserServiceImpl implements UserService {
             .setEmail(userSignupFormFirst.getEmail())
             .setCreatedAt(LocalDateTime.now())
             .setUpdatedAt(LocalDateTime.now());
+
+        user.setVerified(false);
+
         userRepository.save(user);
 
         UserToRole userToRole = new UserToRole();
@@ -84,7 +97,8 @@ public class UserServiceImpl implements UserService {
             .setUuid(user.getUuid())
             .setEmail(user.getEmail())
             .setPassword(encodedPassword)
-            .setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()));
+            .setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()))
+            .setVerified(false);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 authUser,
@@ -109,7 +123,9 @@ public class UserServiceImpl implements UserService {
         @NotNull UserRefreshPasswordForm userRefreshPasswordForm
     ) {
         String encodedPassword = passwordEncoder.encode(userRefreshPasswordForm.getPassword());
-        User user = Objects.requireNonNull(findByEmail(userRefreshPasswordForm.getEmail()).get());
+
+        User user = findByEmail(userRefreshPasswordForm.getEmail())
+            .orElseThrow(() -> new UsernameNotFoundException("Can't find user by email"));
 
         user.setPassword(encodedPassword);
         userRepository.save(user);
@@ -135,6 +151,26 @@ public class UserServiceImpl implements UserService {
         authUser.setRefreshToken(jwtRefreshToken);
 
         return authUser;
+    }
+
+    @Override
+    @NotNull
+    public void verifyAccount(@NotNull String email) {
+        byte[] token;
+
+        try {
+            token = generateVerificationToken(email);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 not found");
+        }
+
+        validationTokenCacheUtil.save(new String(token, StandardCharsets.UTF_8), email);
+
+        try {
+           emailService.sendSimpleEmail(email, "subject", "message");
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
     }
 
     @Override
@@ -265,5 +301,14 @@ public class UserServiceImpl implements UserService {
         @NotNull Long id
     ) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    @NotNull
+    public byte[] generateVerificationToken(
+        @NotNull String email
+    ) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        return digest.digest(email.getBytes(StandardCharsets.UTF_8));
     }
 }

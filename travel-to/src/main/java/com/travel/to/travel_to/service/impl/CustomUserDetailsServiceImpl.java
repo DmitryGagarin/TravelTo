@@ -25,15 +25,17 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     @Override
     public AuthUser loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+            .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         AuthUser authUser = new AuthUser();
-        authUser.setEmail(user.getEmail());
-        authUser.setName(user.getName());
-        authUser.setSurname(user.getSurname());
-        authUser.setPassword(user.getPassword());
-        authUser.setUuid(user.getUuid());
-        authUser.setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()));
+        authUser
+            .setEmail(user.getEmail())
+            .setName(user.getName())
+            .setSurname(user.getSurname())
+            .setPassword(user.getPassword())
+            .setUuid(user.getUuid())
+            .setVerified(user.getVerified())
+            .setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()));
         return authUser;
     }
 }

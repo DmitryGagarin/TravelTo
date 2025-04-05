@@ -73,7 +73,15 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                 authUser
                     .setUuid(String.valueOf(authUserMap.get("uuid")))
                     .setEmail(String.valueOf(authUserMap.get("email")))
-                    .setPassword(String.valueOf(authUserMap.get("password")));
+                    .setName((String) authUserMap.get("name"))
+                    .setSurname((String) authUserMap.get("surname"))
+                    .setPassword(String.valueOf(authUserMap.get("password")))
+                    .setVerified(Boolean.valueOf((String) authUserMap.get("verified")));
+
+                // TODO: проверка на подтверждение
+                if (authUser.getVerified() == Boolean.FALSE) {
+
+                }
 
                 String authorities = String.valueOf(authUserMap.get("roles"));
                 List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);

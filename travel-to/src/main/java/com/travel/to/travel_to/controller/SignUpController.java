@@ -6,6 +6,7 @@ import com.travel.to.travel_to.form.UserSignUpSecondForm;
 import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.validator.user.UserSignUpFirstFormValidator;
 import com.travel.to.travel_to.validator.user.UserSignUpSecondFormValidator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
@@ -18,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+@Tag(
+    name = "Signup/registration controller",
+    description = "Controller is responsible for two step registration"
+)
 @RestController
 @RequestMapping("/signup")
 public class SignUpController {
@@ -68,6 +72,7 @@ public class SignUpController {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
+        // TODO: automatic account verification
         return userService.addUserInformation(userSignupSecondForm, authUser);
     }
 }

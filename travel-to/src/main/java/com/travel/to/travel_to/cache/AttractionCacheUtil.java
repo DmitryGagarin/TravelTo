@@ -1,4 +1,4 @@
-package com.travel.to.travel_to.service.cache;
+package com.travel.to.travel_to.cache;
 
 import com.travel.to.travel_to.constants.CacheKeys;
 import com.travel.to.travel_to.entity.attraction.Attraction;
@@ -47,6 +47,12 @@ public class AttractionCacheUtil extends CacheUtilBase<Attraction> {
     @Override
     public Attraction findById(long id) {
         return (Attraction) redisTemplate.opsForHash().get(CacheKeys.ATTRACTIONS, String.valueOf(id));
+    }
+
+    // TODO: добавить изменение записи при редактировании бизнеса
+    @Override
+    public Attraction updateById(long id) {
+        return null;
     }
 
 }

@@ -5,6 +5,7 @@ import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.Likes;
 import com.travel.to.travel_to.model.LikesModel;
 import com.travel.to.travel_to.service.LikesService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(
+    name = "Likes controller",
+    description = "Controller is responsible for likes actions"
+)
 @RestController
 @RequestMapping("/like")
 public class LikesController {

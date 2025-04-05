@@ -12,7 +12,7 @@ import com.travel.to.travel_to.repository.AttractionRepository;
 import com.travel.to.travel_to.service.AttractionImageService;
 import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.service.UserService;
-import com.travel.to.travel_to.service.cache.AttractionCacheUtil;
+import com.travel.to.travel_to.cache.AttractionCacheUtil;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
