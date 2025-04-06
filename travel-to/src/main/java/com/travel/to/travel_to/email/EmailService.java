@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.email;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.mail.MessagingException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.MimeMailMessage;
 
@@ -20,15 +21,18 @@ public interface EmailService {
         @NotNull String message
     );
 
-    @NotNull
     void sendSimpleEmail(
         @NotNull String address,
         @NotNull String subject,
         @NotNull String message
     );
 
-    @NotNull
     void sendMimeEmail(
 
     );
+
+    void sendAccountVerificationEmail(
+        String email,
+        String verificationUrl
+    ) throws MessagingException;
 }

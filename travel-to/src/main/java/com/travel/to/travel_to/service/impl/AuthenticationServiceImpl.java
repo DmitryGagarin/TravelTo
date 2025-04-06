@@ -14,7 +14,7 @@ import com.travel.to.travel_to.service.UserToRoleService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -130,7 +130,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String extractEmailFromRefreshToken(String refreshToken) {
+    @NotNull
+    public String extractEmailFromRefreshToken(@NotNull String refreshToken) {
         SecretKey key = Keys.hmacShaKeyFor(JwtConstants.SECRET_KEY.getBytes());
         Claims claims = Jwts
             .parser()

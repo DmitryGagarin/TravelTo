@@ -3,7 +3,7 @@ package com.travel.to.travel_to.service;
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

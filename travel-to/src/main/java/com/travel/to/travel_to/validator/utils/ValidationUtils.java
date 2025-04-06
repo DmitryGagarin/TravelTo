@@ -1,7 +1,7 @@
 package com.travel.to.travel_to.validator.utils;
 
 import com.travel.to.travel_to.constants.ValidationConstants;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;

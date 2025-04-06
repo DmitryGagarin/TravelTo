@@ -17,6 +17,8 @@ import Liked from './Liked'
 import AdminModeration from './AdminModeration'
 import EditAttraction from "./EditAttraction.tsx";
 import ResetPassword from "./ResetPassword";
+import VerifyAccount from "./VerifyAccount";
+import VerificationCompleted from "./VerificationCompleted";
 
 function App() {
     return (
@@ -27,9 +29,11 @@ function App() {
                     <Route path="/signin" element={<LoginPage/>}/>
                     <Route path="/reset-password" element={<ResetPassword/>}/>
                     {/*<Route path="/home" element={<Home/>}/>*/}
-                    <Route path="/likes" element={<Liked/>}/>
                     <Route path="/signup" element={<SignUpStepOne/>}/>
                     <Route path="/signup/name" element={<SignUpStepTwo/>}/>
+                    <Route path="/verify/:email" element={<VerifyAccount/>}/>
+                    <Route path="/verification-completed" element={<VerificationCompleted/>} />
+                    <Route path="/likes" element={<Liked/>}/>
                     <Route path="/attractions" element={<Attractions/>}/>
                     <Route path="/attraction/:name" element={<Attraction/>}/>
                     <Route path="/attraction/edit/:name" element={<EditAttraction/>}/>

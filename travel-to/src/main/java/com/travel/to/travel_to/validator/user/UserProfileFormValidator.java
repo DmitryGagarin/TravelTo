@@ -1,7 +1,6 @@
 package com.travel.to.travel_to.validator.user;
 
 import com.travel.to.travel_to.form.UserProfileForm;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

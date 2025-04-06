@@ -14,7 +14,7 @@ import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.service.RoleService;
 import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.service.UserToRoleService;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

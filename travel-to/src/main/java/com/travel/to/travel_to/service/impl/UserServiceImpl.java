@@ -17,7 +17,7 @@ import com.travel.to.travel_to.security.jwt.JwtProvider;
 import com.travel.to.travel_to.service.RoleService;
 import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.service.UserToRoleService;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,7 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.Set;
 
@@ -64,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(AuthUser authUser) {
+    public void delete(@NotNull AuthUser authUser) {
         userRepository.delete(getByUuid(authUser.getUuid()));
     }
 
@@ -101,9 +103,9 @@ public class UserServiceImpl implements UserService {
             .setVerified(false);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-                authUser,
-                encodedPassword,
-                authUser.getAuthorities()
+            authUser,
+            encodedPassword,
+            authUser.getAuthorities()
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -154,9 +156,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @NotNull
     public void verifyAccount(@NotNull String email) {
-        byte[] token;
+        String token;
 
         try {
             token = generateVerificationToken(email);
@@ -164,13 +165,40 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("SHA-256 not found");
         }
 
-        validationTokenCacheUtil.save(new String(token, StandardCharsets.UTF_8), email);
+        validationTokenCacheUtil.save(token, email);
+
+        // TODO: & sent as &amq;
+        String verificationLink = "http://localhost:3000/verification-completed?email=" + email + "&token=" + token;
+
+        String subject = "Account Verification";
+        String message = "Hello,\n\nPlease verify your account by clicking the link below:\n\n" + verificationLink +
+            "\n\nIf you did not request this, please ignore this email.\n\nThanks, \nYour Application Team";
 
         try {
-           emailService.sendSimpleEmail(email, "subject", "message");
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
+            emailService.sendAccountVerificationEmail(
+                email,
+                verificationLink
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Boolean verificationCompleted(
+        @NotNull String email,
+        @NotNull String token
+    ) {
+        String savedToken = validationTokenCacheUtil.findByEmail(email);
+        if (savedToken.equals(token)) {
+            User user = findByEmail(email).orElseThrow(
+                () -> new UsernameNotFoundException("Can't find user by email")
+            );
+            user.setVerified(true);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -193,9 +221,9 @@ public class UserServiceImpl implements UserService {
             .setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-                authUser,
-                authUser.getPassword(),
-                authUser.getAuthorities()
+            authUser,
+            authUser.getPassword(),
+            authUser.getAuthorities()
         );
 
         String jwtAccessToken = JwtProvider.generateAccessToken(authentication);
@@ -304,11 +332,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @NotNull
-    public byte[] generateVerificationToken(
+    public String generateVerificationToken(
         @NotNull String email
     ) throws NoSuchAlgorithmException {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] salt = new byte[16];
+        secureRandom.nextBytes(salt);
+
+        // Combine the email and the salt
+        String combined = email + Base64.getEncoder().encodeToString(salt);
+
+        // Perform SHA-256 hash on the combined value
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        return digest.digest(email.getBytes(StandardCharsets.UTF_8));
+        byte[] hashedBytes = digest.digest(combined.getBytes(StandardCharsets.UTF_8));
+
+        // Encode the result into Base64 (to make it URL-safe)
+        return Base64.getUrlEncoder().encodeToString(hashedBytes);
     }
 }

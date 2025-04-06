@@ -5,8 +5,7 @@ import com.travel.to.travel_to.entity.Likes;
 import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.model.LikesModel;
 import com.travel.to.travel_to.service.AttractionService;
-import jakarta.annotation.Nonnull;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
@@ -30,7 +29,7 @@ public class LikesModelAssembler implements RepresentationModelAssembler<Likes, 
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public LikesModel toModel(@NotNull Likes entity) {
         LikesModel likesModel = new LikesModel();
         List<Attraction> attractions = attractionService.findAllByAttractionId(entity.getAttractionId());

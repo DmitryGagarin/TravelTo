@@ -4,7 +4,6 @@ import com.travel.to.travel_to.constants.ValidationErrorCodes;
 import com.travel.to.travel_to.constants.ValidationFields;
 import com.travel.to.travel_to.form.UserSignInForm;
 import com.travel.to.travel_to.service.UserService;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;

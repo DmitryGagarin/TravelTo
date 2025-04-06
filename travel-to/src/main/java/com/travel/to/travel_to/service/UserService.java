@@ -7,14 +7,12 @@ import com.travel.to.travel_to.form.UserProfileForm;
 import com.travel.to.travel_to.form.UserRefreshPasswordForm;
 import com.travel.to.travel_to.form.UserSignUpFirstForm;
 import com.travel.to.travel_to.form.UserSignUpSecondForm;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 public interface UserService {
-
-    void delete(@NotNull AuthUser authUser);
 
     @NotNull
     AuthUser registration(@NotNull UserSignUpFirstForm userSignupFormFirst);
@@ -44,9 +42,11 @@ public interface UserService {
 
     Optional<User> findById(@NotNull Long id);
 
-    @NotNull
-    byte[] generateVerificationToken(@NotNull String email) throws NoSuchAlgorithmException;
+    String generateVerificationToken(@NotNull String email) throws NoSuchAlgorithmException;
+
+    Boolean verificationCompleted(@NotNull String email, @NotNull String token);
 
     void verifyAccount(@NotNull String email);
 
+    void delete(@NotNull AuthUser authUser);
 }

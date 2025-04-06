@@ -5,7 +5,7 @@ import com.travel.to.travel_to.entity.attraction.AttractionStatus;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.form.AttractionEditForm;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

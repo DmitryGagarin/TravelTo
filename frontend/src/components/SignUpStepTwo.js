@@ -1,10 +1,7 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
-import {
-    MDBContainer,
-    MDBInput
-} from 'mdb-react-ui-kit'
+import {MDBContainer, MDBInput} from 'mdb-react-ui-kit'
 
 function SignUpStepOne() {
     const [name, setName] = useState('')
@@ -24,7 +21,7 @@ function SignUpStepOne() {
                 }
             })
             localStorage.setItem('user', JSON.stringify(response.data))
-            history('/attractions')
+            history(`/verify/${response.data.email}`)
         } catch (error) {
             if (error.response && error.response.data) {
                 const errorMessages = error.response.data

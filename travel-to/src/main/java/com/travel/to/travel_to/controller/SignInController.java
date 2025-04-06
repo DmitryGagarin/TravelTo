@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(
@@ -50,7 +51,15 @@ public class SignInController {
         binder.setValidator(userSignInFormValidator);
     }
 
-    @GetMapping("/verify-account/{email}")
+    @GetMapping("/verification-completed")
+    public Boolean verificationCompleted(
+        @RequestParam String email,
+        @RequestParam String token
+    ) {
+        return userService.verificationCompleted(email, token);
+    }
+
+    @PostMapping("/verify-account/{email}")
     public void verifyAccount(
         @PathVariable String email
     ) {

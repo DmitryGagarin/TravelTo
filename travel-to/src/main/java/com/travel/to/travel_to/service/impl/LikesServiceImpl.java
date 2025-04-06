@@ -6,7 +6,7 @@ import com.travel.to.travel_to.repository.LikesRepository;
 import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.service.LikesService;
 import com.travel.to.travel_to.service.UserService;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

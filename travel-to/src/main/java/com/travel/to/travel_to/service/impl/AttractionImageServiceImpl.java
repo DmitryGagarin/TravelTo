@@ -3,7 +3,7 @@ package com.travel.to.travel_to.service.impl;
 import com.travel.to.travel_to.entity.attraction.AttractionImage;
 import com.travel.to.travel_to.repository.AttractionImageRepository;
 import com.travel.to.travel_to.service.AttractionImageService;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +64,8 @@ public class AttractionImageServiceImpl implements AttractionImageService {
     }
 
     @Override
-    public List<String> getAllImagesFormatsByAttractionId(Long attractionId) {
+    @NotNull
+    public List<String> getAllImagesFormatsByAttractionId(@NotNull Long attractionId) {
         return attractionImageRepository.getAllImagesFormatsByAttractionId(attractionId);
     }
 

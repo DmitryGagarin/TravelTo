@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import {
     MDBContainer,
     MDBInput
-} from 'mdb-react-ui-kit';
+} from 'mdb-react-ui-kit'
 
 function SignUpStepOne() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
-    const history = useNavigate();
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [error, setError] = useState('')
+    const history = useNavigate()
 
     const handleSignup = async () => {
 
@@ -23,24 +23,24 @@ function SignUpStepOne() {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            });
+            })
 
             localStorage.setItem('user', JSON.stringify(response.data))
-            history('/signup/name');
+            history('/signup/name')
         } catch (error) {
             if (error.response && error.response.data) {
-                const errorMessages = error.response.data;
+                const errorMessages = error.response.data
                 setError(
                     Object.entries(errorMessages)
                         .map(([field, message]) => `${field}: ${message}`)
                         .join(', ')
-                );
+                )
             } else {
-                console.error('Signup failed:', error.message);
-                setError('Signup failed, please try again.');
+                console.error('Signup failed:', error.message)
+                setError('Signup failed, please try again.')
             }
         }
-    };
+    }
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
@@ -84,7 +84,7 @@ function SignUpStepOne() {
                 </MDBContainer>
             </div>
         </div>
-    );
+    )
 }
 
-export default SignUpStepOne;
+export default SignUpStepOne

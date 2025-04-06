@@ -3,7 +3,7 @@ package com.travel.to.travel_to.service.impl;
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussionImage;
 import com.travel.to.travel_to.repository.AttractionDiscussionImageRepository;
 import com.travel.to.travel_to.service.AttractionDiscussionImageService;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +25,7 @@ public class AttractionDiscussionImageServiceImpl implements AttractionDiscussio
     }
 
     @Override
+    @NotNull
     public List<AttractionDiscussionImage> create(
         @NotNull Long discussionId,
         @NotNull MultipartFile[] images

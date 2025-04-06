@@ -2,6 +2,7 @@ package com.travel.to.travel_to.cache;
 
 import com.travel.to.travel_to.constants.CacheKeys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ public class ValidationTokenCacheUtil extends SimpleCacheUtilBase<String> {
 
     @Autowired
     public ValidationTokenCacheUtil(
+        @Qualifier("tokenTemplate")
         RedisTemplate<String, String> redisTemplate
     ) {
         this.redisTemplate = redisTemplate;

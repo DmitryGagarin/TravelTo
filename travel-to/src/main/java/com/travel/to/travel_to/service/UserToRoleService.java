@@ -1,7 +1,7 @@
 package com.travel.to.travel_to.service;
 
 import com.travel.to.travel_to.entity.user.UserToRole;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Set;
