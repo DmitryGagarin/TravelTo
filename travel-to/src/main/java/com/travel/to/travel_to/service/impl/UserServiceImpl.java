@@ -189,7 +189,7 @@ public class UserServiceImpl implements UserService {
         @NotNull String email,
         @NotNull String token
     ) {
-        String savedToken = validationTokenCacheUtil.findByEmail(email);
+        String savedToken = validationTokenCacheUtil.findByIdentified(email);
         if (savedToken.equals(token)) {
             User user = findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("Can't find user by email")

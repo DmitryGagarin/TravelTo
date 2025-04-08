@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ValidationTokenCacheUtil extends SimpleCacheUtilBase<String> {
 
-    private final RedisTemplate<String, String> redisTemplate;
     private final HashOperations<String, String, String> hashOperations;
 
     @Autowired
@@ -18,7 +17,6 @@ public class ValidationTokenCacheUtil extends SimpleCacheUtilBase<String> {
         @Qualifier("tokenTemplate")
         RedisTemplate<String, String> redisTemplate
     ) {
-        this.redisTemplate = redisTemplate;
         this.hashOperations = redisTemplate.opsForHash();
     }
 
@@ -29,12 +27,12 @@ public class ValidationTokenCacheUtil extends SimpleCacheUtilBase<String> {
     }
 
     @Override
-    public String findByEmail(String email) {
+    public String findByIdentified(String email) {
         return hashOperations.get(CacheKeys.VERIFICATION_TOKEN, email);
     }
 
     @Override
-    public String deleteByEmail(String email) {
+    public String deleteByIdentified(String email) {
         return String.valueOf(hashOperations.delete(email));
     }
 }

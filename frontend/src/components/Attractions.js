@@ -49,6 +49,8 @@ function Attractions() {
         fetchAttractions()
     }, [token])
 
+    console.log(attractions)
+
     useEffect(() => {
         if (likedAttraction) {
             const handleLike = async (name) => {
@@ -194,9 +196,9 @@ function Attractions() {
                                         <div className="contact-info">
                                             <p>
                                                 Website:{" "}
-                                                <a href={attraction.website} target="_blank" rel="noopener noreferrer">
+                                                <Link to={attraction.website} target="_blank" rel="noopener noreferrer">
                                                     Visit
-                                                </a>
+                                                </Link>
                                             </p>
                                             <p>Phone: {attraction.phone}</p>
                                         </div>

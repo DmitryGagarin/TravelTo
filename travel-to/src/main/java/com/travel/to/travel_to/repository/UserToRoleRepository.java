@@ -14,6 +14,6 @@ public interface UserToRoleRepository extends JpaRepository<UserToRole, Long> {
     @NotNull
     @Query(value = "SELECT user_to_role.role_id FROM user_to_role where user_id = :id",
         nativeQuery = true)
-    List<String> getUserRolesByUserId(@NotNull long id);
+    List<String> getUserRolesByUserId(@NotNull Long id);
 
 }

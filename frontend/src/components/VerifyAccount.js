@@ -1,6 +1,6 @@
 import {MDBContainer} from "mdb-react-ui-kit"
 import React, {useEffect} from "react"
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 
 function VerifyAccount() {
@@ -25,7 +25,7 @@ function VerifyAccount() {
                     <div className="text-center">
                         <h2 className="mb-4 text-center">Account verification</h2>
                         <p>We send verification to your email address, check your inbox</p>
-                        <p>Already Register? <a href="/signin">Login</a></p>
+                        <p>Already Register? <Link to="/signin">Login</Link></p>
                     </div>
                 </MDBContainer>
             </div>

@@ -49,7 +49,7 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     @NotNull
-    public List<Likes> getAllByUser(AuthUser authUser) {
+    public List<Likes> getAllByUser(@NotNull AuthUser authUser) {
         Long id = userService.getByUuid(authUser.getUuid()).getId();
         return likesRepository.findAllByUserId(id);
     }

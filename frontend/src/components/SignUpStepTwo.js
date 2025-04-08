@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import axios from 'axios'
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {MDBContainer, MDBInput} from 'mdb-react-ui-kit'
 
 function SignUpStepOne() {
@@ -55,7 +55,7 @@ function SignUpStepOne() {
                             onClick={handleSignup}>Sign Up
                     </button>
                     <div className="text-center">
-                        <p>Already Register? <a href="/signin">Login</a></p>
+                        <p>Already Register? <Link to="/signin">Login</Link></p>
                     </div>
                 </MDBContainer>
             </div>

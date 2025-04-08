@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { MDBContainer, MDBInput } from 'mdb-react-ui-kit'
 
 function LoginPage() {
@@ -64,10 +64,10 @@ function LoginPage() {
                     {error && <p className="text-danger">{error}</p>}
                     <button className="mb-4 d-block btn-primary" style={{ height: '50px', width: '100%' }} onClick={handleLogin}>Sign in</button>
                     <div className="text-center">
-                        <p>Not a member? <a href="/signup">Register</a></p>
+                        <p>Not a member? <Link to="/signup">Register</Link></p>
                     </div>
                     <div className="text-center">
-                        <p>Forget password? <a href="/reset-password">Reset Password</a></p>
+                        <p>Forget password? <Link to="/reset-password">Reset Password</Link></p>
                     </div>
                 </MDBContainer>
             </div>

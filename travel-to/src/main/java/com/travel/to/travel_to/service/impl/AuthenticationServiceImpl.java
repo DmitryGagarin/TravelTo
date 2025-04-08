@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -116,7 +117,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             new UsernamePasswordAuthenticationToken(
                 userRefreshTokenForm.getEmail(),
                 userRefreshTokenForm.getPassword(),
-                userToRoleService.getAllUserRolesByUserId(userId)
+                userToRoleService.getAllUserRolesByUserId(Objects.requireNonNull(userId))
             )
         );
 

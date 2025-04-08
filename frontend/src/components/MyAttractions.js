@@ -44,7 +44,7 @@ function MyAttractions() {
         }
     }
 
-    console.log(attractions)
+    // console.log(attractions)
 
     useEffect(() => {
         if (attractionName) {

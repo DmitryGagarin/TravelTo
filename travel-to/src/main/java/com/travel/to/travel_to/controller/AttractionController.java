@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.assembler.AttractionModelAssembler;
+import com.travel.to.travel_to.cache.AttractionCacheUtil;
 import com.travel.to.travel_to.constants.ValidationConstants;
 import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.user.AuthUser;
@@ -9,7 +10,6 @@ import com.travel.to.travel_to.form.AttractionCreateForm;
 import com.travel.to.travel_to.form.AttractionEditForm;
 import com.travel.to.travel_to.model.AttractionModel;
 import com.travel.to.travel_to.service.AttractionService;
-import com.travel.to.travel_to.cache.AttractionCacheUtil;
 import com.travel.to.travel_to.validator.attraction.AttractionCreateFormValidator;
 import com.travel.to.travel_to.validator.attraction.AttractionEditFormValidator;
 import com.travel.to.travel_to.validator.utils.ValidationUtils;
@@ -100,7 +100,8 @@ public class AttractionController {
         int totalPages = (int) Math.ceil((double) totalElements / pageSize);
 
         PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(pageSize, currentPage, totalElements, totalPages);
-
+// TODO: почему то фронт не может обработать новые записи в редиса
+//        создаем новую -> фронт не видит -> сбрасываем кэш и обновляем его -> фронт видит
         return PagedModel.of(attractionModels, pageMetadata);
     }
 
@@ -111,6 +112,7 @@ public class AttractionController {
         return attractionModelAssembler.toModel(attractionService.getByName(name));
     }
 
+    // TODO: add cache
     @PreAuthorize("hasAnyAuthority('ROLE_OWNER', 'ROLE_ADMIN')")
     @GetMapping("/my")
     public PagedModel<AttractionModel> getAttractionsByOwner(

@@ -27,7 +27,7 @@ function Liked() {
         fetchLikes()
     }, [])
 
-    likes.map((attraction) => console.log(attraction[0]))
+    // likes.map((attraction) => console.log(attraction[0]))
 
     if (!likes) {
         return (

@@ -11,15 +11,8 @@ public class MailSenderConfig {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("localhost");
-        mailSender.setPort(1025);  // Make sure you're using the correct port
-
-        // Explicitly disable STARTTLS and SSL
-//        mailSender.getJavaMailProperties().put("mail.smtp.starttls.enable", "false");
-//        mailSender.getJavaMailProperties().put("mail.smtp.starttls.required", "false");
-//        mailSender.getJavaMailProperties().put("mail.smtp.ssl.enable", "false");
-//        mailSender.getJavaMailProperties().put("mail.smtp.auth", "false");
-
+        mailSender.setHost("host.docker.internal");
+        mailSender.setPort(1025);
         return mailSender;
     }
 

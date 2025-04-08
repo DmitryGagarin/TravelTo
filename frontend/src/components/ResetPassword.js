@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {MDBContainer, MDBInput} from "mdb-react-ui-kit";
 
 function ResetPassword() {
@@ -72,8 +72,8 @@ function ResetPassword() {
                         Reset Password
                     </button>
                     <div className="text-center">
-                        <p>Already have account? <a href="/signin">Sign in</a></p>
-                        <p>Not a member? <a href="/signup">Register</a></p>
+                        <p>Already have account? <Link to="/signin">Sign in</Link></p>
+                        <p>Not a member? <Link to="/signup">Register</Link></p>
                     </div>
                 </MDBContainer>
             </div>
