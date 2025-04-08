@@ -64,7 +64,9 @@ public class WebSecurityConfiguration {
                     "/signup/**",
                     "/logout",
                     "/user/reset-password",
-                    "/attraction")
+                    "/attraction",
+                    "/swagger-ui/**",
+                    "/v3/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

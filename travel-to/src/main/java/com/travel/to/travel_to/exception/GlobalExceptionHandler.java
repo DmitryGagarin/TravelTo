@@ -2,6 +2,7 @@ package com.travel.to.travel_to.exception;
 
 import com.travel.to.travel_to.exception.exception.FileExtensionException;
 import com.travel.to.travel_to.exception.exception.InvalidEmailOrPasswordException;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+@Hidden
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

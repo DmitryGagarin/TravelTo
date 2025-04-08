@@ -46,6 +46,8 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             || requestURI.equals(URLConstants.RESET_PASSWORD)
             || requestURI.startsWith(URLConstants.ACCOUNT_VERIFICATION)
             || requestURI.equals(URLConstants.ATTRACTIONS)
+            || requestURI.startsWith(URLConstants.SWAGGER)
+            || requestURI.startsWith(URLConstants.SWAGGER2)
         ) {
             filterChain.doFilter(request, response);
             return;
@@ -105,9 +107,9 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 
     private static String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
         Set<String> auths = new HashSet<>();
-        for(GrantedAuthority authority: authorities) {
+        for (GrantedAuthority authority : authorities) {
             auths.add(authority.getAuthority());
         }
-        return String.join(",",auths);
+        return String.join(",", auths);
     }
 }
