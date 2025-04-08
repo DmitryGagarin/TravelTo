@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.entity.attraction;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.travel.to.travel_to.entity.common.UuidAbleEntity;
 import com.travel.to.travel_to.entity.user.User;
 import jakarta.persistence.Entity;
@@ -29,6 +30,7 @@ public class Attraction extends UuidAbleEntity implements Serializable {
     private Double rating;
     private String status;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
