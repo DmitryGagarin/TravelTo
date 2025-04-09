@@ -100,8 +100,6 @@ public class AttractionController {
         int totalPages = (int) Math.ceil((double) totalElements / pageSize);
 
         PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(pageSize, currentPage, totalElements, totalPages);
-// TODO: почему то фронт не может обработать новые записи в редиса
-//        создаем новую -> фронт не видит -> сбрасываем кэш и обновляем его -> фронт видит
         return PagedModel.of(attractionModels, pageMetadata);
     }
 

@@ -158,6 +158,10 @@ public class AttractionServiceImpl implements AttractionService {
     ) {
         Attraction attraction = getByName(attractionName);
         attraction.setStatus(attractionStatus.name());
+        // refresh cache with new value
+        // TODO: rewrite to update method
+        attractionCacheUtil.deleteById(attraction.getId());
+        attractionCacheUtil.save(attraction);
         return attractionRepository.save(attraction);
     }
 

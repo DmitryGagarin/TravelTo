@@ -55,4 +55,9 @@ public class AttractionCacheUtil extends CacheUtilBase<Attraction> {
         return null;
     }
 
+    @Override
+    public void deleteById(long id) {
+        hashOperations.delete(CacheKeys.ATTRACTIONS, String.valueOf(id));
+    }
+
 }
