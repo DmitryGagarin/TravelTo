@@ -168,7 +168,7 @@ public class UserServiceImpl implements UserService {
         validationTokenCacheUtil.save(token, email);
 
         // TODO: & sent as &amq;
-        String verificationLink = "http://localhost:3000/verification-completed?email=" + email + "&token=" + token;
+        String verificationLink = "http://localhost:4000/verification-completed?email=" + email + "&token=" + token;
 
         String subject = "Account Verification";
         String message = "Hello,\n\nPlease verify your account by clicking the link below:\n\n" + verificationLink +

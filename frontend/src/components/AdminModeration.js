@@ -21,7 +21,7 @@ const AdminModeration = () => {
                 setAttractions(response?.data?._embedded?.attractionModelList || [])
             } catch (error) {
                 if (error.response && error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/signin"
+                    window.location.href = "http://localhost:4000/signin"
                 }
             }
         }
@@ -39,7 +39,7 @@ const AdminModeration = () => {
                     })
             } catch (error) {
                 if (error.response && error.response.status === 401) {
-                    window.location.href = "http://localhost:3000/signin"
+                    window.location.href = "http://localhost:4000/signin"
                 } else {
                     console.log(error.response?.status)
                 }

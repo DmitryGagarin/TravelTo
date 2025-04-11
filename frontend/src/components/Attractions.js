@@ -16,16 +16,12 @@ function Attractions() {
 
     const [currentImageIndexes, setCurrentImageIndexes] = useState({})
 
-    const token = JSON.parse(localStorage.getItem('user')).accessToken
+    const token = JSON.parse(localStorage.getItem('user'))?.accessToken
 
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/attraction', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                })
+                const response = await axios.get('http://localhost:8080/attraction')
                 const attractionsData = response?.data?._embedded?.attractionModelList;
                 if (Array.isArray(attractionsData)) {
                     const publishedAttractions = attractionsData.filter(
@@ -40,9 +36,9 @@ function Attractions() {
                     setTypes([])
                 }
             } catch (error) {
-                if (error.response.status === 401) {
-                    window.location.href = 'http://localhost:3000/signin'
-                }
+                // if (error.response.status === 401) {
+                //     window.location.href = 'http://localhost:4000/signin'
+                // }
                 console.error(error)
             }
         }
@@ -63,7 +59,7 @@ function Attractions() {
                     })
                 } catch (error) {
                     if (error.response.status === 401) {
-                        window.location.href = 'http://localhost:3000/signin'
+                        window.location.href = 'http://localhost:4000/signin'
                     }
                     console.error('Error liking attraction:', error)
                 }

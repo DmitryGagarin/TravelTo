@@ -95,7 +95,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 
             } catch (ExpiredJwtException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setHeader("Location", "http://localhost:3000/");
+                response.setHeader("Location", "http://localhost:4000/");
                 return;
             } catch (Exception e) {
                 throw new BadCredentialsException("Invalid token", e);

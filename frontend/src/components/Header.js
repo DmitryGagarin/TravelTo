@@ -10,6 +10,7 @@ function Header() {
 
     useEffect(() => {
         const getUser = async () => {
+            if (authUser) {
             try {
                 const response = await axios.get('http://localhost:8080/user/get', {
                     headers: {
@@ -17,11 +18,13 @@ function Header() {
                     }
                 })
                 setUserName(response.data.name)
+
             } catch (error) {
-                if (error.response.status === 401) {
-                    window.location.href = 'http://localhost:8080/signin'
-                }
+                // if (error.response.status === 401) {
+                //     window.location.href = 'http://localhost:8080/signin'
+                // }
                 console.log(error)
+            }
             }
         }
 
@@ -61,6 +64,7 @@ function Header() {
             {/*</button>*/}
             <div className="d-flex align-items-center">
                 <p className="mb-0 me-3">
+                    // TODO: только если пользователь существует
                     Hello, {userName}!
                 </p>
                 <button onClick={handleAccountClick} className="btn btn-light me-3">

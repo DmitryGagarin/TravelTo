@@ -41,7 +41,7 @@ function Account() {
             window.location.reload()
         } catch (error) {
             if (error.response.status === 401) {
-                window.location.href = "http://localhost:3000/signin";
+                window.location.href = "http://localhost:4000/signin";
             }
             console.log(error)
             setError("Failed to change data")

@@ -77,6 +77,8 @@ public class AttractionController {
         binder.addValidators(attractionEditFormValidator);
     }
 
+    // TODO: переписать маппинг на /get или /all или че-то такое, путаница происходит
+    // TODO: в идеале бы еще изобрести какой то механизм который будет картинки сжимать, 5мб пайлоуда очень много
     @GetMapping
     public PagedModel<AttractionModel> getAttractions() {
         List<Attraction> attractions;
