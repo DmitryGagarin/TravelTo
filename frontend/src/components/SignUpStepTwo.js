@@ -32,7 +32,7 @@ function SignUpStepOne() {
                 )
             } else {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin";
+                    window.location.href = "http://localhost:4000/signin"
                 }
                 console.error('Signup failed:', error.message)
                 setError('Signup failed, please try again.')

@@ -1,57 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { MDBContainer } from "mdb-react-ui-kit";
-import axios from "axios";
+import React, { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import { MDBContainer } from "mdb-react-ui-kit"
+import axios from "axios"
 
 function VerificationCompleted() {
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search)
 
-    const email = queryParams.get('email');
-    const token = queryParams.get('token');
+    const email = queryParams.get('email')
+    const token = queryParams.get('token')
 
-    const navigate = useNavigate();  // Updated for consistency
+    const navigate = useNavigate()  // Updated for consistency
 
-    console.log("Email:", email);
-    console.log("Token:", token);
+    console.log("Email:", email)
+    console.log("Token:", token)
 
-    const [isVerifiedCorrectly, setIsVerifiedCorrectly] = useState(false);
+    const [isVerifiedCorrectly, setIsVerifiedCorrectly] = useState(false)
 
     useEffect(() => {
         const checkAccountVerification = async () => {
             try {
                 // Make sure email and token are present
                 if (!email || !token) {
-                    console.log("Missing email or token");
-                    return;
+                    console.log("Missing email or token")
+                    return
                 }
 
-                const encodedEmail = encodeURIComponent(email);
-                const encodedToken = encodeURIComponent(token);
+                const encodedEmail = encodeURIComponent(email)
+                const encodedToken = encodeURIComponent(token)
 
                 const response = await axios.get(
                     `http://localhost:8080/signin/verification-completed?email=${encodedEmail}&token=${encodedToken}`
-                );
+                )
 
                 if (response.data.success) {  // Assuming the response includes a 'success' key
-                    setIsVerifiedCorrectly(true);
-                    navigate('/signin');  // Redirect after successful verification
+                    setIsVerifiedCorrectly(true)
+                    navigate('/signin')  // Redirect after successful verification
                 } else {
-                    setIsVerifiedCorrectly(false);  // Handle unsuccessful verification
+                    setIsVerifiedCorrectly(false)  // Handle unsuccessful verification
                 }
             } catch (error) {
-                console.error("Error verifying account:", error);
-                setIsVerifiedCorrectly(false);  // Handle errors gracefully
+                console.error("Error verifying account:", error)
+                setIsVerifiedCorrectly(false)  // Handle errors gracefully
             }
-        };
+        }
 
         // If both email and token are available, proceed with the verification check
         if (email && token) {
-            checkAccountVerification();
+            checkAccountVerification()
         } else {
-            setIsVerifiedCorrectly(false);  // If email or token is missing, show failure
+            setIsVerifiedCorrectly(false)  // If email or token is missing, show failure
         }
-    }, [email, token, navigate]);
+    }, [email, token, navigate])
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
@@ -69,7 +69,7 @@ function VerificationCompleted() {
                 </MDBContainer>
             </div>
         </div>
-    );
+    )
 }
 
-export default VerificationCompleted;
+export default VerificationCompleted

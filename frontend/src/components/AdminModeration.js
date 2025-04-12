@@ -88,7 +88,7 @@ const AdminModeration = () => {
     }
 
     const getImageFormat = (format) => {
-        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg'];
+        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg']
         if (formats.includes(format.toLowerCase())) {
             return format.toLowerCase()
         } else {

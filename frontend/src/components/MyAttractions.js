@@ -20,7 +20,7 @@ function MyAttractions() {
                 setAttractions(response.data._embedded.attractionModelList)
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin";
+                    window.location.href = "http://localhost:4000/signin"
                 }
                 console.error("Error fetching attractions:", error)
             }
@@ -35,10 +35,10 @@ function MyAttractions() {
                     'Authorization': `Bearer ${token}`,
                 },
             })
-            window.location.reload();
+            window.location.reload()
         } catch (error) {
             if (error.response.status === 401) {
-                window.location.href = "http://localhost:4000/signin";
+                window.location.href = "http://localhost:4000/signin"
             }
             console.error("Error deleting attraction:", error)
         }
@@ -68,7 +68,7 @@ function MyAttractions() {
     }
 
     const getImageFormat = (format) => {
-        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg'];
+        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg']
         if (formats.includes(format.toLowerCase())) {
             return format.toLowerCase()
         } else {

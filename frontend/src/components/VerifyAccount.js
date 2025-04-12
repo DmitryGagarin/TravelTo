@@ -1,7 +1,7 @@
 import {MDBContainer} from "mdb-react-ui-kit"
 import React, {useEffect} from "react"
-import {Link, useParams} from "react-router-dom";
-import axios from "axios";
+import {Link, useParams} from "react-router-dom"
+import axios from "axios"
 
 function VerifyAccount() {
 
@@ -16,7 +16,7 @@ function VerifyAccount() {
             }
         }
         sendVerificationEmail()
-    }, [email]);
+    }, [email])
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">

@@ -3,7 +3,7 @@ import axios from "axios"
 import Header from "./Header"
 import {MDBInput} from "mdb-react-ui-kit"
 import {MdDelete} from "react-icons/md"
-import {useEffect, useState} from "react";
+import {useEffect, useState} from "react"
 
 function EditAttraction() {
     const {name} = useParams()
@@ -41,31 +41,31 @@ function EditAttraction() {
                 setStreet(addressData[1])
                 setHousehold(addressData[2])
 
-                const files: File[] = [];
+                const files: File[] = []
                 response.data.images.forEach((image: string) => {
                     // Decode the base64 string
-                    const byteCharacters = atob(image);
-                    const byteArrays = [];
+                    const byteCharacters = atob(image)
+                    const byteArrays = []
                     for (let i = 0; i < byteCharacters.length; i++) {
-                        byteArrays.push(byteCharacters.charCodeAt(i));
+                        byteArrays.push(byteCharacters.charCodeAt(i))
                     }
-                    const byteArray = new Uint8Array(byteArrays);
+                    const byteArray = new Uint8Array(byteArrays)
 
                     // Create a Blob from the byte array
-                    const blob = new Blob([byteArray], { type: "image/png" }); // You may need to adjust the MIME type based on the image format
+                    const blob = new Blob([byteArray], { type: "image/png" }) // You may need to adjust the MIME type based on the image format
 
                     // Convert the Blob to a File
-                    const file = new File([blob], `image_${Math.random().toString(36).substring(7)}.png`, { type: "image/png" });
+                    const file = new File([blob], `image_${Math.random().toString(36).substring(7)}.png`, { type: "image/png" })
 
                     // Push the file to the array
-                    files.push(file);
-                });
+                    files.push(file)
+                })
 
                 // Update the state with the array of File objects
                 setAttraction((prevState) => ({
                     ...prevState,
                     images: files
-                }));
+                }))
             } catch (error) {
                 if (error.response.status === 401) {
                     window.location.href = "http://localhost:4000/signin"
@@ -154,13 +154,13 @@ function EditAttraction() {
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // Ensure e.target.files is properly typed
-        const files = e.target.files ? Array.from(e.target.files) : [];
+        const files = e.target.files ? Array.from(e.target.files) : []
 
         setAttraction((prev) => ({
             ...prev,
             images: [...prev.images, ...files], // Append the files to the existing images array
-        }));
-    };
+        }))
+    }
 
 
     return (
@@ -307,6 +307,8 @@ function EditAttraction() {
                                             className="card-image"
                                         />
                                     ) : (
+
+                                        // TODO: переделать на все форматы картинов
                                         <img
                                             src={`data:image/png;base64,${image}`}
                                             alt={`image-${index}`}

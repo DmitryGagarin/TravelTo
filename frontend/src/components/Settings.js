@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import Header from "./Header"
-import axios from "axios";
+import axios from "axios"
 
 function Settings() {
 
@@ -23,7 +23,7 @@ function Settings() {
                 })
 
                 // setResponse(response.data)
-                const roles = response.data.role.map(role => role.authority);
+                const roles = response.data.role.map(role => role.authority)
                 setIsOwner(roles.includes("ROLE_OWNER"))
                 setIsAdmin(roles.includes("ROLE_ADMIN"))
 

@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react'
-import axios from "axios";
-import Header from "./Header";
-import {Link} from "react-router-dom";
-import attraction from "./Attraction";
+import axios from "axios"
+import Header from "./Header"
+import {Link} from "react-router-dom"
 
 function Liked() {
     const [likes, setLikes] = useState([])
@@ -20,7 +19,7 @@ function Liked() {
             } catch
                 (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin";
+                    window.location.href = "http://localhost:4000/signin"
                 }
             }
         }
@@ -41,7 +40,7 @@ function Liked() {
     }
 
     const getImageFormat = (format) => {
-        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg'];
+        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg']
         if (formats.includes(format.toLowerCase())) {
             return format.toLowerCase()
         } else {

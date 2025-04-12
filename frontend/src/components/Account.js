@@ -3,7 +3,7 @@ import axios from 'axios'
 import {MDBContainer, MDBInput} from "mdb-react-ui-kit"
 import {useNavigate} from "react-router-dom"
 import Settings from "./Settings"
-import Inputmask from "inputmask";
+import Inputmask from "inputmask"
 
 function Account() {
     const authUser = JSON.parse(localStorage.getItem('user'))
@@ -41,7 +41,7 @@ function Account() {
             window.location.reload()
         } catch (error) {
             if (error.response.status === 401) {
-                window.location.href = "http://localhost:4000/signin";
+                window.location.href = "http://localhost:4000/signin"
             }
             console.log(error)
             setError("Failed to change data")

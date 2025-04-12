@@ -3,6 +3,7 @@ package com.travel.to.travel_to.service;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
+import com.travel.to.travel_to.form.PasswordResetForm;
 import com.travel.to.travel_to.form.UserProfileForm;
 import com.travel.to.travel_to.form.UserRefreshPasswordForm;
 import com.travel.to.travel_to.form.UserSignUpFirstForm;
@@ -18,13 +19,13 @@ public interface UserService {
     AuthUser registration(@NotNull UserSignUpFirstForm userSignupFormFirst);
 
     @NotNull
-    AuthUser resetPassword(@NotNull UserRefreshPasswordForm userRefreshPasswordForm);
-
-    @NotNull
     AuthUser addUserInformation(@NotNull UserSignUpSecondForm userSignupFormSecond, @NotNull AuthUser authUser);
 
     @NotNull
     AuthUser saveChanges(@NotNull UserProfileForm userProfileForm, AuthUser authUser);
+
+    @NotNull
+    AuthUser resetPassword(@NotNull PasswordResetForm passwordResetForm);
 
     @NotNull
     User updateUserRole(@NotNull AuthUser authUser, @NotNull Roles newRole);
@@ -42,11 +43,13 @@ public interface UserService {
 
     Optional<User> findById(@NotNull Long id);
 
-    String generateVerificationToken(@NotNull String email) throws NoSuchAlgorithmException;
+    String generateEmailToken(@NotNull String email) throws NoSuchAlgorithmException;
 
     Boolean verificationCompleted(@NotNull String email, @NotNull String token);
 
     void verifyAccount(@NotNull String email);
+
+    void resetPassword(@NotNull UserRefreshPasswordForm userRefreshPasswordForm);
 
     void delete(@NotNull AuthUser authUser);
 }

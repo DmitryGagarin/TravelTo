@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.cache;
 
 import com.travel.to.travel_to.constants.CacheKeys;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
@@ -8,12 +9,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidationTokenCacheUtil extends SimpleCacheUtilBase<String> {
+public class EmailTokenCacheUtil extends SimpleCacheUtilBase<String> {
 
     private final HashOperations<String, String, String> hashOperations;
 
     @Autowired
-    public ValidationTokenCacheUtil(
+    public EmailTokenCacheUtil(
         @Qualifier("tokenTemplate")
         RedisTemplate<String, String> redisTemplate
     ) {
@@ -21,14 +22,21 @@ public class ValidationTokenCacheUtil extends SimpleCacheUtilBase<String> {
     }
 
     @Override
-    public String save(String token, String email) {
-        hashOperations.put(CacheKeys.VERIFICATION_TOKEN, email, token);
+    public String save(
+        @NotNull String token,
+        @NotNull String email,
+        @NotNull String key
+    ) {
+        hashOperations.put(key, email, token);
         return token;
     }
 
     @Override
-    public String findByIdentified(String email) {
-        return hashOperations.get(CacheKeys.VERIFICATION_TOKEN, email);
+    public String findByIdentified(
+        @NotNull String email,
+        @NotNull String key
+    ) {
+        return hashOperations.get(key, email);
     }
 
     @Override

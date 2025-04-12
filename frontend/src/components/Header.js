@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {FaCog, FaHeart, FaUserAlt} from 'react-icons/fa'
-import axios from "axios";
+import axios from "axios"
 
 function Header() {
 

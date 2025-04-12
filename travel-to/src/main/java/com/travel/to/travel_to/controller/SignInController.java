@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.entity.user.AuthUser;
+import com.travel.to.travel_to.form.PasswordResetForm;
 import com.travel.to.travel_to.form.UserRefreshPasswordForm;
 import com.travel.to.travel_to.form.UserRefreshTokenForm;
 import com.travel.to.travel_to.form.UserSignInForm;
@@ -59,6 +60,7 @@ public class SignInController {
         return userService.verificationCompleted(email, token);
     }
 
+    // TODO: needed to be rewrote to form probably
     @PostMapping("/verify-account/{email}")
     public void verifyAccount(
         @PathVariable String email
@@ -67,10 +69,17 @@ public class SignInController {
     }
 
     @PostMapping("/reset-password")
-    public AuthUser refreshUser(
+    public void resetUserPassword(
         @RequestBody UserRefreshPasswordForm userRefreshPasswordForm
     ) {
-        return userService.resetPassword(userRefreshPasswordForm);
+        userService.resetPassword(userRefreshPasswordForm);
+    }
+
+    @PostMapping("/reset-password-completion")
+    public AuthUser resetUserPasswordCompletion(
+        @RequestBody PasswordResetForm passwordResetForm
+    ) {
+        return userService.resetPassword(passwordResetForm);
     }
 
     @PostMapping("")

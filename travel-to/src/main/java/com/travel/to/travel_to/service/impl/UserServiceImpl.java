@@ -1,12 +1,14 @@
 package com.travel.to.travel_to.service.impl;
 
-import com.travel.to.travel_to.cache.ValidationTokenCacheUtil;
+import com.travel.to.travel_to.cache.EmailTokenCacheUtil;
+import com.travel.to.travel_to.constants.CacheKeys;
 import com.travel.to.travel_to.email.EmailService;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.Role;
 import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.entity.user.UserToRole;
+import com.travel.to.travel_to.form.PasswordResetForm;
 import com.travel.to.travel_to.form.UserProfileForm;
 import com.travel.to.travel_to.form.UserRefreshPasswordForm;
 import com.travel.to.travel_to.form.UserSignUpFirstForm;
@@ -18,6 +20,8 @@ import com.travel.to.travel_to.service.RoleService;
 import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.service.UserToRoleService;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,13 +43,14 @@ import java.util.Set;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserToRoleRepository userToRoleRepository;
     private final RoleService roleService;
     private final UserToRoleService userToRoleService;
     private final EmailService emailService;
-    private final ValidationTokenCacheUtil validationTokenCacheUtil;
+    private final EmailTokenCacheUtil emailTokenCacheUtil;
 
     @Autowired
     public UserServiceImpl(
@@ -55,14 +60,15 @@ public class UserServiceImpl implements UserService {
         RoleService roleService,
         UserToRoleService userToRoleService,
         EmailService emailService,
-        ValidationTokenCacheUtil validationTokenCacheUtil) {
+        EmailTokenCacheUtil emailTokenCacheUtil
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userToRoleRepository = userToRoleRepository;
         this.roleService = roleService;
         this.userToRoleService = userToRoleService;
         this.emailService = emailService;
-        this.validationTokenCacheUtil = validationTokenCacheUtil;
+        this.emailTokenCacheUtil = emailTokenCacheUtil;
     }
 
     @Override
@@ -119,40 +125,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @NotNull
     @Transactional
-    public AuthUser resetPassword(
+    public void resetPassword (
         @NotNull UserRefreshPasswordForm userRefreshPasswordForm
     ) {
-        String encodedPassword = passwordEncoder.encode(userRefreshPasswordForm.getPassword());
+        String email = userRefreshPasswordForm.getEmail();
 
-        User user = findByEmail(userRefreshPasswordForm.getEmail())
-            .orElseThrow(() -> new UsernameNotFoundException("Can't find user by email"));
+        if (this.findByEmail(email).isEmpty()) {
+            throw new UsernameNotFoundException(email);
+        }
 
-        user.setPassword(encodedPassword);
-        userRepository.save(user);
+        String token;
 
-        AuthUser authUser = new AuthUser();
-        authUser
-            .setUuid(user.getUuid())
-            .setEmail(user.getEmail())
-            .setPassword(encodedPassword)
-            .setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()));
+        try {
+            token = generateEmailToken(email);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 not found");
+        }
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-            authUser,
-            encodedPassword,
-            authUser.getAuthorities()
-        );
+        emailTokenCacheUtil.save(token, email, CacheKeys.RESET_PASSWORD_TOKEN);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String verificationLink = "http://localhost:4000/reset-password-completion?email=" + email + "&token=" + token;
 
-        String jwtAccessToken = JwtProvider.generateAccessToken(authentication);
-        String jwtRefreshToken = JwtProvider.generateRefreshToken(authentication);
-        authUser.setAccessToken(jwtAccessToken);
-        authUser.setRefreshToken(jwtRefreshToken);
-
-        return authUser;
+        try {
+            emailService.sendPasswordResetEmail(
+                email,
+                verificationLink
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -160,19 +162,15 @@ public class UserServiceImpl implements UserService {
         String token;
 
         try {
-            token = generateVerificationToken(email);
+            token = generateEmailToken(email);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("SHA-256 not found");
         }
 
-        validationTokenCacheUtil.save(token, email);
+        emailTokenCacheUtil.save(token, email, CacheKeys.VERIFICATION_TOKEN);
 
         // TODO: & sent as &amq;
         String verificationLink = "http://localhost:4000/verification-completed?email=" + email + "&token=" + token;
-
-        String subject = "Account Verification";
-        String message = "Hello,\n\nPlease verify your account by clicking the link below:\n\n" + verificationLink +
-            "\n\nIf you did not request this, please ignore this email.\n\nThanks, \nYour Application Team";
 
         try {
             emailService.sendAccountVerificationEmail(
@@ -189,7 +187,7 @@ public class UserServiceImpl implements UserService {
         @NotNull String email,
         @NotNull String token
     ) {
-        String savedToken = validationTokenCacheUtil.findByIdentified(email);
+        String savedToken = emailTokenCacheUtil.findByIdentified(email, CacheKeys.VERIFICATION_TOKEN);
         if (savedToken.equals(token)) {
             User user = findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("Can't find user by email")
@@ -303,6 +301,52 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @NotNull
+    public AuthUser resetPassword(
+        @NotNull PasswordResetForm passwordResetForm
+    ) {
+        String email = passwordResetForm.getEmail();
+
+        if (!passwordResetForm.getToken().equals(
+            emailTokenCacheUtil.findByIdentified(email, CacheKeys.RESET_PASSWORD_TOKEN))
+        ) {
+            throw new RuntimeException("Invalid token");
+        }
+
+        User user = findByEmail(email).orElseThrow(
+            () -> new UsernameNotFoundException("Can't find user by email")
+        );
+
+        user.setPassword(passwordEncoder.encode(passwordResetForm.getPassword()));
+        userRepository.save(user);
+
+        AuthUser authUser = new AuthUser();
+        authUser
+            .setPassword(passwordResetForm.getPassword())
+            .setEmail(email)
+            .setName(user.getName())
+            .setSurname(user.getSurname())
+            .setPhone(user.getPhone())
+            .setVerified(user.getVerified())
+            .setUuid(user.getUuid())
+            .setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()));
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            authUser,
+            SecurityContextHolder.getContext().getAuthentication().getCredentials().toString(),
+            authUser.getAuthorities()
+        );
+
+        String jwtAccessToken = JwtProvider.generateAccessToken(authentication);
+        String jwtRefreshToken = JwtProvider.generateRefreshToken(authentication);
+
+        authUser.setAccessToken(jwtAccessToken);
+        authUser.setRefreshToken(jwtRefreshToken);
+
+        return authUser;
+    }
+
+    @Override
+    @NotNull
     public User getCurrentUser(
         @NotNull AuthUser authUser
     ) {
@@ -332,7 +376,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String generateVerificationToken(
+    public String generateEmailToken(
         @NotNull String email
     ) throws NoSuchAlgorithmException {
         SecureRandom secureRandom = new SecureRandom();

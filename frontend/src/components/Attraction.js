@@ -155,7 +155,7 @@ function Attraction() {
                 )
             } else {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin";
+                    window.location.href = "http://localhost:4000/signin"
                 }
                 setError('Discussion registration failed, please try again.')
             }
@@ -177,7 +177,7 @@ function Attraction() {
     }
 
     const getImageFormat = (format) => {
-        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg'];
+        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg']
         if (formats.includes(format.toLowerCase())) {
             return format.toLowerCase()
         } else {

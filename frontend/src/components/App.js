@@ -1,24 +1,25 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
-import React from 'react';
-import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
+import React from 'react'
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom'
 
-import LoginPage from './SignIn';
-import SignUpStepOne from './SignUpStepOne';
+import LoginPage from './SignIn'
+import SignUpStepOne from './SignUpStepOne'
 import SignUpStepTwo from './SignUpStepTwo'
-import Home from './Home';
+import Home from './Home'
 import MyAttractions from './MyAttractions'
 import Attractions from './Attractions'
 import Attraction from './Attraction'
-import Settings from './Settings';
+import Settings from './Settings'
 import Account from './Account'
 import RegisterBusiness from './RegisterBusiness'
 import Liked from './Liked'
 import AdminModeration from './AdminModeration'
-import EditAttraction from "./EditAttraction.tsx";
-import ResetPassword from "./ResetPassword";
-import VerifyAccount from "./VerifyAccount";
-import VerificationCompleted from "./VerificationCompleted";
+import EditAttraction from "./EditAttraction.tsx"
+import ResetPassword from "./ResetPassword"
+import VerifyAccount from "./VerifyAccount"
+import VerificationCompleted from "./VerificationCompleted"
+import ResetPasswordCompletion from "./ResetPasswordCompletion"
 
 function App() {
     return (
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/" element={<Navigate to="/signin"/>} />
                     <Route path="/signin" element={<LoginPage/>}/>
                     <Route path="/reset-password" element={<ResetPassword/>}/>
+                    <Route path="/reset-password-completion" element={<ResetPasswordCompletion/>}/>
                     {/*<Route path="/home" element={<Home/>}/>*/}
                     <Route path="/signup" element={<SignUpStepOne/>}/>
                     <Route path="/signup/name" element={<SignUpStepTwo/>}/>
@@ -45,7 +47,7 @@ function App() {
                 </Routes>
             </Router>
         </div>
-    );
+    )
 }
 
-export default App;
+export default App

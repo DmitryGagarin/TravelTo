@@ -4,8 +4,7 @@ import axios from "axios"
 import {useNavigate} from "react-router-dom"
 import Settings from "./Settings"
 import Inputmask from "inputmask"
-import PhoneInput from "react-phone-number-input";
-import "react-phone-number-input/style.css";
+import "react-phone-number-input/style.css"
 
 function RegisterBusiness() {
 
@@ -108,7 +107,7 @@ function RegisterBusiness() {
                 )
             } else {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin";
+                    window.location.href = "http://localhost:4000/signin"
                 }
                 setError('Business registration failed, please try again.')
             }

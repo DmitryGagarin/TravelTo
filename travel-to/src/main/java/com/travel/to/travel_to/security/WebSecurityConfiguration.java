@@ -63,8 +63,8 @@ public class WebSecurityConfiguration {
                     "/signin/**",
                     "/signup/**",
                     "/logout",
-                    "/user/reset-password",
                     "/attraction",
+                    // TODO: как то настроить роли для допуска
                     "/swagger-ui/**",
                     "/v3/**")
                 .permitAll()

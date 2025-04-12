@@ -22,12 +22,12 @@ function Attractions() {
         const fetchAttractions = async () => {
             try {
                 const response = await axios.get('http://localhost:8080/attraction')
-                const attractionsData = response?.data?._embedded?.attractionModelList;
+                const attractionsData = response?.data?._embedded?.attractionModelList
                 if (Array.isArray(attractionsData)) {
                     const publishedAttractions = attractionsData.filter(
                         (attraction) => attraction?.status === 'published'
                     )
-                    setAttractions(publishedAttractions);
+                    setAttractions(publishedAttractions)
 
                     const attractionTypes = publishedAttractions.map((attraction) => attraction.type)
                     setTypes([...new Set(attractionTypes)])
@@ -127,7 +127,7 @@ function Attractions() {
     }
 
     const getImageFormat = (format) => {
-        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg'];
+        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg']
         if (formats.includes(format.toLowerCase())) {
             return format.toLowerCase()
         } else {
