@@ -1,6 +1,7 @@
 ports: 
 <ul>
 <li>react = 4000 </li>
+<li>chronograf = 8888</li>
 <li>spring = 8080 </li>
 <li>grafana = 3000 </li>
 <li>nginx = 80 </li>
