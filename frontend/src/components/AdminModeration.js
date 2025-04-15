@@ -3,6 +3,7 @@ import {getAttractionCardStyle} from "../utils/StyleUtils"
 import axios from "axios"
 import Settings from "./Settings"
 import {getImageFormat} from "../utils/ImageUtils"
+import {Link} from "react-router-dom";
 
 const AdminModeration = () => {
 
@@ -189,6 +190,14 @@ const AdminModeration = () => {
                             }}
                         >
                             On Moderation
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-primary mt-3 admin-button grafana-redirect"
+                        >
+                            <Link to={`${GRAFANA_URL}`} target="_blank" rel="noopener noreferrer">
+                                Grafana
+                            </Link>
                         </button>
                     </div>
                 </div>

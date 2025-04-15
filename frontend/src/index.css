@@ -193,10 +193,15 @@
   left: 10px;
 }
 
-.learn-more-button, .save-changes-button {
+.learn-more-button, .save-changes-button, .grafana-redirect {
   border-radius: 4px;
   background: lightgreen;
   width: 120px;
+}
+
+.grafana-redirect a {
+  color: white;
+  text-decoration: none;
 }
 
 .learn-more a {

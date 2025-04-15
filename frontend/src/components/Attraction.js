@@ -3,7 +3,7 @@ import axios from 'axios'
 import Header from "./Header"
 import {Link, useParams} from "react-router-dom"
 import {MDBInput, MDBTextArea} from "mdb-react-ui-kit"
-import {FaHeart, FaRegStar, FaStar} from "react-icons/fa"
+import {FaHeart} from "react-icons/fa"
 import {getAttractionCardStyle, renderStars} from '../utils/StyleUtils.js'
 import {getImageFormat} from "../utils/ImageUtils"
 

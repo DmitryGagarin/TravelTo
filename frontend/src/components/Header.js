@@ -56,7 +56,7 @@ function Header() {
     return (
         <header className="d-flex justify-content-between align-items-center p-3 shadow-sm"
                 style={{position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, backgroundColor: 'white'}}>
-            <button onClick={handleAttractionsClick} className="btn btn-light me-3">
+            <button onClick={handleAttractionsClick} className="btn btn-light">
                 Attractions
             </button>
             {/*<button onClick={handleHomeClick} className="btn btn-light me-3">*/}
@@ -74,14 +74,14 @@ function Header() {
                         </div>
                     )}
                 </p>
-                <button onClick={handleAccountClick} className="btn btn-light me-3">
+                <button onClick={handleLiked} className="btn btn-light">
+                    <FaHeart size={24}/>
+                </button>
+                <button onClick={handleAccountClick} className="btn btn-light">
                     <FaUserAlt size={24}/>
                 </button>
                 <button onClick={handleSettingsClick} className="btn btn-light">
                     <FaCog size={24}/>
-                </button>
-                <button onClick={handleLiked} className="btn btn-light">
-                    <FaHeart size={24}/>
                 </button>
             </div>
         </header>
