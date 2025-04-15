@@ -43,8 +43,6 @@ function Attractions() {
         fetchAttractions()
     }, [token])
 
-    console.log(attractions)
-
     useEffect(() => {
         if (likedAttraction) {
             const handleLike = async (name) => {
