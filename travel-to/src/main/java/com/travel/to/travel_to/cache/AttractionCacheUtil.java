@@ -13,7 +13,6 @@ import java.util.List;
 @Component
 public class AttractionCacheUtil extends CacheUtilBase<Attraction> {
 
-    private final RedisTemplate<String, Attraction> redisTemplate;
     private final HashOperations<String, String, Attraction> hashOperations;
 
     @Autowired
@@ -21,7 +20,6 @@ public class AttractionCacheUtil extends CacheUtilBase<Attraction> {
         @Qualifier("attractionTemplate")
         RedisTemplate<String, Attraction> redisTemplate
     ) {
-        this.redisTemplate = redisTemplate;
         this.hashOperations = redisTemplate.opsForHash();
     }
 
@@ -46,13 +44,13 @@ public class AttractionCacheUtil extends CacheUtilBase<Attraction> {
 
     @Override
     public Attraction findById(long id) {
-        return (Attraction) redisTemplate.opsForHash().get(CacheKeys.ATTRACTIONS, String.valueOf(id));
+        return hashOperations.get(CacheKeys.ATTRACTIONS, String.valueOf(id));
     }
 
-    // TODO: добавить изменение записи при редактировании бизнеса
     @Override
-    public Attraction updateById(long id) {
-        return null;
+    public Attraction updateById(long id, Attraction attraction) {
+        deleteById(id);
+        return save(attraction);
     }
 
     @Override

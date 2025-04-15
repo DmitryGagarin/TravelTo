@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react'
-import {YMaps, Map, Placemark} from '@pbe/react-yandex-maps'
 import axios from 'axios'
 import Header from "./Header"
-import {useParams} from "react-router-dom"
+import {Link, useParams} from "react-router-dom"
 import {MDBInput, MDBTextArea} from "mdb-react-ui-kit"
+import {FaHeart, FaRegStar, FaStar} from "react-icons/fa"
+import {getAttractionCardStyle, renderStars} from '../utils/StyleUtils.js'
+import {getImageFormat} from "../utils/ImageUtils"
 
 function Attraction() {
     const API_KEY = process.env.REACT_APP_YANDEX_MAP_API_KEY
@@ -21,7 +23,9 @@ function Attraction() {
     const [showCreateDiscussionForm, setShowCreateDiscussionForm] = useState(false)
     const [currentAttractionImageIndex, setCurrentAttractionImageIndex] = useState(0)
     const [currentDiscussionImageIndex, setCurrentDiscussionImageIndex] = useState(0)
+    const [currentImageIndexes, setCurrentImageIndexes] = useState({})
 
+    const [likedAttraction, setLikedAttraction] = useState(null)
 
     const [title, setTitle] = useState('')
     const [contentLike, setContentLike] = useState('')
@@ -53,6 +57,8 @@ function Attraction() {
                 setError('Failed to fetch attraction data')
             }
         }
+
+        console.log(attraction)
 
         const fetchDiscussions = async () => {
             try {
@@ -176,96 +182,81 @@ function Attraction() {
         setImages([...e.target.files]) // Set the file object
     }
 
-    const getImageFormat = (format) => {
-        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg']
-        if (formats.includes(format.toLowerCase())) {
-            return format.toLowerCase()
-        } else {
-            return 'jpeg'
-        }
-    }
-
     return (
         <div>
-            <Header/>
-            <div className="attraction-main-container">
-                <div className="attraction-container">
+            <Header />
+            <div className="attractions-main-container">
+                <div className="attractions-container">
                     <div className="cards-container">
-                        <div className="attraction-card">
-                            <div className="image-container">
-                                {attraction.images && attraction.images.length > 0 && (
-                                    <>
-                                        <img
-                                            src={`data:image/${getImageFormat(attraction.imagesFormats[currentAttractionImageIndex])};base64,${attraction.images[currentAttractionImageIndex]}`}
-                                            alt={attraction.name}
-                                            className="card-image"
-                                        />
-                                        <div className="image-navigation">
-                                            {/* Left Arrow Button */}
-                                            <button
-                                                className="image-nav-button left"
-                                                onClick={() =>
-                                                    setCurrentAttractionImageIndex(handlePrevImage(currentAttractionImageIndex, attraction.images))
-                                                }
-                                            >
-                                                ←
-                                            </button>
-
-                                            {/* Right Arrow Button */}
-                                            <button
-                                                className="image-nav-button right"
-                                                onClick={() =>
-                                                    setCurrentAttractionImageIndex(handleNextImage(currentAttractionImageIndex, attraction.images, attraction.name))
-                                                }
-                                            >
-                                                →
-                                            </button>
-                                        </div>
-                                    </>
-                                )}
+                        {(!attraction || Object.keys(attraction).length === 0) && (
+                            <div>
+                                <h2>Nothing found</h2>
                             </div>
-                        </div>
-                        <div className="rating">
-                            Rating: {attraction.rating}
-                        </div>
-                        <div className="contact-info">
-                            <p>
-                                Website:{" "}
-                                <a
-                                    href={attraction.website}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    Visit
-                                </a>
-                            </p>
-                            <p>Phone: {attraction.phone}</p>
-                        </div>
-                        <div className="name-description">
-                            <h5>{attraction.name}</h5>
-                            <p>{attraction.description}</p>
-                        </div>
-                        <div className="opening-time">
-                            <p>Opening Time: {attraction.openTime}</p>
-                            <p>Closing Time: {attraction.closeTime}</p>
-                        </div>
+                        )}
+
+                        {attraction && Object.keys(attraction).length > 0 && (
+                            <div key={attraction.name} className="attraction-card">
+                                <div className="image-container">
+                                    <img
+                                        src={`data:image/${getImageFormat(attraction.imagesFormats[currentImageIndexes[attraction.name] || 0])};base64,${attraction.images[currentImageIndexes[attraction.name] || 0]}`}
+                                        alt={attraction.name}
+                                        className="card-image"
+                                    />
+                                    <div className="image-navigation">
+                                        <button
+                                            className="image-nav-button left"
+                                            onClick={() =>
+                                                handlePrevImage(currentImageIndexes[attraction.name] || 0, attraction.images, attraction.name)
+                                            }
+                                        >
+                                            ←
+                                        </button>
+                                        <button
+                                            className="image-nav-button right"
+                                            onClick={() =>
+                                                handleNextImage(currentImageIndexes[attraction.name] || 0, attraction.images, attraction.name)
+                                            }
+                                        >
+                                            →
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="attraction-data">
+                                    <div
+                                        className="attraction-type"
+                                        style={getAttractionCardStyle(attraction.type)}
+                                    >
+                                        {attraction.type}
+                                    </div>
+                                    <div className="like">
+                                        <FaHeart onClick={() => setLikedAttraction(attraction.name)} />
+                                    </div>
+                                    <div className="rating">{renderStars(attraction.rating)}</div>
+                                    <div className="contact-info">
+                                        <p>
+                                            Website:{" "}
+                                            <Link to={attraction.website} target="_blank" rel="noopener noreferrer">
+                                                Visit
+                                            </Link>
+                                        </p>
+                                        <p>Phone: {attraction.phone}</p>
+                                    </div>
+                                    <div className="name-description">
+                                        <h5>{attraction.name}</h5>
+                                        <p>{attraction.description}</p>
+                                    </div>
+                                    <div className="time">
+                                        <p>From: {attraction.openTime}</p>
+                                        <p>To: {attraction.closeTime}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
-            {/*<YMaps>*/
-            }
-            {/*    <div className="map">*/
-            }
-            {/*        <Map defaultState={{ center: [latitude, longitude], zoom: 15}} width="93%" height="40vh">*/
-            }
-            {/*            <Placemark geometry={[latitude, longitude]}/>*/
-            }
-            {/*        </Map>*/
-            }
-            {/*    </div>*/
-            }
-            {/*</YMaps>*/
-            }
+
+            {/* Comment Section */}
             <div className="discussion-main-container">
                 <div className="leave-discussion-container">
                     <button className="leave-discussion" onClick={handleLeaveDiscussion}>
@@ -273,7 +264,8 @@ function Attraction() {
                     </button>
                 </div>
                 {error && <p className="text-danger">{error}</p>}
-                {/* Pop-up Window */}
+
+                {/* Pop-up Window for creating discussion */}
                 {showCreateDiscussionForm && (
                     <div className="popup">
                         <div className="popup-content">
@@ -285,7 +277,7 @@ function Attraction() {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                     required
-                                    style={{marginBottom: '10px'}}
+                                    style={{ marginBottom: '10px' }}
                                 />
                                 <MDBInput
                                     placeholder="What you liked?"
@@ -293,7 +285,7 @@ function Attraction() {
                                     value={contentLike}
                                     onChange={(e) => setContentLike(e.target.value)}
                                     required
-                                    style={{marginBottom: '10px'}}
+                                    style={{ marginBottom: '10px' }}
                                 />
                                 <MDBInput
                                     placeholder="What you disliked?"
@@ -301,20 +293,20 @@ function Attraction() {
                                     value={contentDislike}
                                     onChange={(e) => setContentDislike(e.target.value)}
                                     required
-                                    style={{marginBottom: '10px'}}
+                                    style={{ marginBottom: '10px' }}
                                 />
                                 <MDBTextArea
                                     placeholder="Overall"
                                     value={content}
                                     onChange={(e) => setContent(e.target.value)}
                                     required
-                                    style={{marginBottom: '10px'}}
+                                    style={{ marginBottom: '10px' }}
                                 />
                                 <MDBInput
-                                    wrapperClass='mb-4'
-                                    placeholder='Choose images'
-                                    id='images'
-                                    type='file'
+                                    wrapperClass="mb-4"
+                                    placeholder="Choose images"
+                                    id="images"
+                                    type="file"
                                     multiple
                                     onChange={handleImageChange}
                                 />
@@ -326,13 +318,15 @@ function Attraction() {
                                     value={rating}
                                     onChange={(e) => setRating(e.target.value)}
                                     required
-                                    style={{marginBottom: '10px'}}
+                                    style={{ marginBottom: '10px' }}
                                 />
                                 <button type="submit">Submit Comment</button>
                             </form>
                         </div>
                     </div>
                 )}
+
+                {/* Displaying Discussions */}
                 <div className="discussions-main-container">
                     <div className="discussion-container">
                         {discussions.map((discussion) => (
@@ -363,21 +357,25 @@ function Attraction() {
                                 <div className="image-navigation">
                                     <button
                                         className="image-nav-button left"
-                                        onClick={() => setCurrentAttractionImageIndex(
-                                            handlePrevImage(currentDiscussionImageIndex, discussion.images)
-                                        )}
+                                        onClick={() =>
+                                            setCurrentAttractionImageIndex(
+                                                handlePrevImage(currentDiscussionImageIndex, discussion.images)
+                                            )
+                                        }
                                         disabled={discussion.images.length <= 1}
                                     >
-                                        &lt
+                                        ←
                                     </button>
                                     <button
                                         className="image-nav-button right"
-                                        onClick={() => setCurrentAttractionImageIndex(
-                                            handleNextImage(currentDiscussionImageIndex, discussion.images)
-                                        )}
+                                        onClick={() =>
+                                            setCurrentAttractionImageIndex(
+                                                handleNextImage(currentDiscussionImageIndex, discussion.images)
+                                            )
+                                        }
                                         disabled={discussion.images.length <= 1}
                                     >
-                                        &gt
+                                        →
                                     </button>
                                 </div>
                                 <div className="discussion-created_at discussion-part">
@@ -389,7 +387,7 @@ function Attraction() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Attraction

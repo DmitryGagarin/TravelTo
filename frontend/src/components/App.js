@@ -6,7 +6,6 @@ import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom
 import LoginPage from './SignIn'
 import SignUpStepOne from './SignUpStepOne'
 import SignUpStepTwo from './SignUpStepTwo'
-import Home from './Home'
 import MyAttractions from './MyAttractions'
 import Attractions from './Attractions'
 import Attraction from './Attraction'

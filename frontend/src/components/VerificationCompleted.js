@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
-import { MDBContainer } from "mdb-react-ui-kit"
+import React, {useEffect, useState} from "react"
+import {useLocation, useNavigate} from "react-router-dom"
+import {MDBContainer} from "mdb-react-ui-kit"
 import axios from "axios"
 
 function VerificationCompleted() {

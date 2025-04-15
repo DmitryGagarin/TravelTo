@@ -29,11 +29,12 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
     private String phone;
     private Boolean isVerified;
 
-    @JsonBackReference
+    @JsonBackReference(value = "user-attraction")
     @OneToMany(mappedBy = "owner")
     private List<Attraction> ownerAttractions;
     @OneToMany(mappedBy = "likedBy")
     private List<Attraction> likedAttractions;
+    @JsonBackReference(value = "user-attraction-discussion")
     @OneToMany(mappedBy = "author")
     private List<AttractionDiscussion> authorAttractionDiscussions;
 

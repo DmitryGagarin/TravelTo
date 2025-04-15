@@ -2,9 +2,11 @@ import React, {useEffect, useState} from 'react'
 import axios from "axios"
 import Header from "./Header"
 import {Link} from "react-router-dom"
+import {getImageFormat} from "../utils/ImageUtils"
 
 function Liked() {
     const [likes, setLikes] = useState([])
+    const [error, setError] = useState('')
 
     useEffect(() => {
         const token = JSON.parse(localStorage.getItem('user')).accessToken
@@ -16,17 +18,24 @@ function Liked() {
                     }
                 })
                 setLikes(response.data._embedded.likesModelList || [])
-            } catch
-                (error) {
-                if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin"
+            } catch (error) {
+                if (error.response && error.response.data) {
+                    const errorMessages = error.response.data
+                    setError(
+                        Object.entries(errorMessages)
+                            .map(([field, message]) => `${field}: ${message}`)
+                            .join(', ')
+                    )
+                } else {
+                    if (error.response.status === 401) {
+                        window.location.href = "http://localhost:4000/signin"
+                    }
+                    setError('Business registration failed, please try again.')
                 }
             }
         }
         fetchLikes()
     }, [])
-
-    // likes.map((attraction) => console.log(attraction[0]))
 
     if (!likes) {
         return (
@@ -39,14 +48,7 @@ function Liked() {
         )
     }
 
-    const getImageFormat = (format) => {
-        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg']
-        if (formats.includes(format.toLowerCase())) {
-            return format.toLowerCase()
-        } else {
-            return 'jpeg'
-        }
-    }
+
 
     return (
         <div>

@@ -4,11 +4,12 @@ import {Link} from 'react-router-dom'
 import Header from './Header'
 import {MDBInput} from 'mdb-react-ui-kit'
 import {FaHeart} from 'react-icons/fa'
+import {getAttractionCardStyle, renderStars} from "../utils/StyleUtils"
+import {getImageFormat} from "../utils/ImageUtils"
 
 function Attractions() {
     const [attractions, setAttractions] = useState([])
     const [types, setTypes] = useState([])
-
     const [likedAttraction, setLikedAttraction] = useState(null)
 
     const [selectedTypes, setSelectedTypes] = useState([])
@@ -36,9 +37,6 @@ function Attractions() {
                     setTypes([])
                 }
             } catch (error) {
-                // if (error.response.status === 401) {
-                //     window.location.href = 'http://localhost:4000/signin'
-                // }
                 console.error(error)
             }
         }
@@ -53,8 +51,7 @@ function Attractions() {
                 try {
                     await axios.post(`http://localhost:8080/like/add/${name}`, {}, {
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
                         },
                     })
                 } catch (error) {
@@ -107,34 +104,6 @@ function Attractions() {
         }))
     }
 
-    const getAttractionCardStyle = (type) => {
-        switch (type.toLowerCase()) {
-            case 'museum':
-                return {backgroundColor: 'yellow', color: 'black'}
-            case 'gallery':
-                return {backgroundColor: 'orange', color: 'black'}
-            case 'park':
-                return {backgroundColor: 'green', color: 'white'}
-            case 'religious':
-                return {backgroundColor: 'lightgray', color: 'black'}
-            case 'cafe':
-                return {backgroundColor: 'wheat', color: 'black'}
-            case 'restaurant':
-                return {backgroundColor: 'pink', color: 'black'}
-            default:
-                return {backgroundColor: 'lightgray', color: 'black'}
-        }
-    }
-
-    const getImageFormat = (format) => {
-        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg']
-        if (formats.includes(format.toLowerCase())) {
-            return format.toLowerCase()
-        } else {
-            return 'jpeg'
-        }
-    }
-
     return (
         <div>
             <Header/>
@@ -149,7 +118,7 @@ function Attractions() {
                         {filteredAttractions.map((attraction) => {
                             const currentImageIndex = currentImageIndexes[attraction.name] || 0
                             return (
-                                <div key={attraction.name} className="attraction-card">
+                                <div key={attraction.name} className="attraction-card attractions">
                                     <div className="image-container">
                                         <img
                                             src={`data:image/${getImageFormat(attraction.imagesFormats[currentImageIndex])};base64,${attraction.images[currentImageIndex]}`}
@@ -157,7 +126,6 @@ function Attractions() {
                                             className="card-image"
                                         />
                                         <div className="image-navigation">
-                                            {/* Left Arrow Button */}
                                             <button
                                                 className="image-nav-button left"
                                                 onClick={() =>
@@ -167,7 +135,6 @@ function Attractions() {
                                                 ←
                                             </button>
 
-                                            {/* Right Arrow Button */}
                                             <button
                                                 className="image-nav-button right"
                                                 onClick={() =>
@@ -188,7 +155,7 @@ function Attractions() {
                                         <div className="like">
                                             <FaHeart onClick={() => setLikedAttraction(attraction.name)}/>
                                         </div>
-                                        <div className="rating">Rating: {attraction.rating}</div>
+                                        <div className="rating">{renderStars(attraction.rating)}</div>
                                         <div className="contact-info">
                                             <p>
                                                 Website:{" "}
@@ -204,12 +171,12 @@ function Attractions() {
                                         </div>
                                         <div className="learn-more">
                                             <button className="learn-more-button">
-                                                <Link to={`/attraction/${attraction.name}`}>Learn More</Link>
+                                                <Link to={`/attraction/${attraction.name}`}>Visit</Link>
                                             </button>
                                         </div>
                                         <div className="time">
-                                            <p>Opening Time: {attraction.openTime}</p>
-                                            <p>Closing Time: {attraction.closeTime}</p>
+                                            <p>From: {attraction.openTime}</p>
+                                            <p>To: {attraction.closeTime}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -219,29 +186,31 @@ function Attractions() {
                 </div>
 
                 {/* Filter Container */}
-                <div className="filter-container">
-                    <h5>Filter</h5>
-                    <div className="checkboxes">
-                        {types.map((type) => (
-                            <div key={type} className="checkbox-container">
-                                <label>{type}</label>
-                                <input
-                                    type="checkbox"
-                                    value={type}
-                                    checked={selectedTypes.includes(type)}
-                                    onChange={handleTypeChange}
-                                />
-                            </div>
-                        ))}
+                {filteredAttractions.length !== 0 && (
+                    <div className="filter-container">
+                        <h5>Filter</h5>
+                        <div className="checkboxes">
+                            {types.map((type) => (
+                                <div key={type} className="checkbox-container">
+                                    <label>{type}</label>
+                                    <input
+                                        type="checkbox"
+                                        value={type}
+                                        checked={selectedTypes.includes(type)}
+                                        onChange={handleTypeChange}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        <MDBInput
+                            type="text"
+                            id="filterInput"
+                            value={searchQuery}
+                            onChange={handleSearch}
+                            placeholder="Search"
+                        />
                     </div>
-                    <MDBInput
-                        type="text"
-                        id="filterInput"
-                        value={searchQuery}
-                        onChange={handleSearch}
-                        placeholder="Search"
-                    />
-                </div>
+                )}
             </div>
         </div>
     )

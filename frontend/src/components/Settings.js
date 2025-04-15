@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom"
+import React, {useEffect, useState} from 'react'
+import {useNavigate} from "react-router-dom"
 import Header from "./Header"
 import axios from "axios"
 
@@ -7,6 +7,7 @@ function Settings() {
 
     const [isAdmin, setIsAdmin] = useState(false)
     const [isOwner, setIsOwner] = useState(false)
+
     // const [response, setResponse] = useState([])
 
     const authUser = JSON.parse(localStorage.getItem('user'))
@@ -56,7 +57,7 @@ function Settings() {
     }
 
     const handleAdminModeration = () => {
-        history('admin/moderation/on_moderation')
+        history('/settings/admin/moderation/on_moderation')
     }
 
     return (

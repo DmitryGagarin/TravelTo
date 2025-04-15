@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react"
+import React, {useEffect, useState} from "react"
 import axios from "axios"
-import { Link } from "react-router-dom"
+import {Link} from "react-router-dom"
 import Settings from "./Settings"
+import {getImageFormat} from "../utils/ImageUtils"
+import {getAttractionStatusStyle, renderStars} from "../utils/StyleUtils"
 
 function MyAttractions() {
     const [attractions, setAttractions] = useState([])
@@ -44,8 +46,6 @@ function MyAttractions() {
         }
     }
 
-    // console.log(attractions)
-
     useEffect(() => {
         if (attractionName) {
             const confirmation = window.confirm("Are you sure you want to delete this attraction?")
@@ -55,26 +55,6 @@ function MyAttractions() {
             setAttractionName(null)
         }
     }, [attractionName, token])
-
-    const getAttractionStatusStyle = (status) => {
-        switch (status.toLowerCase()) {
-            case 'PUBLISHED':
-                return { color: 'green' }
-            case 'ON_MODERATION':
-                return { color: 'red' }
-            default:
-                return { backgroundColor: 'lightgray', color: 'black' }
-        }
-    }
-
-    const getImageFormat = (format) => {
-        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg']
-        if (formats.includes(format.toLowerCase())) {
-            return format.toLowerCase()
-        } else {
-            return 'jpeg'
-        }
-    }
 
     return (
         <div className="my-attractions-main-container">
@@ -91,7 +71,7 @@ function MyAttractions() {
                                 <div className="attraction-type">{attraction.type}</div>
                             </div>
                             <div className="rating">
-                                Rating: {attraction.rating}
+                                {renderStars(attraction.rating)}
                             </div>
                             <div className="contact-info">
                                 <p>
@@ -106,14 +86,14 @@ function MyAttractions() {
                                 </p>
                                 <p>Phone: {attraction.phone}</p>
                             </div>
-                            <div className="learn-more">
-                                <button className="learn-more-button">
-                                    <Link to={`/attraction/${attraction.name}`}>Learn More</Link>
-                                </button>
-                            </div>
                             <div className="edit">
                                 <button className="edit-button">
                                     <Link to={`/attraction/edit/${attraction.name}`}>Edit</Link>
+                                </button>
+                            </div>
+                            <div className="learn-more learn-more-my">
+                                <button className="learn-more-button">
+                                    <Link to={`/attraction/${attraction.name}`}>Learn More</Link>
                                 </button>
                             </div>
                             <div className="name-description">
@@ -121,8 +101,8 @@ function MyAttractions() {
                                 <p>{attraction.description}</p>
                             </div>
                             <div className="opening-time">
-                                <p>Opening Time: {attraction.openTime}</p>
-                                <p>Closing Time: {attraction.closeTime}</p>
+                                <p>From: {attraction.openTime}</p>
+                                <p>To: {attraction.closeTime}</p>
                             </div>
                             <div className="delete-button">
                                 <button onClick={() => {
@@ -130,7 +110,18 @@ function MyAttractions() {
                                 }}>Delete</button>
                             </div>
                             <div className="status" style={getAttractionStatusStyle(attraction.status)}>
-                                <h5>{attraction.status}</h5>
+                                <div className="attraction-status">
+                                    {attraction.status === 'published' ? (
+                                        <>
+                                            Published
+                                        </>
+                                    ) : (
+                                        <>
+                                            On Moderation
+                                        </>
+                                    )
+                                    }
+                                </div>
                             </div>
                         </div>
                     ))}

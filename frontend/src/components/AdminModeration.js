@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
+import {getAttractionCardStyle} from "../utils/StyleUtils"
 import axios from "axios"
 import Settings from "./Settings"
+import {getImageFormat} from "../utils/ImageUtils"
 
 const AdminModeration = () => {
 
@@ -8,6 +10,8 @@ const AdminModeration = () => {
     const [attractionStatus, setAttractionStatus] = useState('on_moderation')
     const [attractionName, setAttractionName] = useState('')
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+    const [onModerationPage, setOnModerationPage] = useState(true)
 
     useEffect(() => {
         const fetchAttractions = async () => {
@@ -68,34 +72,6 @@ const AdminModeration = () => {
         return index
     }
 
-    const getAttractionCardStyle = (type) => {
-        switch (type.toLowerCase()) {
-            case 'museum':
-                return {backgroundColor: 'yellow', color: 'black'}
-            case 'gallery':
-                return {backgroundColor: 'orange', color: 'black'}
-            case 'park':
-                return {backgroundColor: 'green', color: 'white'}
-            case 'religious':
-                return {backgroundColor: 'lightgray', color: 'black'}
-            case 'cafe':
-                return {backgroundColor: 'wheat', color: 'black'}
-            case 'restaurant':
-                return {backgroundColor: 'pink', color: 'black'}
-            default:
-                return {backgroundColor: 'lightgray', color: 'black'}
-        }
-    }
-
-    const getImageFormat = (format) => {
-        const formats = ['png', 'jpeg', 'jpg', 'webp', 'svg']
-        if (formats.includes(format.toLowerCase())) {
-            return format.toLowerCase()
-        } else {
-            return 'jpeg'
-        }
-    }
-
     return (
         <div>
             <div className="attractions-main-container">
@@ -126,7 +102,7 @@ const AdminModeration = () => {
                                                 className="image-nav-button left"
                                                 onClick={() => setCurrentImageIndex(handlePrevImage(currentImageIndex, images))}
                                             >
-                                                &lt
+                                                ←
                                             </button>
 
                                             {/* Right Arrow Button */}
@@ -134,7 +110,7 @@ const AdminModeration = () => {
                                                 className="image-nav-button right"
                                                 onClick={() => setCurrentImageIndex(handleNextImage(currentImageIndex, images))}
                                             >
-                                                &gt
+                                                →
                                             </button>
                                         </div>
                                     </div>
@@ -144,7 +120,16 @@ const AdminModeration = () => {
                                             {attraction.type}
                                         </div>
                                         <div className="attraction-status">
-                                            {attraction.status}
+                                            {attraction.status === 'published' ? (
+                                                <>
+                                                    Published
+                                                </>
+                                            ) : (
+                                                <>
+                                                    On Moderation
+                                                </>
+                                            )
+                                            }
                                         </div>
                                         <div className="rating">
                                             Rating: {attraction.rating}
@@ -183,12 +168,26 @@ const AdminModeration = () => {
                 </div>
                 <div className="attraction-type-changer-admin">
                     <div className="text-center">
-                        <button type="button" className="btn btn-primary mt-3 admin-button"
-                                onClick={() => setAttractionStatus('published')}>
+                        <button
+                            type="button"
+                            className="btn btn-primary mt-3 admin-button"
+                            style={onModerationPage ? {backgroundColor: '#007bff'} : {backgroundColor: 'red'}} // Published button color
+                            onClick={() => {
+                                setAttractionStatus('published');
+                                setOnModerationPage(false);
+                            }}
+                        >
                             Published
                         </button>
-                        <button type="button" className="btn btn-primary mt-3 admin-button"
-                                onClick={() => setAttractionStatus('on_moderation')}>
+                        <button
+                            type="button"
+                            className="btn btn-primary mt-3 admin-button"
+                            style={onModerationPage ? {backgroundColor: 'red'} : {backgroundColor: '#007bff'}} // On Moderation button color
+                            onClick={() => {
+                                setAttractionStatus('on_moderation');
+                                setOnModerationPage(true);
+                            }}
+                        >
                             On Moderation
                         </button>
                     </div>

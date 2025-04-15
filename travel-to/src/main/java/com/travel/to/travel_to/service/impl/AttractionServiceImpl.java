@@ -114,6 +114,7 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     @NotNull
+    @Transactional
     public Attraction editAttraction(
         @NotNull AttractionEditForm attractionEditForm,
         @NotNull MultipartFile[] images,
@@ -130,13 +131,15 @@ public class AttractionServiceImpl implements AttractionService {
             .setOpenTime(attractionEditForm.getOpenTime())
             .setCloseTime(attractionEditForm.getCloseTime());
 
+        attractionCacheUtil.updateById(attraction.getId(), attraction);
+
         try {
             attractionImageService.edit(images, attraction.getId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return attraction;
+        return attractionRepository.save(attraction);
     }
 
     @Override
@@ -147,6 +150,7 @@ public class AttractionServiceImpl implements AttractionService {
     ) {
         Attraction attraction = getByUuid(attractionUuid);
         attraction.setRating(totalRating);
+        attractionCacheUtil.updateById(attraction.getId(), attraction);
         return attractionRepository.save(attraction);
     }
 
@@ -158,10 +162,7 @@ public class AttractionServiceImpl implements AttractionService {
     ) {
         Attraction attraction = getByName(attractionName);
         attraction.setStatus(attractionStatus.name());
-        // refresh cache with new value
-        // TODO: rewrite to update method
-        attractionCacheUtil.deleteById(attraction.getId());
-        attractionCacheUtil.save(attraction);
+        attractionCacheUtil.updateById(attraction.getId(), attraction);
         return attractionRepository.save(attraction);
     }
 

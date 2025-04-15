@@ -11,7 +11,7 @@ public abstract class CacheUtilBase<T> {
 
     public abstract T findById(long id);
 
-    public abstract T updateById(long id);
+    public abstract T updateById(long id, T object);
 
     public abstract void deleteById(long id);
 }

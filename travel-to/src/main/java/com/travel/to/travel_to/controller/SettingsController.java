@@ -42,6 +42,7 @@ public class SettingsController {
         binder.addValidators(userProfileFormValidator);
     }
 
+    // TODO: если что-то меняется, то надо сделать автоперезаход или как-то пофиксить проблему
     @PostMapping("/save-changes")
     public AuthUser saveChanges(
         @Validated @RequestBody UserProfileForm userProfileForm,

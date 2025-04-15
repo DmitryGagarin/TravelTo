@@ -11,20 +11,20 @@ function Header() {
     useEffect(() => {
         const getUser = async () => {
             if (authUser) {
-            try {
-                const response = await axios.get('http://localhost:8080/user/get', {
-                    headers: {
-                        'Authorization': `Bearer ${authUser.accessToken}`
-                    }
-                })
-                setUserName(response.data.name)
+                try {
+                    const response = await axios.get('http://localhost:8080/user/get', {
+                        headers: {
+                            'Authorization': `Bearer ${authUser.accessToken}`
+                        }
+                    })
+                    setUserName(response.data.name)
 
-            } catch (error) {
-                // if (error.response.status === 401) {
-                //     window.location.href = 'http://localhost:8080/signin'
-                // }
-                console.log(error)
-            }
+                } catch (error) {
+                    // if (error.response.status === 401) {
+                    //     window.location.href = 'http://localhost:8080/signin'
+                    // }
+                    console.log(error)
+                }
             }
         }
 
@@ -64,8 +64,15 @@ function Header() {
             {/*</button>*/}
             <div className="d-flex align-items-center">
                 <p className="mb-0 me-3">
-                    // TODO: только если пользователь существует
-                    Hello, {userName}!
+                    {userName ? (
+                        <div className="header-username">
+                            Hello, {userName}!
+                        </div>
+                    ) : (
+                        <div>
+
+                        </div>
+                    )}
                 </p>
                 <button onClick={handleAccountClick} className="btn btn-light me-3">
                     <FaUserAlt size={24}/>
