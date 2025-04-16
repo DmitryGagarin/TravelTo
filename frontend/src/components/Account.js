@@ -113,8 +113,20 @@ function Account() {
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     {error && <p className="text-danger">{error}</p>}
-                    <button onClick={handleChange}>Save changes</button>
-                    <button onClick={() => setDeleteButtonClicked(true)}>Delete account</button>
+                    <button
+                        onClick={handleChange}
+                        type="button"
+                        className="btn btn-primary mt-3 settings-button account-buttons"
+                    >
+                        Save changes
+                    </button>
+                    <button
+                        onClick={() => setDeleteButtonClicked(true)}
+                        type="button"
+                        className="btn btn-danger mt-3 settings-button account-buttons account-delete-button"
+                    >
+                        Delete account
+                    </button>
                 </MDBContainer>
             </div>
             <Settings/>

@@ -120,7 +120,7 @@ function Attractions() {
                         {filteredAttractions.map((attraction) => {
                             const currentImageIndex = currentImageIndexes[attraction.name] || 0
                             return (
-                                <div key={attraction.name} className="attraction-card attractions">
+                                <div key={attraction.name} className="attraction-card attractions-attraction-card attractions">
                                     <div className="image-container">
                                         <img
                                             src={`data:image/${getImageFormat(attraction.imagesFormats[currentImageIndex])};base64,${attraction.images[currentImageIndex]}`}
@@ -147,7 +147,7 @@ function Attractions() {
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="attraction-data">
+                                    {/*<div className="attraction-data">*/}
                                         <div
                                             className="attraction-type"
                                             style={getAttractionCardStyle(attraction.type)}
@@ -155,19 +155,19 @@ function Attractions() {
                                             {attraction.type}
                                         </div>
                                         <div className="like">
-                                            <FaHeart onClick={() => setLikedAttraction(attraction.name)}/>
+                                            <FaHeart color="pink" size={36} onClick={() => setLikedAttraction(attraction.name)}/>
                                         </div>
-                                        <div className="rating">{renderStars(attraction.rating)}</div>
                                         <div className="contact-info">
                                             <p>
                                                 Website:{" "}
                                                 <Link to={attraction.website} target="_blank" rel="noopener noreferrer">
-                                                    Visit
+                                                    {attraction.website}
                                                 </Link>
                                             </p>
                                             <p>Phone: {attraction.phone}</p>
                                         </div>
-                                        <div className="name-description">
+                                    <div className="rating">{renderStars(attraction.rating)}</div>
+                                    <div className="name-description">
                                             <h5>{attraction.name}</h5>
                                             <p>{attraction.description}</p>
                                         </div>
@@ -180,7 +180,7 @@ function Attractions() {
                                             <p>From: {attraction.openTime}</p>
                                             <p>To: {attraction.closeTime}</p>
                                         </div>
-                                    </div>
+                                    {/*</div>*/}
                                 </div>
                             )
                         })}

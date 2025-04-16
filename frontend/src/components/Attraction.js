@@ -183,6 +183,8 @@ function Attraction() {
         setImages([...e.target.files]) // Set the file object
     }
 
+    // TODO: add different type of images
+    // TODO: arrow sliders broken
     return (
         <div>
             <Header />
@@ -230,7 +232,7 @@ function Attraction() {
                                         {attraction.type}
                                     </div>
                                     <div className="like">
-                                        <FaHeart onClick={() => setLikedAttraction(attraction.name)} />
+                                        <FaHeart color="pink" onClick={() => setLikedAttraction(attraction.name)} />
                                     </div>
                                     <div className="rating">{renderStars(attraction.rating)}</div>
                                     <div className="contact-info">
@@ -348,7 +350,7 @@ function Attraction() {
                                     Review: {discussion.content}
                                 </div>
                                 <div className="discussion-ration discussion-part">
-                                    Overall: {discussion.rating}
+                                    Overall: {renderStars(discussion.rating)}
                                 </div>
                                 <img
                                     src={`data:image/png;base64,${discussion.images[currentDiscussionImageIndex]}`}

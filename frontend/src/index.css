@@ -34,6 +34,10 @@
   align-items: flex-start;
 }
 
+.discussion-card img {
+  width: 30%;
+}
+
 .popup {
   background-color: white;
   border: 1px solid #d1d1d1; /* Grey border */
@@ -56,6 +60,10 @@
 
 .discussion-card {
   margin: 10px 0 20px 0;
+}
+
+.discussion-card img {
+
 }
 
 .leave-discussion-container {
@@ -98,7 +106,7 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  /*justify-content: space-between;*/
   position: relative;
   transition: transform 0.2s;
 }
@@ -109,11 +117,12 @@
 }
 
 .my-attraction-card {
+  margin: 0 12px;
   min-height: 880px;
   max-height: 880px;
 }
 
-.attraction-card:hover {
+.attractions-attraction-card:hover {
   transform: translateY(-5px); /* Adds a subtle hover effect */
 }
 
@@ -132,6 +141,15 @@
   font-size: 2rem; /* Adjust as needed */
   cursor: pointer;
   border-radius: 60px; /* Round buttons */
+  visibility: hidden;
+  transition: opacity 2s ease, transform 0.2s;
+}
+
+/*TODO: correct smooth transition on arrows*/
+.attraction-card:hover .image-nav-button {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1.05)
 }
 
 .image-nav-button:hover {
@@ -184,7 +202,6 @@
 }
 
 .learn-more {
-  position: absolute;
   right: 10px;
 }
 
@@ -193,10 +210,18 @@
   left: 10px;
 }
 
+.edit button a {
+  text-decoration: none;
+}
+
 .learn-more-button, .save-changes-button, .grafana-redirect {
   border-radius: 4px;
   background: lightgreen;
   width: 120px;
+}
+
+.learn-more-button a {
+  color: black;
 }
 
 .grafana-redirect a {
@@ -229,11 +254,16 @@
 
 .rating, .contact-info {
   position: absolute;
-  bottom: 30px;
+  bottom: 60px;
   right: 10px;
   font-size: 14px;
   color: #333;
   text-align: right;
+}
+
+.rating {
+  position: absolute;
+  bottom: 30px;
 }
 
 .star {
@@ -291,13 +321,12 @@
   margin-top: 72px;
 }
 
-.delete-button {
-  text-align: center;
+.account-buttons {
+  margin: 6px;
 }
 
-.delete-button button{
-  background: red;
-  border-radius: 4px;
+.delete-button {
+  text-align: center;
 }
 
 .settings {

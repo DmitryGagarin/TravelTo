@@ -78,7 +78,7 @@ function Header() {
                     )}
                 </p>
                 <button onClick={handleLiked} className="btn btn-light">
-                    <FaHeart size={24}/>
+                    <FaHeart size={24} color="pink"/>
                 </button>
                 <button onClick={handleAccountClick} className="btn btn-light">
                     <FaUserAlt size={24}/>

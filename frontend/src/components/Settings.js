@@ -23,7 +23,6 @@ function Settings() {
                     }
                 })
 
-                // setResponse(response.data)
                 const roles = response.data.role.map(role => role.authority)
                 setIsOwner(roles.includes("ROLE_OWNER"))
                 setIsAdmin(roles.includes("ROLE_ADMIN"))

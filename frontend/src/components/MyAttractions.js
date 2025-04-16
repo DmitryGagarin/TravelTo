@@ -73,9 +73,6 @@ function MyAttractions() {
                                 />
                                 <div className="attraction-type">{attraction.type}</div>
                             </div>
-                            <div className="rating">
-                                {renderStars(attraction.rating)}
-                            </div>
                             <div className="contact-info">
                                 <p>
                                     Website:{" "}
@@ -84,18 +81,21 @@ function MyAttractions() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        Visit
+                                        {attraction.website}
                                     </a>
                                 </p>
                                 <p>Phone: {attraction.phone}</p>
                             </div>
+                            <div className="rating">
+                                {renderStars(attraction.rating)}
+                            </div>
                             <div className="edit">
-                                <button className="edit-button">
+                                <button className="edit-button btn btn-info">
                                     <Link to={`/attraction/edit/${attraction.name}`}>Edit</Link>
                                 </button>
                             </div>
                             <div className="learn-more learn-more-my">
-                                <button className="learn-more-button">
+                                <button className="learn-more-button btn btn-success">
                                     <Link to={`/attraction/${attraction.name}`}>Learn More</Link>
                                 </button>
                             </div>
@@ -107,21 +107,24 @@ function MyAttractions() {
                                 <p>From: {attraction.openTime}</p>
                                 <p>To: {attraction.closeTime}</p>
                             </div>
-                            <div className="delete-button">
-                                <button onClick={() => {
-                                    setAttractionName(attraction.name)
-                                }}>Delete</button>
+                            <div className="delete-button ">
+                                <button
+                                    onClick={() => setAttractionName(attraction.name)}
+                                    className={"btn btn-danger mt-3"}
+                                >
+                                    Delete
+                                </button>
                             </div>
                             <div className="status" style={getAttractionStatusStyle(attraction.status)}>
                                 <div className="attraction-status">
                                     {attraction.status === 'published' ? (
-                                        <>
+                                        <div className="attraction-status text-success">
                                             Published
-                                        </>
+                                        </div>
                                     ) : (
-                                        <>
+                                        <div className="attraction-status text-warning">
                                             On Moderation
-                                        </>
+                                        </div>
                                     )
                                     }
                                 </div>

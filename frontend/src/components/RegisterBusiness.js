@@ -117,6 +117,7 @@ function RegisterBusiness() {
         }
     }
 
+    // TODO: add preview
     return (
         <div className="register-business-main-container">
             <div className="register-business-container">
