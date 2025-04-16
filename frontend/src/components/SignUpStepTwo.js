@@ -4,6 +4,9 @@ import {Link, useNavigate} from 'react-router-dom'
 import {MDBContainer, MDBInput} from 'mdb-react-ui-kit'
 
 function SignUpStepOne() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+    const FRONTEND = process.env.REACT_APP_FRONTEND_URL
+
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
     const [error, setError] = useState('')
@@ -12,7 +15,7 @@ function SignUpStepOne() {
 
     const handleSignup = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/signup/name', {
+            const response = await axios.post(`${BACKEND}/signup/name`, {
                 name,
                 surname
             }, {
@@ -32,7 +35,7 @@ function SignUpStepOne() {
                 )
             } else {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin"
+                    window.location.href = `${FRONTEND}/signin`
                 }
                 console.error('Signup failed:', error.message)
                 setError('Signup failed, please try again.')

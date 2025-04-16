@@ -4,6 +4,9 @@ import {Link} from "react-router-dom"
 import {MDBContainer, MDBInput} from "mdb-react-ui-kit"
 
 function ResetPassword() {
+
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+
     const [email, setEmail] = useState('')
     const [error, setError] = useState('')
 
@@ -11,7 +14,7 @@ function ResetPassword() {
 
     const resetPassword = async () => {
         try {
-            await axios.post('http://localhost:8080/signin/reset-password',
+            await axios.post(`${BACKEND}/signin/reset-password`,
                 {email}
             )
             setEmailSent(true)

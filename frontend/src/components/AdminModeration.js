@@ -7,6 +7,10 @@ import {Link} from "react-router-dom";
 
 const AdminModeration = () => {
 
+    const GRAFANA_URL = process.env.REACT_APP_GRAFANA_URL
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+    const FRONTEND = process.env.REACT_APP_FRONTEND_URL
+
     const [attractions, setAttractions] = useState([])
     const [attractionStatus, setAttractionStatus] = useState('on_moderation')
     const [attractionName, setAttractionName] = useState('')
@@ -17,7 +21,7 @@ const AdminModeration = () => {
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/admin/moderation/${attractionStatus}`,
+                const response = await axios.get(`${BACKEND}/admin/moderation/${attractionStatus}`,
                     {
                         headers: {
                             'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`
@@ -26,7 +30,7 @@ const AdminModeration = () => {
                 setAttractions(response?.data?._embedded?.attractionModelList || [])
             } catch (error) {
                 if (error.response && error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin"
+                    window.location.href = `${FRONTEND}/signin`
                 }
             }
         }
@@ -36,7 +40,7 @@ const AdminModeration = () => {
     useEffect(() => {
         const applyModeration = async () => {
             try {
-                await axios.post(`http://localhost:8080/admin/apply-moderation/${attractionName}`, {},
+                await axios.post(`${BACKEND}/admin/apply-moderation/${attractionName}`, {},
                     {
                         headers: {
                             'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`,
@@ -44,7 +48,7 @@ const AdminModeration = () => {
                     })
             } catch (error) {
                 if (error.response && error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin"
+                    window.location.href = `${FRONTEND}/signin`
                 } else {
                     console.log(error.response?.status)
                 }
@@ -172,7 +176,7 @@ const AdminModeration = () => {
                         <button
                             type="button"
                             className="btn btn-primary mt-3 admin-button"
-                            style={onModerationPage ? {backgroundColor: '#007bff'} : {backgroundColor: 'red'}} // Published button color
+                            style={onModerationPage ? {backgroundColor: '#007bff'} : {backgroundColor: 'red'}}
                             onClick={() => {
                                 setAttractionStatus('published');
                                 setOnModerationPage(false);
@@ -183,7 +187,7 @@ const AdminModeration = () => {
                         <button
                             type="button"
                             className="btn btn-primary mt-3 admin-button"
-                            style={onModerationPage ? {backgroundColor: 'red'} : {backgroundColor: '#007bff'}} // On Moderation button color
+                            style={onModerationPage ? {backgroundColor: 'red'} : {backgroundColor: '#007bff'}}
                             onClick={() => {
                                 setAttractionStatus('on_moderation');
                                 setOnModerationPage(true);

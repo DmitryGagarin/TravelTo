@@ -6,6 +6,9 @@ import {getImageFormat} from "../utils/ImageUtils"
 import {getAttractionStatusStyle, renderStars} from "../utils/StyleUtils"
 
 function MyAttractions() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+    const FRONTEND = process.env.REACT_APP_FRONTEND_URL
+
     const [attractions, setAttractions] = useState([])
     const [attractionName, setAttractionName] = useState(null) 
 
@@ -14,7 +17,7 @@ function MyAttractions() {
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/attraction/my", {
+                const response = await axios.get(`${BACKEND}/attraction/my`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -22,7 +25,7 @@ function MyAttractions() {
                 setAttractions(response.data._embedded.attractionModelList)
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin"
+                    window.location.href = `${FRONTEND}/signin`
                 }
                 console.error("Error fetching attractions:", error)
             }
@@ -32,7 +35,7 @@ function MyAttractions() {
 
     const handleDelete = async (name) => {
         try {
-            await axios.post(`http://localhost:8080/attraction/delete/${name}`, {}, {
+            await axios.post(`${BACKEND}/attraction/delete/${name}`, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -40,7 +43,7 @@ function MyAttractions() {
             window.location.reload()
         } catch (error) {
             if (error.response.status === 401) {
-                window.location.href = "http://localhost:4000/signin"
+                window.location.href = `${FRONTEND}/signin`
             }
             console.error("Error deleting attraction:", error)
         }

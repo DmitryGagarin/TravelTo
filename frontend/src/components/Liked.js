@@ -8,8 +8,9 @@ function Liked() {
     const [likes, setLikes] = useState([])
     const [error, setError] = useState('')
 
+    // TODO: TypeError: Cannot read properties of undefined (reading 'status')
     useEffect(() => {
-        const token = JSON.parse(localStorage.getItem('user')).accessToken
+    const token = JSON.parse(localStorage.getItem('user')).accessToken
         const fetchLikes = async () => {
             try {
                 const response = await axios.get("http://localhost:8080/like", {
@@ -27,9 +28,9 @@ function Liked() {
                             .join(', ')
                     )
                 } else {
-                    if (error.response.status === 401) {
-                        window.location.href = "http://localhost:4000/signin"
-                    }
+                    // if (error.response.status === 401) {
+                    //     window.location.href = "http://localhost:4000/signin"
+                    // }
                     setError('Business registration failed, please try again.')
                 }
             }
@@ -48,8 +49,9 @@ function Liked() {
         )
     }
 
+    console.log(likes)
 
-
+    // TODO: add image slider
     return (
         <div>
             <Header/>

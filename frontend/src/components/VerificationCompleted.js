@@ -4,19 +4,22 @@ import {MDBContainer} from "mdb-react-ui-kit"
 import axios from "axios"
 
 function VerificationCompleted() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+
     const location = useLocation()
     const queryParams = new URLSearchParams(location.search)
 
     const email = queryParams.get('email')
     const token = queryParams.get('token')
 
-    const navigate = useNavigate()  // Updated for consistency
+    const navigate = useNavigate()
 
     console.log("Email:", email)
     console.log("Token:", token)
 
     const [isVerifiedCorrectly, setIsVerifiedCorrectly] = useState(false)
 
+    // TODO: add screens when failed
     useEffect(() => {
         const checkAccountVerification = async () => {
             try {
@@ -30,26 +33,25 @@ function VerificationCompleted() {
                 const encodedToken = encodeURIComponent(token)
 
                 const response = await axios.get(
-                    `http://localhost:8080/signin/verification-completed?email=${encodedEmail}&token=${encodedToken}`
+                    `${BACKEND}/signin/verification-completed?email=${encodedEmail}&token=${encodedToken}`
                 )
 
-                if (response.data.success) {  // Assuming the response includes a 'success' key
+                if (response.data.success) {
                     setIsVerifiedCorrectly(true)
-                    navigate('/signin')  // Redirect after successful verification
+                    navigate('/signin')
                 } else {
-                    setIsVerifiedCorrectly(false)  // Handle unsuccessful verification
+                    setIsVerifiedCorrectly(false)
                 }
             } catch (error) {
                 console.error("Error verifying account:", error)
-                setIsVerifiedCorrectly(false)  // Handle errors gracefully
+                setIsVerifiedCorrectly(false)
             }
         }
 
-        // If both email and token are available, proceed with the verification check
         if (email && token) {
             checkAccountVerification()
         } else {
-            setIsVerifiedCorrectly(false)  // If email or token is missing, show failure
+            setIsVerifiedCorrectly(false)
         }
     }, [email, token, navigate])
 

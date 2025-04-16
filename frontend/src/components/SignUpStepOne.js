@@ -4,6 +4,8 @@ import {Link, useNavigate} from 'react-router-dom'
 import {MDBContainer, MDBInput} from 'mdb-react-ui-kit'
 
 function SignUpStepOne() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -13,7 +15,7 @@ function SignUpStepOne() {
     const handleSignup = async () => {
 
         try {
-            const response = await axios.post('http://localhost:8080/signup', {
+            const response = await axios.post(`${BACKEND}/signup`, {
                 email,
                 password
             }, {

@@ -4,6 +4,8 @@ import axios from "axios"
 import {MDBContainer, MDBInput} from "mdb-react-ui-kit"
 
 function ResetPasswordCompletion() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+
     const location = useLocation()
     const queryParams = new URLSearchParams(location.search)
 
@@ -23,7 +25,7 @@ function ResetPasswordCompletion() {
         }
 
         try {
-            await axios.post(`http://localhost:8080/signin/reset-password-completion`, {
+            await axios.post(`${BACKEND}/signin/reset-password-completion`, {
                 email,
                 token,
                 password: passwordFirst

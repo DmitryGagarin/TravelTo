@@ -4,6 +4,8 @@ import {Link, useNavigate} from 'react-router-dom'
 import {MDBContainer, MDBInput} from 'mdb-react-ui-kit'
 
 function LoginPage() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -17,7 +19,7 @@ function LoginPage() {
                 return
             }
 
-            const response = await axios.post('http://localhost:8080/signin', { email, password }, {
+            const response = await axios.post(`${BACKEND}/signin`, { email, password }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

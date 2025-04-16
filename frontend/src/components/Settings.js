@@ -5,10 +5,10 @@ import axios from "axios"
 
 function Settings() {
 
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+
     const [isAdmin, setIsAdmin] = useState(false)
     const [isOwner, setIsOwner] = useState(false)
-
-    // const [response, setResponse] = useState([])
 
     const authUser = JSON.parse(localStorage.getItem('user'))
 
@@ -17,7 +17,7 @@ function Settings() {
     useEffect(() => {
         const getUser = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/user/get', {
+                const response = await axios.get(`${BACKEND}/user/get`, {
                     headers: {
                         'Authorization': `Bearer ${authUser.accessToken}`
                     }
@@ -35,10 +35,6 @@ function Settings() {
 
         getUser()
     }, [authUser.accessToken])
-
-    // console.log("isAdmin", isAdmin)
-    // console.log("isOwner", isOwner)
-    // console.log("response", response.data)
 
     const handleAccount = () => {
         history('/settings/account')

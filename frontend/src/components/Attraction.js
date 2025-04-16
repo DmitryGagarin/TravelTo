@@ -8,7 +8,10 @@ import {getAttractionCardStyle, renderStars} from '../utils/StyleUtils.js'
 import {getImageFormat} from "../utils/ImageUtils"
 
 function Attraction() {
-    const API_KEY = process.env.REACT_APP_YANDEX_MAP_API_KEY
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+    const FRONTEND = process.env.REACT_APP_FRONTEND_URL
+
+    const YANDEX_MAP_API_KEY = process.env.REACT_APP_YANDEX_MAP_API_KEY
     const domain = "https://geocode-maps.yandex.ru/v1/"
 
     const {name} = useParams()
@@ -43,7 +46,7 @@ function Attraction() {
             try {
                 const token = JSON.parse(localStorage.getItem('user')).accessToken
                 const response =
-                    await axios.get(`http://localhost:8080/attraction/${name}`, {
+                    await axios.get(`${BACKEND}/attraction/${name}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                         },
@@ -52,7 +55,7 @@ function Attraction() {
                 setAttractionUuid(response.data.uuid)
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin"
+                    window.location.href = `${FRONTEND}/signin`
                 }
                 setError('Failed to fetch attraction data')
             }
@@ -64,7 +67,7 @@ function Attraction() {
             try {
                 const token = JSON.parse(localStorage.getItem('user')).accessToken
                 const response =
-                    await axios.get(`http://localhost:8080/attraction-discussion/${attractionUuid}`, {
+                    await axios.get(`${BACKEND}/attraction-discussion/${attractionUuid}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -141,7 +144,7 @@ function Attraction() {
             }
 
             await axios.post(
-                `http://localhost:8080/attraction-discussion/create/${attractionUuid}`,
+                `${BACKEND}/attraction-discussion/create/${attractionUuid}`,
                 formData,
                 {
                     headers: {
@@ -161,7 +164,7 @@ function Attraction() {
                 )
             } else {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin"
+                    window.location.href = `${FRONTEND}/signin`
                 }
                 setError('Discussion registration failed, please try again.')
             }
@@ -169,13 +172,11 @@ function Attraction() {
     }
 
     const handleNextImage = (index, images) => {
-        const newIndex = (index + 1) % images.length
-        return newIndex
+        return (index + 1) % images.length
     }
 
     const handlePrevImage = (index, images) => {
-        const newIndex = (index - 1 + images.length) % images.length
-        return newIndex
+        return (index - 1 + images.length) % images.length
     }
 
     const handleImageChange = (e) => {

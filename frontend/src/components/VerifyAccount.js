@@ -4,13 +4,14 @@ import {Link, useParams} from "react-router-dom"
 import axios from "axios"
 
 function VerifyAccount() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
 
     const {email} = useParams('')
 
     useEffect(() => {
         const sendVerificationEmail = async () => {
             try {
-                await axios.post(`http://localhost:8080/signin/verify-account/${email}`)
+                await axios.post(`${BACKEND}/signin/verify-account/${email}`)
             } catch (error) {
                 console.log(error)
             }

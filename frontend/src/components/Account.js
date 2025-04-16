@@ -6,6 +6,9 @@ import Settings from "./Settings"
 import Inputmask from "inputmask"
 
 function Account() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+    const FRONTEND = process.env.REACT_APP_FRONTEND_URL
+
     const authUser = JSON.parse(localStorage.getItem('user'))
 
     const [name, setName] = useState(authUser.name)
@@ -26,7 +29,7 @@ function Account() {
 
     const handleChange = async () => {
         try {
-            const response = await axios.post("http://localhost:8080/setting/save-changes",
+            const response = await axios.post(`${BACKEND}/setting/save-changes`,
                 {
                     name, surname, email, phone
                 }, {
@@ -41,7 +44,7 @@ function Account() {
             window.location.reload()
         } catch (error) {
             if (error.response.status === 401) {
-                window.location.href = "http://localhost:4000/signin"
+                window.location.href = `${FRONTEND}/signin`
             }
             console.log(error)
             setError("Failed to change data")
@@ -53,7 +56,7 @@ function Account() {
 
         const handleDelete = async () => {
             try {
-                await axios.post("http://localhost:8080/user/delete", {}, {
+                await axios.post(`${BACKEND}/user/delete`, {}, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${authUser.accessToken}`

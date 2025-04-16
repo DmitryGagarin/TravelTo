@@ -282,7 +282,8 @@ public class UserServiceImpl implements UserService {
             .setEmail(user.getEmail())
             .setName(user.getName())
             .setSurname(user.getSurname())
-            .setPhone(user.getPhone());
+            .setPhone(user.getPhone())
+            .setAuthorities(userToRoleService.getAllUserRolesByUserId(user.getId()));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
             authUser,

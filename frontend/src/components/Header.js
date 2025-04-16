@@ -5,6 +5,9 @@ import axios from "axios"
 
 function Header() {
 
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+    const FRONTEND = process.env.REACT_APP_FRONTEND_URL
+
     const [userName, setUserName] = useState('')
     const authUser = JSON.parse(localStorage.getItem('user'))
 
@@ -12,7 +15,7 @@ function Header() {
         const getUser = async () => {
             if (authUser) {
                 try {
-                    const response = await axios.get('http://localhost:8080/user/get', {
+                    const response = await axios.get(`${BACKEND}/user/get`, {
                         headers: {
                             'Authorization': `Bearer ${authUser.accessToken}`
                         }

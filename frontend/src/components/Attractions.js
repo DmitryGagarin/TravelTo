@@ -8,6 +8,9 @@ import {getAttractionCardStyle, renderStars} from "../utils/StyleUtils"
 import {getImageFormat} from "../utils/ImageUtils"
 
 function Attractions() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+    const FRONTEND = process.env.REACT_APP_FRONTEND_URL
+
     const [attractions, setAttractions] = useState([])
     const [types, setTypes] = useState([])
     const [likedAttraction, setLikedAttraction] = useState(null)
@@ -22,7 +25,7 @@ function Attractions() {
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/attraction')
+                const response = await axios.get(`${BACKEND}/attraction`)
                 const attractionsData = response?.data?._embedded?.attractionModelList
                 if (Array.isArray(attractionsData)) {
                     const publishedAttractions = attractionsData.filter(
@@ -47,14 +50,15 @@ function Attractions() {
         if (likedAttraction) {
             const handleLike = async (name) => {
                 try {
-                    await axios.post(`http://localhost:8080/like/add/${name}`, {}, {
+                    await axios.post(`${BACKEND}/like/add/${name}`, {}, {
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
                         },
                     })
                 } catch (error) {
                     if (error.response.status === 401) {
-                        window.location.href = 'http://localhost:4000/signin'
+                        window.location.href = `${FRONTEND}/signin`
                     }
                     console.error('Error liking attraction:', error)
                 }

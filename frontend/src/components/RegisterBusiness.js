@@ -8,6 +8,9 @@ import "react-phone-number-input/style.css"
 
 function RegisterBusiness() {
 
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+    const FRONTEND = process.env.REACT_APP_FRONTEND_URL
+
     const [ownerTelegram, setOwnerTelegram] = useState('')
 
     const [attractionName, setAttractionName] = useState('')
@@ -86,7 +89,7 @@ function RegisterBusiness() {
             }
 
             await axios.post(
-                "http://localhost:8080/attraction/register-business",
+                `${BACKEND}/attraction/register-business`,
                 formData,
                 {
                     headers: {
@@ -107,7 +110,7 @@ function RegisterBusiness() {
                 )
             } else {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin"
+                    window.location.href = `${FRONTEND}/signin`
                 }
                 setError('Business registration failed, please try again.')
             }
