@@ -66,7 +66,8 @@ public class WebSecurityConfiguration {
                     "/attraction",
                     // TODO: как то настроить роли для допуска
                     "/swagger-ui/**",
-                    "/v3/**")
+                    "/v3/**",
+                    "/actuator/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

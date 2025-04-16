@@ -9,4 +9,5 @@ public class URLConstants {
     public static final String ATTRACTIONS = "/attraction";
     public static final String SWAGGER = "/swagger-ui";
     public static final String SWAGGER2 = "/v3";
+    public static final String ACTUATOR = "/actuator";
 }

@@ -8,6 +8,7 @@ ports:
 <li>redis = 6379 </li>
 <li>postgres = 5431 </li>
 <li>prometheus = 9090</li>
+<li>actuator/prometheus = 8081</li>
 </ul>
 
 grafana credentials: admin admin

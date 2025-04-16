@@ -48,6 +48,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             || requestURI.equals(URLConstants.ATTRACTIONS)
             || requestURI.startsWith(URLConstants.SWAGGER)
             || requestURI.startsWith(URLConstants.SWAGGER2)
+            || requestURI.startsWith(URLConstants.ACTUATOR)
         ) {
             filterChain.doFilter(request, response);
             return;
