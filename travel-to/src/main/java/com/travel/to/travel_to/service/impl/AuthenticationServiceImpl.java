@@ -3,6 +3,7 @@ package com.travel.to.travel_to.service.impl;
 import com.travel.to.travel_to.configuration.CustomAuthenticationProvider;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.BaseUser;
+import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.exception.exception.UserNotVerifiedException;
 import com.travel.to.travel_to.form.UserRefreshTokenForm;
 import com.travel.to.travel_to.form.UserSignInForm;
@@ -55,29 +56,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             .orElseThrow(() -> new UsernameNotFoundException("User not found"))
             .getId();
 
+        User user = userService.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
         Set<GrantedAuthority> authorities = userToRoleService.getAllUserRolesByUserId(userId);
 
         AuthUser authUser = new AuthUser();
-        authUser.setEmail(userSignInForm.getEmail());
-        authUser.setPassword(userSignInForm.getPassword());
-        authUser.setAuthorities(authorities);
-
         authUser
-            .setName(
-                userService.findByEmail(userSignInForm.getEmail())
-                    .map(BaseUser::getName)
-                    .orElse(null)
-            )
-            .setSurname(
-                userService.findByEmail(userSignInForm.getEmail())
-                    .map(BaseUser::getSurname)
-                    .orElse(null)
-            )
-            .setVerified(
-                userService.findByEmail(userSignInForm.getEmail())
-                    .map(BaseUser::getVerified)
-                    .orElse(false)
-            );
+            .setEmail(userSignInForm.getEmail())
+            .setPassword(userSignInForm.getPassword())
+            .setAuthorities(authorities)
+            .setPhone(user.getPhone())
+            .setName(user.getName())
+            .setSurname(user.getSurname())
+            .setVerified(user.getVerified());
 
         // TODO: correct redirect in case of not verified
         if (!authUser.getVerified() || authUser.getVerified() == null) {

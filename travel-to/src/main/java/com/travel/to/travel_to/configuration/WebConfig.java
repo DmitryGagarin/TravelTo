@@ -23,9 +23,6 @@ public class WebConfig implements WebMvcConfigurer {
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setCacheSeconds(3600);
 
-//        // Log the loaded messages for debugging
-//        String[] propertyFiles = {"messages/messages.properties", "messages/messages_en_US.properties"};
-//        for (String file : propertyFiles) {
 //            System.out.println(file);
 //            Properties properties = new Properties();
 //            try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(file)) {
@@ -49,8 +46,6 @@ public class WebConfig implements WebMvcConfigurer {
     public LocalValidatorFactoryBean getValidator(MessageSource messageSource) {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource);
-//        System.out.println("LocalValidatorFactoryBean initialized with message source: " + bean.getValidationPropertyMap());
-//        System.out.println("MessageSource class: " + messageSource.getClass().getName());
         return bean;
     }
 

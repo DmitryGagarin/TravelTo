@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -39,7 +40,11 @@ public class AttractionCacheUtil extends CacheUtilBase<Attraction> {
 
     @Override
     public List<Attraction> findAll() {
-        return hashOperations.values(CacheKeys.ATTRACTIONS);
+        List<Attraction> attractions = hashOperations.values(CacheKeys.ATTRACTIONS);
+        attractions.sort(
+            Comparator.comparing(Attraction::getPriority).reversed()
+        );
+        return attractions;
     }
 
     @Override

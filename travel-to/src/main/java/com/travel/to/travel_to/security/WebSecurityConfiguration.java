@@ -63,7 +63,7 @@ public class WebSecurityConfiguration {
                     "/signin/**",
                     "/signup/**",
                     "/logout",
-                    "/attraction",
+                    "/attraction/published",
                     // TODO: как то настроить роли для допуска
                     "/swagger-ui/**",
                     "/v3/**",

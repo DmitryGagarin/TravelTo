@@ -78,10 +78,13 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                     .setPassword(String.valueOf(authUserMap.get("password")))
                     .setVerified((Boolean) authUserMap.get("verified"));
 
-                // TODO: проверка на подтверждение
-                if (authUser.getVerified() == Boolean.FALSE) {
+//                // TODO: проверка на подтверждение
+//                if (authUser.getVerified() == Boolean.FALSE) {
+//                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                    response.setHeader("Location", "http://localhost:4000/");
+//                    return;
+//                }
 
-                }
 
                 String authorities = String.valueOf(authUserMap.get("roles"));
                 List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
@@ -95,7 +98,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (ExpiredJwtException e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // return 401 status code
                 response.setHeader("Location", "http://localhost:4000/");
                 return;
             } catch (Exception e) {

@@ -1,8 +1,7 @@
 package com.travel.to.travel_to.entity.attraction;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.entity.common.UuidAbleTimedEntity;
+import com.travel.to.travel_to.entity.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

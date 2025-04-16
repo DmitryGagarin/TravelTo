@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface AttractionService {
 
     @NotNull
-    List<Attraction> findAll();
+    List<Attraction> findAllByPriorityDesc();
 
     @NotNull
     List<Attraction> findAllByStatus(@NotNull String status);

@@ -37,7 +37,8 @@ public class AttractionServiceImpl implements AttractionService {
         AttractionRepository attractionRepository,
         UserService userService,
         AttractionImageService attractionImageService,
-        AttractionCacheUtil attractionCacheUtil) {
+        AttractionCacheUtil attractionCacheUtil
+    ) {
         this.attractionRepository = attractionRepository;
         this.userService = userService;
         this.attractionImageService = attractionImageService;
@@ -46,8 +47,8 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     @NotNull
-    public List<Attraction> findAll() {
-        return attractionRepository.findAll();
+    public List<Attraction> findAllByPriorityDesc() {
+        return attractionRepository.findAllByOrderByPriorityDesc();
     }
 
     @Override
@@ -99,7 +100,8 @@ public class AttractionServiceImpl implements AttractionService {
             .setType(attractionCreateForm.getAttractionType())
             .setRating(DefaultInitialValues.INITIAL_ATTRACTION_RATING)
             .setOwner(userService.getByUuid(authUser.getUuid()))
-            .setStatus(AttractionStatus.on_moderation.name());
+            .setStatus(AttractionStatus.on_moderation.name())
+            .setPriority(DefaultInitialValues.INITIAL_ATTRACTION_PRIORITY);
         attractionRepository.save(attraction);
         attractionCacheUtil.save(attraction);
 
@@ -189,6 +191,7 @@ public class AttractionServiceImpl implements AttractionService {
         @NotNull AuthUser authUser
     ) {
         attractionRepository.delete(getByName(name));
+        attractionCacheUtil.deleteById(getByName(name).getId());
         if (findAllByOwner(authUser).isEmpty()) {
             User user = userService.getByUuid(authUser.getUuid());
             userService.updateUserRole(authUser, Roles.USER);

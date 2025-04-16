@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -77,25 +76,21 @@ public class AttractionController {
         binder.addValidators(attractionEditFormValidator);
     }
 
-    // TODO: переписать маппинг на /get или /all или че-то такое, путаница происходит
-    // TODO: в идеале бы еще изобрести какой то механизм который будет картинки сжимать, 5мб пайлоуда очень много
-    // TODO: + return only published, not all
-    @GetMapping
-    public PagedModel<AttractionModel> getAttractions() {
+    @GetMapping("/published")
+    public PagedModel<AttractionModel> getPublishedAttractions() {
         List<Attraction> attractions;
 
         if (Objects.isNull(attractionCacheUtil.findAll()) || attractionCacheUtil.findAll().isEmpty()) {
-            attractions = attractionService.findAll();
+            attractions = attractionService.findAllByPriorityDesc();
             attractionCacheUtil.saveAll(attractions);
         } else {
             attractions = attractionCacheUtil.findAll();
         }
 
-        List<AttractionModel> attractionModels = new ArrayList<>();
-        for (Attraction attraction : attractions) {
-            AttractionModel attractionModel = attractionModelAssembler.toModel(attraction);
-            attractionModels.add(attractionModel);
-        }
+        List<AttractionModel> attractionModels = attractions.stream()
+            .filter(attraction -> "published".equals(attraction.getStatus()))
+            .map(attractionModelAssembler::toModel)
+            .collect(Collectors.toList());
 
         int pageSize = attractionModels.size();
         int currentPage = 0;

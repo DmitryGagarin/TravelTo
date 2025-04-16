@@ -3,6 +3,7 @@ package com.travel.to.travel_to.security.jwt;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -21,14 +22,7 @@ public class JwtProvider {
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
         String roles = populateAuthorities(authorities);
 
-        Map<String, Object> authUserMap = new HashMap<>();
-        authUserMap.put("uuid", ((AuthUser) auth.getPrincipal()).getUuid());
-        authUserMap.put("email", ((AuthUser) auth.getPrincipal()).getEmail());
-        authUserMap.put("name", ((AuthUser) auth.getPrincipal()).getName());
-        authUserMap.put("surname", ((AuthUser) auth.getPrincipal()).getSurname());
-        authUserMap.put("password", ((AuthUser) auth.getPrincipal()).getPassword());
-        authUserMap.put("verified", ((AuthUser) auth.getPrincipal()).getVerified());
-        authUserMap.put("roles", roles);
+        Map<String, Object> authUserMap = extractAuthUserFromToken(auth, roles);
 
         return Jwts.builder()
                 .issuedAt(new Date())
@@ -58,6 +52,20 @@ public class JwtProvider {
             .signWith(key)
             .compact();
     }
+
+    @NotNull
+    private static Map<String, Object> extractAuthUserFromToken(Authentication auth, String roles) {
+        Map<String, Object> authUserMap = new HashMap<>();
+        authUserMap.put("uuid", ((AuthUser) auth.getPrincipal()).getUuid());
+        authUserMap.put("email", ((AuthUser) auth.getPrincipal()).getEmail());
+        authUserMap.put("name", ((AuthUser) auth.getPrincipal()).getName());
+        authUserMap.put("surname", ((AuthUser) auth.getPrincipal()).getSurname());
+        authUserMap.put("password", ((AuthUser) auth.getPrincipal()).getPassword());
+        authUserMap.put("verified", ((AuthUser) auth.getPrincipal()).getVerified());
+        authUserMap.put("roles", roles);
+        return authUserMap;
+    }
+
 
     private static String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
         Set<String> auths = new HashSet<>();

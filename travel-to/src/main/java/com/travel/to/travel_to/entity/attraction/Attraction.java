@@ -28,6 +28,7 @@ public class Attraction extends UuidAbleEntity implements Serializable {
     private String closeTime;
     private Double rating;
     private String status;
+    private Integer priority;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
@@ -151,6 +152,15 @@ public class Attraction extends UuidAbleEntity implements Serializable {
 
     public Attraction setStatus(String status) {
         this.status = status;
+        return this;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public Attraction setPriority(Integer priority) {
+        this.priority = priority;
         return this;
     }
 }

@@ -1,6 +1,5 @@
 package com.travel.to.travel_to.cache;
 
-import com.travel.to.travel_to.constants.CacheKeys;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

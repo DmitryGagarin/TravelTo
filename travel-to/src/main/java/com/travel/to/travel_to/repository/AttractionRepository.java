@@ -12,8 +12,9 @@ import java.util.Optional;
 @Repository
 public interface AttractionRepository extends JpaRepository<Attraction, Long> {
 
-    @NotNull
     List<Attraction> findAllByStatus(@NotNull String status);
+
+    List<Attraction> findAllByOrderByPriorityDesc();
 
     @NotNull
     @Query(value = "SELECT * FROM Attraction a WHERE a.owner_id = :ownerId",

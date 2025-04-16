@@ -25,15 +25,11 @@ function Attractions() {
     useEffect(() => {
         const fetchAttractions = async () => {
             try {
-                const response = await axios.get(`${BACKEND}/attraction`)
+                const response = await axios.get(`${BACKEND}/attraction/published`)
                 const attractionsData = response?.data?._embedded?.attractionModelList
                 if (Array.isArray(attractionsData)) {
-                    const publishedAttractions = attractionsData.filter(
-                        (attraction) => attraction?.status === 'published'
-                    )
-                    setAttractions(publishedAttractions)
-
-                    const attractionTypes = publishedAttractions.map((attraction) => attraction.type)
+                    setAttractions(attractionsData)
+                    const attractionTypes = attractionsData.map((attraction) => attraction.type)
                     setTypes([...new Set(attractionTypes)])
                 } else {
                     setAttractions([])
@@ -73,10 +69,8 @@ function Attractions() {
     }
 
     const filteredAttractions = attractions.filter((attraction) => {
-        const matchesSearch =
-            attraction.name.toLowerCase().includes(searchQuery.toLowerCase())
-        const matchesType =
-            selectedTypes.length === 0 || selectedTypes.includes(attraction.type)
+        const matchesSearch = attraction.name.toLowerCase().includes(searchQuery.toLowerCase())
+        const matchesType = selectedTypes.length === 0 || selectedTypes.includes(attraction.type)
 
         return matchesSearch && matchesType
     })
