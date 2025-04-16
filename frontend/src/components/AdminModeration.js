@@ -3,10 +3,9 @@ import {getAttractionCardStyle} from "../utils/StyleUtils"
 import axios from "axios"
 import Settings from "./Settings"
 import {getImageFormat} from "../utils/ImageUtils"
-import {Link} from "react-router-dom";
+import {Link} from "react-router-dom"
 
 const AdminModeration = () => {
-
     const GRAFANA_URL = process.env.REACT_APP_GRAFANA_URL
     const BACKEND = process.env.REACT_APP_BACKEND_URL
     const FRONTEND = process.env.REACT_APP_FRONTEND_URL
@@ -178,8 +177,8 @@ const AdminModeration = () => {
                             className="btn btn-primary mt-3 admin-button"
                             style={onModerationPage ? {backgroundColor: '#007bff'} : {backgroundColor: 'red'}}
                             onClick={() => {
-                                setAttractionStatus('published');
-                                setOnModerationPage(false);
+                                setAttractionStatus('published')
+                                setOnModerationPage(false)
                             }}
                         >
                             Published
@@ -189,8 +188,8 @@ const AdminModeration = () => {
                             className="btn btn-primary mt-3 admin-button"
                             style={onModerationPage ? {backgroundColor: 'red'} : {backgroundColor: '#007bff'}}
                             onClick={() => {
-                                setAttractionStatus('on_moderation');
-                                setOnModerationPage(true);
+                                setAttractionStatus('on_moderation')
+                                setOnModerationPage(true)
                             }}
                         >
                             On Moderation

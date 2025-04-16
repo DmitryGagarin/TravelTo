@@ -10,7 +10,7 @@ export const getAttractionCardStyle = (type) => {
         case 'park':
             return {backgroundColor: 'green', color: 'white'}
         case 'religious':
-            return {backgroundColor: 'lightgray', color: 'black'}
+            return {backgroundColor: 'wheat', color: 'black'}
         case 'cafe':
             return {backgroundColor: 'wheat', color: 'black'}
         case 'restaurant':

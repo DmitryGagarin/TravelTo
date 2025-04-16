@@ -14,21 +14,11 @@ function VerificationCompleted() {
 
     const navigate = useNavigate()
 
-    console.log("Email:", email)
-    console.log("Token:", token)
-
     const [isVerifiedCorrectly, setIsVerifiedCorrectly] = useState(false)
 
-    // TODO: add screens when failed
     useEffect(() => {
         const checkAccountVerification = async () => {
             try {
-                // Make sure email and token are present
-                if (!email || !token) {
-                    console.log("Missing email or token")
-                    return
-                }
-
                 const encodedEmail = encodeURIComponent(email)
                 const encodedToken = encodeURIComponent(token)
 

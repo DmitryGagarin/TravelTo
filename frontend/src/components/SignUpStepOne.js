@@ -13,7 +13,6 @@ function SignUpStepOne() {
     const history = useNavigate()
 
     const handleSignup = async () => {
-
         try {
             const response = await axios.post(`${BACKEND}/signup`, {
                 email,

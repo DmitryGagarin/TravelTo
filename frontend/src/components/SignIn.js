@@ -11,7 +11,6 @@ function LoginPage() {
     const [error, setError] = useState('')
     const history = useNavigate()
 
-
     const handleLogin = async () => {
         try {
             if (!email || !password) {

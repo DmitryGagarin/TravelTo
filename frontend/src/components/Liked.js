@@ -28,9 +28,9 @@ function Liked() {
                             .join(', ')
                     )
                 } else {
-                    // if (error.response.status === 401) {
-                    //     window.location.href = "http://localhost:4000/signin"
-                    // }
+                    if (error.response.status === 401) {
+                        window.location.href = "http://localhost:4000/signin"
+                    }
                     setError('Business registration failed, please try again.')
                 }
             }

@@ -6,6 +6,9 @@ import {MdDelete} from "react-icons/md"
 import {useEffect, useState} from "react"
 
 function EditAttraction() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+    const FRONTEND = process.env.REACT_APP_FRONTEND_URL
+
     const {name} = useParams()
     const [attraction, setAttraction] = useState({
         website: "",
@@ -30,7 +33,7 @@ function EditAttraction() {
     useEffect(() => {
         const fetchAttraction = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/attraction/${name}`, {
+                const response = await axios.get(`${BACKEND}/attraction/${name}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -68,7 +71,7 @@ function EditAttraction() {
                 }))
             } catch (error) {
                 if (error.response.status === 401) {
-                    window.location.href = "http://localhost:4000/signin"
+                    window.location.href = `${FRONTEND}/signin`
                 }
                 setError('Failed to fetch attraction data')
             }
@@ -107,7 +110,7 @@ function EditAttraction() {
             })
 
             await axios.post(
-                `http://localhost:8080/attraction/edit/${name}`,
+                `${BACKEND}/attraction/edit/${name}`,
                 formData,
                 {
                     headers: {
@@ -161,7 +164,6 @@ function EditAttraction() {
             images: [...prev.images, ...files], // Append the files to the existing images array
         }))
     }
-
 
     return (
         <div>

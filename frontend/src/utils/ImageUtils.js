@@ -8,3 +8,12 @@ export const getImageFormat = (format) => {
         }
     }
 }
+
+export const handleNextImage = (index, images) => {
+    return (index + 1) % images.length
+}
+
+export const handlePrevImage = (index, images) => {
+    return (index - 1 + images.length) % images.length
+}
+

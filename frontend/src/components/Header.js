@@ -4,7 +4,6 @@ import {FaCog, FaHeart, FaUserAlt} from 'react-icons/fa'
 import axios from "axios"
 
 function Header() {
-
     const BACKEND = process.env.REACT_APP_BACKEND_URL
     const FRONTEND = process.env.REACT_APP_FRONTEND_URL
 

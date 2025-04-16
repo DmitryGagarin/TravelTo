@@ -42,7 +42,7 @@ public class AttractionCacheUtil extends CacheUtilBase<Attraction> {
     public List<Attraction> findAll() {
         List<Attraction> attractions = hashOperations.values(CacheKeys.ATTRACTIONS);
         attractions.sort(
-            Comparator.comparing(Attraction::getPriority).reversed()
+            Comparator.comparing(Attraction::getPriority, Comparator.nullsLast(Comparator.naturalOrder())).reversed()
         );
         return attractions;
     }

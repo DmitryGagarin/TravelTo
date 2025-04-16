@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import {MDBContainer, MDBInput} from "mdb-react-ui-kit"
 import axios from "axios"
-import {useNavigate} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import Settings from "./Settings"
 import Inputmask from "inputmask"
 import "react-phone-number-input/style.css"
+import {getAttractionCardStyle} from "../utils/StyleUtils"
 
 function RegisterBusiness() {
-
     const BACKEND = process.env.REACT_APP_BACKEND_URL
     const FRONTEND = process.env.REACT_APP_FRONTEND_URL
 
     const [ownerTelegram, setOwnerTelegram] = useState('')
-
     const [attractionName, setAttractionName] = useState('')
     const [description, setDescription] = useState('')
     const [city, setCity] = useState('')
@@ -25,6 +24,8 @@ function RegisterBusiness() {
     const [openTime, setOpenTime] = useState('')
     const [closeTime, setCloseTime] = useState('')
     const [error, setError] = useState('')
+
+    const [currentImageIndexes, setCurrentImageIndexes] = useState({})
 
     const history = useNavigate()
 
@@ -49,8 +50,11 @@ function RegisterBusiness() {
     }
 
     const handleImageChange = (e) => {
-        setImages([...e.target.files])
+        const filesArray = Array.from(e.target.files)
+        setImages(filesArray)
+        setCurrentImageIndexes(prev => ({...prev, [attractionName]: 0}))
     }
+
 
     const handleAttractionRegistration = async (e) => {
         e.preventDefault()
@@ -93,7 +97,7 @@ function RegisterBusiness() {
                 formData,
                 {
                     headers: {
-                        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`,
+                        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user'))?.accessToken}`,
                         'Content-Type': 'multipart/form-data'
                     }
                 }
@@ -117,7 +121,24 @@ function RegisterBusiness() {
         }
     }
 
-    // TODO: add preview
+    const handleNextImage = (currentIndex, imagesArray, name) => {
+        const nextIndex = (currentIndex + 1) % imagesArray.length
+
+        setCurrentImageIndexes(prev => ({
+            ...prev,
+            [name]: nextIndex
+        }))
+    }
+
+    const handlePrevImage = (currentIndex, imagesArray, name) => {
+        const prevIndex = (currentIndex - 1 + imagesArray.length) % imagesArray.length
+
+        setCurrentImageIndexes(prev => ({
+            ...prev,
+            [name]: prevIndex
+        }))
+    }
+
     return (
         <div className="register-business-main-container">
             <div className="register-business-container">
@@ -238,6 +259,69 @@ function RegisterBusiness() {
                     {error && <p className="text-danger">{error}</p>}
                     <button onClick={handleAttractionRegistration} disabled={!validateForm()}>Register business</button>
                 </MDBContainer>
+            </div>
+            <div className="attraction-preview">
+                <p style={{textAlign: 'center', fontSize: '32px'}}>Attraction preview</p>
+                <div className="attractions-preview-container">
+                    <div className="cards-container">
+                        <div key={attractionName} className="attraction-card">
+                            <div className="image-container">
+                                {images.length > 0 && images[currentImageIndexes[attractionName] || 0] ? (
+                                    <img
+                                        src={URL.createObjectURL(images[currentImageIndexes[attractionName] || 0])}
+                                        alt={attractionName}
+                                        className="card-image"
+                                    />
+                                ) : (
+                                    <p>No image selected</p>
+                                )}
+                                <div className="image-navigation">
+                                    <button
+                                        className="image-nav-button left"
+                                        onClick={() =>
+                                            handlePrevImage(currentImageIndexes[attractionName] || 0, images, attractionName)
+                                        }
+                                    >
+                                        ←
+                                    </button>
+                                    <button
+                                        className="image-nav-button right"
+                                        onClick={() =>
+                                            handleNextImage(currentImageIndexes[attractionName] || 0, images, attractionName)
+                                        }
+                                    >
+                                        →
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="attraction-data">
+                                <div
+                                    className="attraction-type"
+                                    style={getAttractionCardStyle(type)}
+                                >
+                                    {type}
+                                </div>
+                                <div className="contact-info">
+                                    <p>
+                                        Website:{" "}
+                                        <Link to={website} target="_blank" rel="noopener noreferrer">
+                                            {website}
+                                        </Link>
+                                    </p>
+                                    <p>Phone: {phone}</p>
+                                </div>
+                                <div className="name-description">
+                                    <h5>{attractionName}</h5>
+                                    <p>{description}</p>
+                                </div>
+                                <div className="time">
+                                    <p>From: {openTime}</p>
+                                    <p>To: {closeTime}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <Settings/>
         </div>

@@ -309,12 +309,24 @@
   justify-content: space-between; /* This places the items side by side */
 }
 
+.register-business-main-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+}
+
 .register-business-container,
 .account-details-container,
 .my-attractions-container {
   width: 80%;
   margin-right: auto;
   margin-top: 90px;
+}
+
+.attraction-preview {
+  width: 80%;
+  margin-right: auto;
 }
 
 .my-attractions-container {

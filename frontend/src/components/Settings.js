@@ -4,7 +4,6 @@ import Header from "./Header"
 import axios from "axios"
 
 function Settings() {
-
     const BACKEND = process.env.REACT_APP_BACKEND_URL
 
     const [isAdmin, setIsAdmin] = useState(false)

@@ -5,7 +5,7 @@ import {Link, useParams} from "react-router-dom"
 import {MDBInput, MDBTextArea} from "mdb-react-ui-kit"
 import {FaHeart} from "react-icons/fa"
 import {getAttractionCardStyle, renderStars} from '../utils/StyleUtils.js'
-import {getImageFormat} from "../utils/ImageUtils"
+import {getImageFormat, handleNextImage, handlePrevImage} from "../utils/ImageUtils"
 
 function Attraction() {
     const BACKEND = process.env.REACT_APP_BACKEND_URL
@@ -17,7 +17,6 @@ function Attraction() {
     const {name} = useParams()
 
     const [error, setError] = useState('')
-    // const [loading, setLoading] = useState(true) // Loading state to track fetching status
 
     const [attraction, setAttraction] = useState('')
     const [discussions, setDiscussions] = useState([])
@@ -171,16 +170,8 @@ function Attraction() {
         }
     }
 
-    const handleNextImage = (index, images) => {
-        return (index + 1) % images.length
-    }
-
-    const handlePrevImage = (index, images) => {
-        return (index - 1 + images.length) % images.length
-    }
-
     const handleImageChange = (e) => {
-        setImages([...e.target.files]) // Set the file object
+        setImages([...e.target.files])
     }
 
     // TODO: add different type of images
@@ -390,7 +381,7 @@ function Attraction() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
 export default Attraction
