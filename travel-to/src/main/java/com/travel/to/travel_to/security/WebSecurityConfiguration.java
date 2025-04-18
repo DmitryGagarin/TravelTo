@@ -60,6 +60,7 @@ public class WebSecurityConfiguration {
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers(
                     "/",
+                    "/favicon.ico",
                     "/signin/**",
                     "/signup/**",
                     "/logout",
@@ -67,7 +68,9 @@ public class WebSecurityConfiguration {
                     // TODO: как то настроить роли для допуска
                     "/swagger-ui/**",
                     "/v3/**",
-                    "/actuator/**")
+                    "/actuator/**",
+                    "/actuator/health",
+                    "/actuator/prometheus")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

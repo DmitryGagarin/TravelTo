@@ -49,6 +49,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             || requestURI.startsWith(URLConstants.SWAGGER)
             || requestURI.startsWith(URLConstants.SWAGGER2)
             || requestURI.startsWith(URLConstants.ACTUATOR)
+            || requestURI.equals("/favicon.ico")
         ) {
             filterChain.doFilter(request, response);
             return;
