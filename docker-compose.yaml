@@ -10,6 +10,8 @@ services:
       POSTGRES_PASSWORD: qrrqrr
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   redis:
     image: redis:latest
     ports:
@@ -30,6 +32,13 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+      - redis
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      retries: 3
+    networks:
+      - app-network
   frontend:
     build:
       context: ./frontend
@@ -57,9 +66,50 @@ services:
     ports:
       - "1025:1025"
       - "1080:1080"
-
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - backend
+    networks:
+      - app-network
+  influx:
+    image: influxdb:1.8
+    container_name: influx
+    environment:
+      - INFLUXDB_DB=travelToProd
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=adminadmin
+    ports:
+      - "8086:8086"
+    depends_on:
+      - backend
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+      - influx
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
 
 volumes:
   pgadmin_data:
+  postgres_data:
+  grafana_data:
+
+networks:
+  app-network:
+    driver: bridge
 
 
