@@ -52,7 +52,8 @@ const AdminModeration = () => {
                     console.log(error.response?.status)
                 }
             }
-            window.location.reload()
+
+
 
             setAttractionName('')
         }
