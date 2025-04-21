@@ -145,12 +145,10 @@ public class UserServiceImpl implements UserService {
 
         emailTokenCacheUtil.save(token, email, CacheKeys.RESET_PASSWORD_TOKEN);
 
-        String verificationLink = "http://localhost:4000/reset-password-completion?email=" + email + "&token=" + token;
-
         try {
             emailService.sendPasswordResetEmail(
                 email,
-                verificationLink
+                token
             );
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -170,12 +168,12 @@ public class UserServiceImpl implements UserService {
         emailTokenCacheUtil.save(token, email, CacheKeys.VERIFICATION_TOKEN);
 
         // TODO: & sent as &amq;
-        String verificationLink = "http://localhost:4000/verification-completed?email=" + email + "&token=" + token;
+//        String verificationLink = "http://localhost:4000/verification-completed?email=" + email + "&token=" + token;
 
         try {
             emailService.sendAccountVerificationEmail(
                 email,
-                verificationLink
+                token
             );
         } catch (Exception e) {
             throw new RuntimeException(e);

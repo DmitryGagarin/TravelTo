@@ -28,11 +28,12 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendAccountVerificationEmail(
         @NotNull String email,
-        @NotNull String verificationUrl
+        @NotNull String token
     ) throws MessagingException {
         Context context = new Context();
         context.setVariable(EmailVariables.TITLE, EmailTitles.ACCOUNT_VERIFICATION);
-        context.setVariable(EmailVariables.VERIFICATION_URL, verificationUrl);
+        context.setVariable("email", email);
+        context.setVariable("token", token);
 
         String body = templateEngine.process(EmailTemplateNames.ACCOUNT_VERIFICATION_TEMPLATE, context);
 
@@ -48,11 +49,12 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendPasswordResetEmail(
         @NotNull String email,
-        @NotNull String resetUrl
+        @NotNull String token
     ) throws MessagingException {
         Context context = new Context();
         context.setVariable(EmailVariables.TITLE, EmailTitles.RESET_PASSWORD);
-        context.setVariable(EmailVariables.RESET_PASSWORD_URL, resetUrl);
+        context.setVariable("email", email);
+        context.setVariable("token", token);
         String body = templateEngine.process(EmailTemplateNames.RESET_PASSWORD_TEMPLATE, context);
 
         MimeMessage mimeMessage = constuctMimeMessage(

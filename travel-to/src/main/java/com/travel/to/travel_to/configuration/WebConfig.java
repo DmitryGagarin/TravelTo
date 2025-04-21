@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,28 +17,15 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${spring.security.cors.configurationSource.allowedOrigins}")
+    private String corsAllowedOrigins;
+
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("messages/messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setCacheSeconds(3600);
-
-//            System.out.println(file);
-//            Properties properties = new Properties();
-//            try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(file)) {
-//                if (inputStream != null) {
-//                    properties.load(inputStream);
-//                    System.out.println("Loaded properties from " + file + ":");
-//                    properties.forEach((key, value) -> System.out.println(key + " = 1234" + value));
-//                } else {
-//                    System.err.println(file + " file not found!");
-//                }
-//            } catch (IOException e) {
-//                System.err.println("Failed to load " + file + ": " + e.getMessage());
-//            }
-//        }
-
         return messageSource;
     }
 
@@ -52,7 +40,7 @@ public class WebConfig implements WebMvcConfigurer {
     public CorsConfigurationSource corsConfigurationSource() {
         return request -> {
             CorsConfiguration corsConfiguration = new CorsConfiguration();
-            corsConfiguration.setAllowedOrigins(List.of("http://localhost"));
+            corsConfiguration.setAllowedOrigins(List.of(corsAllowedOrigins));
             corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
             corsConfiguration.setAllowCredentials(true);
             corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
