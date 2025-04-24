@@ -19,6 +19,7 @@ import ResetPassword from "./ResetPassword"
 import VerifyAccount from "./VerifyAccount"
 import VerificationCompleted from "./VerificationCompleted"
 import ResetPasswordCompletion from "./ResetPasswordCompletion"
+import UsabilityQuestionnaire from "./UsabilityQuestionnaire";
 
 function App() {
     return (
@@ -43,6 +44,7 @@ function App() {
                     <Route path="/settings/business" element={<RegisterBusiness/>}/>
                     <Route path="/settings/my" element={<MyAttractions/>}/>
                     <Route path="/settings/admin/moderation/:type" element={<AdminModeration/>}/>
+                    <Route path="/questionnaire/usability" element={<UsabilityQuestionnaire/>}/>
                 </Routes>
             </Router>
         </div>
