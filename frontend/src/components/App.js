@@ -20,6 +20,7 @@ import VerifyAccount from "./VerifyAccount"
 import VerificationCompleted from "./VerificationCompleted"
 import ResetPasswordCompletion from "./ResetPasswordCompletion"
 import UsabilityQuestionnaire from "./UsabilityQuestionnaire";
+import Donate from "./Donate";
 
 function App() {
     return (
@@ -45,6 +46,7 @@ function App() {
                     <Route path="/settings/my" element={<MyAttractions/>}/>
                     <Route path="/settings/admin/moderation/:type" element={<AdminModeration/>}/>
                     <Route path="/questionnaire/usability" element={<UsabilityQuestionnaire/>}/>
+                    <Route path="/donate" element={<Donate/>}/>
                 </Routes>
             </Router>
         </div>

@@ -7,6 +7,7 @@ import Inputmask from "inputmask"
 import "react-phone-number-input/style.css"
 import {getAttractionCardStyle} from "../utils/StyleUtils"
 
+// TODO: улетели настройки
 function RegisterBusiness() {
     const BACKEND = process.env.REACT_APP_BACKEND_URL
     const FRONTEND = process.env.REACT_APP_FRONTEND_URL

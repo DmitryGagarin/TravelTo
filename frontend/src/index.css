@@ -303,7 +303,8 @@
 
 .register-business-main-container,
 .account-details-main-container,
-.my-attractions-main-container {
+.my-attractions-main-container,
+.usability-main-container {
   display: flex;
   align-items: flex-start; /* Ensures both columns align at the top */
   justify-content: space-between; /* This places the items side by side */
@@ -318,7 +319,8 @@
 
 .register-business-container,
 .account-details-container,
-.my-attractions-container {
+.my-attractions-container,
+.usability-container {
   width: 80%;
   margin-right: auto;
   margin-top: 90px;

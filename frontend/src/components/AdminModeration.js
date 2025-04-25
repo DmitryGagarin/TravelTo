@@ -5,6 +5,7 @@ import Settings from "./Settings"
 import {getImageFormat} from "../utils/ImageUtils"
 import {Link} from "react-router-dom"
 
+// TODO: настройки улетают
 const AdminModeration = () => {
     const GRAFANA_URL = process.env.REACT_APP_GRAFANA_URL
     const BACKEND = process.env.REACT_APP_BACKEND_URL

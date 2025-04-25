@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +37,7 @@ public class QuestionnaireController {
 
     @PostMapping("/mark-usability")
     public UsabilityQuestionnaireModel saveUsability(
-        @Validated UsabilityQuestionnaireForm usabilityQuestionnaireForm,
+        @Validated @RequestBody UsabilityQuestionnaireForm usabilityQuestionnaireForm,
         BindingResult bindingResult,
         @AuthenticationPrincipal AuthUser authUser
     ) {

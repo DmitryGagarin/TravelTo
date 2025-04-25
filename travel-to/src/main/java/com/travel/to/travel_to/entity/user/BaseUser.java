@@ -28,6 +28,7 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
     private String surname;
     private String phone;
     private Boolean isVerified;
+    private Boolean answeredUsabilityQuestionnaire;
 
     @JsonBackReference(value = "user-attraction")
     @OneToMany(mappedBy = "owner")
@@ -97,6 +98,15 @@ public class BaseUser extends UuidAbleTimedEntity implements Serializable {
 
     public BaseUser setVerified(Boolean verified) {
         isVerified = verified;
+        return this;
+    }
+
+    public Boolean getAnsweredUsabilityQuestionnaire() {
+        return answeredUsabilityQuestionnaire;
+    }
+
+    public BaseUser setAnsweredUsabilityQuestionnaire(Boolean answeredUsabilityQuestionnaire) {
+        this.answeredUsabilityQuestionnaire = answeredUsabilityQuestionnaire;
         return this;
     }
 

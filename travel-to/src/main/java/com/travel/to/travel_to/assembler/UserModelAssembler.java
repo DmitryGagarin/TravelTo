@@ -30,7 +30,8 @@ public class UserModelAssembler implements RepresentationModelAssembler<User, Us
             .setName(entity.getName())
             .setSurname(entity.getSurname())
             .setPhone(entity.getPhone())
-            .setRole(userToRoleService.getAllUserRolesByUserId(entity.getId()));
+            .setRole(userToRoleService.getAllUserRolesByUserId(entity.getId()))
+            .setAnsweredUsabilityQuestionnaire(entity.getAnsweredUsabilityQuestionnaire());
         return userModel;
     }
 

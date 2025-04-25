@@ -14,6 +14,7 @@ public class UserModel extends PagedModel<UserModel> {
     private LocalDateTime createdAt;
     private Set<GrantedAuthority> roles;
     private String accessToken;
+    private Boolean answeredUsabilityQuestionnaire;
 
     public String getName() {
         return name;
@@ -75,6 +76,24 @@ public class UserModel extends PagedModel<UserModel> {
 
     public UserModel setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+        return this;
+    }
+
+    public Set<GrantedAuthority> getRoles() {
+        return roles;
+    }
+
+    public UserModel setRoles(Set<GrantedAuthority> roles) {
+        this.roles = roles;
+        return this;
+    }
+
+    public Boolean getAnsweredUsabilityQuestionnaire() {
+        return answeredUsabilityQuestionnaire;
+    }
+
+    public UserModel setAnsweredUsabilityQuestionnaire(Boolean answeredUsabilityQuestionnaire) {
+        this.answeredUsabilityQuestionnaire = answeredUsabilityQuestionnaire;
         return this;
     }
 }

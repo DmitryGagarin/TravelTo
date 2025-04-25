@@ -90,7 +90,9 @@ public class UserServiceImpl implements UserService {
             .setCreatedAt(LocalDateTime.now())
             .setUpdatedAt(LocalDateTime.now());
 
-        user.setVerified(false);
+        user
+            .setVerified(false)
+            .setAnsweredUsabilityQuestionnaire(false);
 
         userRepository.save(user);
 
@@ -126,7 +128,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void resetPassword (
+    public void resetPassword(
         @NotNull UserRefreshPasswordForm userRefreshPasswordForm
     ) {
         String email = userRefreshPasswordForm.getEmail();

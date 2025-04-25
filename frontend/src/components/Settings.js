@@ -8,6 +8,7 @@ function Settings() {
 
     const [isAdmin, setIsAdmin] = useState(false)
     const [isOwner, setIsOwner] = useState(false)
+    const [answeredUsabilityQuestionnaire, setAnsweredUsabilityQuestionnaire] = useState(false)
 
     const authUser = JSON.parse(localStorage.getItem('user'))
 
@@ -22,10 +23,12 @@ function Settings() {
                     }
                 })
 
+                console.log(`response: ${response}`)
+
                 const roles = response.data.role.map(role => role.authority)
                 setIsOwner(roles.includes("ROLE_OWNER"))
                 setIsAdmin(roles.includes("ROLE_ADMIN"))
-
+                setAnsweredUsabilityQuestionnaire(response.data.answeredUsabilityQuestionnaire)
             } catch (error) {
                 console.error(error)
             }
@@ -54,9 +57,17 @@ function Settings() {
         history('/settings/admin/moderation/on_moderation')
     }
 
+    const handleQuestionnaire = () => {
+        history('/questionnaire/usability')
+    }
+
+    const handleDonation = () => {
+        history('/donate')
+    }
+
     return (
         <div>
-            <Header />
+            <Header/>
             <div className="settings">
                 <div className="text-center">
                     <button type="button" className="btn btn-primary mt-3 settings-button"
@@ -82,6 +93,18 @@ function Settings() {
                         </button>
                     </div>
                 )}
+                {(answeredUsabilityQuestionnaire === false) && (
+                    <div className="text-center">
+                        <button type="button" className="btn btn-primary mt-3 settings-button"
+                                onClick={handleQuestionnaire}>Rate me
+                        </button>
+                    </div>
+                )}
+                <div className="text-center">
+                    <button type="button" className="btn btn-primary mt-3 settings-button"
+                            onClick={handleDonation}>Donate
+                    </button>
+                </div>
                 <div className="text-center">
                     <button type="button" className="btn btn-primary mt-3 settings-button"
                             onClick={handleLogout}>Logout
