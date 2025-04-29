@@ -17,12 +17,12 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
     List<Attraction> findAllByOrderByPriorityDesc();
 
     @NotNull
-    @Query(value = "SELECT * FROM Attraction a WHERE a.owner_id = :ownerId",
+    @Query(value = "SELECT * FROM attraction a WHERE a.owner_id = :ownerId",
     nativeQuery = true)
     List<Attraction> findAllByOwnerId(@NotNull Long ownerId);
 
     @NotNull
-    @Query(value = "SELECT a.rating FROM Attraction a WHERE a.id = :attractionId",
+    @Query(value = "SELECT a.rating FROM attraction a WHERE a.id = :attractionId",
     nativeQuery = true)
     List<Double> findAllAttractionRatingsById(Long attractionId);
 
@@ -33,5 +33,4 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
 
     @NotNull
     Attraction getByName(@NotNull String name);
-
 }

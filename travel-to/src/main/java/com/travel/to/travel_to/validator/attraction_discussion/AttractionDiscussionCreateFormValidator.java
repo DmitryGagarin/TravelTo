@@ -3,7 +3,7 @@ package com.travel.to.travel_to.validator.attraction_discussion;
 import com.travel.to.travel_to.constants.ValidationConstants;
 import com.travel.to.travel_to.constants.ValidationErrorCodes;
 import com.travel.to.travel_to.constants.ValidationFields;
-import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
+import com.travel.to.travel_to.form.attraction.AttractionDiscussionCreateForm;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

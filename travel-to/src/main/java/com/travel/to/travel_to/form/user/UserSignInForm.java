@@ -1,6 +1,6 @@
-package com.travel.to.travel_to.form;
+package com.travel.to.travel_to.form.user;
 
-public class UserSignUpFirstForm {
+public class UserSignInForm {
     private String email;
     private String password;
 
@@ -8,7 +8,7 @@ public class UserSignUpFirstForm {
         return email;
     }
 
-    public UserSignUpFirstForm setEmail(String email) {
+    public UserSignInForm setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -17,7 +17,7 @@ public class UserSignUpFirstForm {
         return password;
     }
 
-    public UserSignUpFirstForm setPassword(String password) {
+    public UserSignInForm setPassword(String password) {
         this.password = password;
         return this;
     }

@@ -2,11 +2,10 @@ package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.configuration.CustomAuthenticationProvider;
 import com.travel.to.travel_to.entity.user.AuthUser;
-import com.travel.to.travel_to.entity.user.BaseUser;
 import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.exception.exception.UserNotVerifiedException;
-import com.travel.to.travel_to.form.UserRefreshTokenForm;
-import com.travel.to.travel_to.form.UserSignInForm;
+import com.travel.to.travel_to.form.user.UserRefreshTokenForm;
+import com.travel.to.travel_to.form.user.UserSignInForm;
 import com.travel.to.travel_to.security.jwt.JwtConstants;
 import com.travel.to.travel_to.security.jwt.JwtProvider;
 import com.travel.to.travel_to.service.AuthenticationService;

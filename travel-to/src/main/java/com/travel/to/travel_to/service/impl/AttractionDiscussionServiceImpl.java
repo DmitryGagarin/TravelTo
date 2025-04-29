@@ -6,7 +6,7 @@ import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.entity.user.UserToRole;
-import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
+import com.travel.to.travel_to.form.attraction.AttractionDiscussionCreateForm;
 import com.travel.to.travel_to.repository.AttractionDiscussionRepository;
 import com.travel.to.travel_to.service.AttractionDiscussionImageService;
 import com.travel.to.travel_to.service.AttractionDiscussionService;

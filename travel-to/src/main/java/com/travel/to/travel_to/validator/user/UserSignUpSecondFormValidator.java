@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.validator.user;
 
-import com.travel.to.travel_to.form.UserSignUpSecondForm;
+import com.travel.to.travel_to.form.user.UserSignUpSecondForm;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

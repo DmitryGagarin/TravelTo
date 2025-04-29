@@ -1,10 +1,10 @@
 package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.entity.user.AuthUser;
-import com.travel.to.travel_to.form.PasswordResetForm;
-import com.travel.to.travel_to.form.UserRefreshPasswordForm;
-import com.travel.to.travel_to.form.UserRefreshTokenForm;
-import com.travel.to.travel_to.form.UserSignInForm;
+import com.travel.to.travel_to.form.user.PasswordResetForm;
+import com.travel.to.travel_to.form.user.UserRefreshPasswordForm;
+import com.travel.to.travel_to.form.user.UserRefreshTokenForm;
+import com.travel.to.travel_to.form.user.UserSignInForm;
 import com.travel.to.travel_to.service.AuthenticationService;
 import com.travel.to.travel_to.service.UserService;
 import com.travel.to.travel_to.validator.user.UserSignInFormValidator;

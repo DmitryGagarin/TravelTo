@@ -4,7 +4,7 @@ import com.travel.to.travel_to.constants.RegExConstants;
 import com.travel.to.travel_to.constants.ValidationConstants;
 import com.travel.to.travel_to.constants.ValidationErrorCodes;
 import com.travel.to.travel_to.constants.ValidationFields;
-import com.travel.to.travel_to.form.AttractionCreateForm;
+import com.travel.to.travel_to.form.attraction.AttractionCreateForm;
 import com.travel.to.travel_to.service.AttractionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;

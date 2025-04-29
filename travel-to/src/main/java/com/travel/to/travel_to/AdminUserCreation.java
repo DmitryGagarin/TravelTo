@@ -1,8 +1,8 @@
 package com.travel.to.travel_to;
 
 import com.travel.to.travel_to.entity.user.User;
-import com.travel.to.travel_to.form.UserSignInForm;
-import com.travel.to.travel_to.form.UserSignUpFirstForm;
+import com.travel.to.travel_to.form.user.UserSignInForm;
+import com.travel.to.travel_to.form.user.UserSignUpFirstForm;
 import com.travel.to.travel_to.service.AuthenticationService;
 import com.travel.to.travel_to.service.RoleService;
 import com.travel.to.travel_to.service.UserService;

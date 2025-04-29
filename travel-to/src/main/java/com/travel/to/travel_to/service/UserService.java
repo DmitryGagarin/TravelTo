@@ -3,11 +3,11 @@ package com.travel.to.travel_to.service;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
-import com.travel.to.travel_to.form.PasswordResetForm;
-import com.travel.to.travel_to.form.UserProfileForm;
-import com.travel.to.travel_to.form.UserRefreshPasswordForm;
-import com.travel.to.travel_to.form.UserSignUpFirstForm;
-import com.travel.to.travel_to.form.UserSignUpSecondForm;
+import com.travel.to.travel_to.form.user.PasswordResetForm;
+import com.travel.to.travel_to.form.user.UserProfileForm;
+import com.travel.to.travel_to.form.user.UserRefreshPasswordForm;
+import com.travel.to.travel_to.form.user.UserSignUpFirstForm;
+import com.travel.to.travel_to.form.user.UserSignUpSecondForm;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.NoSuchAlgorithmException;

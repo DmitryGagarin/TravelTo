@@ -2,7 +2,7 @@ package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.assembler.UsabilityQuestionnaireModelAssembler;
 import com.travel.to.travel_to.entity.user.AuthUser;
-import com.travel.to.travel_to.form.UsabilityQuestionnaireForm;
+import com.travel.to.travel_to.form.questionnaire.UsabilityQuestionnaireForm;
 import com.travel.to.travel_to.model.UsabilityQuestionnaireModel;
 import com.travel.to.travel_to.service.QuestionnaireService;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -6,8 +6,8 @@ import com.travel.to.travel_to.entity.attraction.AttractionStatus;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.Roles;
 import com.travel.to.travel_to.entity.user.User;
-import com.travel.to.travel_to.form.AttractionCreateForm;
-import com.travel.to.travel_to.form.AttractionEditForm;
+import com.travel.to.travel_to.form.attraction.AttractionCreateForm;
+import com.travel.to.travel_to.form.attraction.AttractionEditForm;
 import com.travel.to.travel_to.repository.AttractionRepository;
 import com.travel.to.travel_to.service.AttractionImageService;
 import com.travel.to.travel_to.service.AttractionService;
@@ -183,6 +183,12 @@ public class AttractionServiceImpl implements AttractionService {
     @Override
     public Optional<Attraction> findByName(@NotNull String attractionName) {
         return attractionRepository.findByName(attractionName);
+    }
+
+    @Override
+    @NotNull
+    public String getTypeByName(@NotNull String name) {
+        return getByName(name).getType();
     }
 
     @Override

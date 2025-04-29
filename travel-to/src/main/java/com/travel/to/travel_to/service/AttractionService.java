@@ -3,8 +3,8 @@ package com.travel.to.travel_to.service;
 import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.attraction.AttractionStatus;
 import com.travel.to.travel_to.entity.user.AuthUser;
-import com.travel.to.travel_to.form.AttractionCreateForm;
-import com.travel.to.travel_to.form.AttractionEditForm;
+import com.travel.to.travel_to.form.attraction.AttractionCreateForm;
+import com.travel.to.travel_to.form.attraction.AttractionEditForm;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -61,6 +61,9 @@ public interface AttractionService {
     Attraction getByName(@NotNull String name);
 
     Optional<Attraction> findByName(@NotNull String name);
+
+    @NotNull
+    String getTypeByName(@NotNull String name);
 
     void deleteAttractionByName(@NotNull String name, @NotNull AuthUser authUser);
 }

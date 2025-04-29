@@ -3,7 +3,7 @@ package com.travel.to.travel_to.service.impl;
 import com.travel.to.travel_to.entity.questionnaire.UsabilityQuestionnaire;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.user.User;
-import com.travel.to.travel_to.form.UsabilityQuestionnaireForm;
+import com.travel.to.travel_to.form.questionnaire.UsabilityQuestionnaireForm;
 import com.travel.to.travel_to.repository.UsabilityQuestionnaireRepository;
 import com.travel.to.travel_to.repository.UserRepository;
 import com.travel.to.travel_to.service.QuestionnaireService;

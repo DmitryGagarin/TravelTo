@@ -1,6 +1,7 @@
-package com.travel.to.travel_to.form;
+package com.travel.to.travel_to.form.attraction;
 
-public class AttractionEditForm {
+public class AttractionCreateForm {
+    private String ownerTelegram;
     private String attractionName;
     private String description;
     private String address;
@@ -9,6 +10,10 @@ public class AttractionEditForm {
     private String attractionType;
     private String openTime;
     private String closeTime;
+
+    public String getOwnerTelegram() {
+        return ownerTelegram;
+    }
 
     public String getAttractionName() {
         return attractionName;

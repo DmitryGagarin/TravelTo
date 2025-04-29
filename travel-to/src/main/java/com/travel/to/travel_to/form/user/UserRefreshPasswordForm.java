@@ -1,4 +1,4 @@
-package com.travel.to.travel_to.form;
+package com.travel.to.travel_to.form.user;
 
 public class UserRefreshPasswordForm {
     private String email;

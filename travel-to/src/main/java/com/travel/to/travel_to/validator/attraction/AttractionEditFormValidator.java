@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.validator.attraction;
 
-import com.travel.to.travel_to.form.AttractionEditForm;
+import com.travel.to.travel_to.form.attraction.AttractionEditForm;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

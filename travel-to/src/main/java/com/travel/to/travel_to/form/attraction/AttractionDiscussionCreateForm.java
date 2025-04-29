@@ -1,4 +1,4 @@
-package com.travel.to.travel_to.form;
+package com.travel.to.travel_to.form.attraction;
 
 public class AttractionDiscussionCreateForm {
     private String title;

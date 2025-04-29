@@ -1,4 +1,4 @@
-package com.travel.to.travel_to.form;
+package com.travel.to.travel_to.form.questionnaire;
 
 public class UsabilityQuestionnaireForm {
     private int q1;

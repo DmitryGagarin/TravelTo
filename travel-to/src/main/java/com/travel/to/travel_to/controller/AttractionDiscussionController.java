@@ -3,7 +3,7 @@ package com.travel.to.travel_to.controller;
 import com.travel.to.travel_to.assembler.AttractionDiscussionModelAssembler;
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussion;
 import com.travel.to.travel_to.entity.user.AuthUser;
-import com.travel.to.travel_to.form.AttractionDiscussionCreateForm;
+import com.travel.to.travel_to.form.attraction.AttractionDiscussionCreateForm;
 import com.travel.to.travel_to.model.AttractionDiscussionModel;
 import com.travel.to.travel_to.service.AttractionDiscussionService;
 import com.travel.to.travel_to.validator.attraction_discussion.AttractionDiscussionCreateFormValidator;
