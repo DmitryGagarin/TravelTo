@@ -2,10 +2,12 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import Header from "../Header"
 import {Link, useParams} from "react-router-dom"
-import {MDBInput, MDBTextArea} from "mdb-react-ui-kit"
+import {MDBContainer, MDBInput, MDBTextArea} from "mdb-react-ui-kit"
 import {FaHeart} from "react-icons/fa"
 import {getAttractionCardStyle, renderStars} from '../../utils/StyleUtils.js'
 import {getImageFormat, handleNextImage, handlePrevImage} from "../../utils/ImageUtils"
+import {catchError} from "../../utils/ErrorUtils";
+import {FaRotate} from "react-icons/fa6";
 
 function Attraction() {
     const BACKEND = process.env.REACT_APP_BACKEND_URL
@@ -74,7 +76,7 @@ function Attraction() {
                     })
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
             } catch (error) {
-                console.log(error)
+                catchError(error, setError, FRONTEND, 'Impossible to fetch discussions')
             }
         }
 
@@ -105,9 +107,10 @@ function Attraction() {
                             }
                         }
                     )
-                    setFeature(response)
+                    console.log('response', response)
+                    setFeature(response.data)
                 } catch (error) {
-                    console.log(error)
+                    catchError(error, setError, FRONTEND, 'Impossible to fetch menu')
                 }
             }
             fetchMenu()
@@ -121,7 +124,9 @@ function Attraction() {
             setLatitude(lat)
             setLongitude(lon)
         }
-    }, [balloon]) // This effect runs whenever 'balloon' changes
+    }, [balloon])
+
+    console.log("feature", feature)
 
     useEffect(() => {
         if (attraction && Array.isArray(attraction.images) && attraction.images.length > 0) {
@@ -270,6 +275,17 @@ function Attraction() {
                     </div>
                 </div>
             </div>
+            <MDBContainer>
+                <div style={{height: '600px'}}>
+                    <iframe
+                        title="Menu"
+                        src={feature}
+                        width="100%"
+                        height="100%"
+                        style={{border: 'none'}}
+                    />
+                </div>
+            </MDBContainer>
 
             {/* Comment Section */}
             <div className="discussion-main-container">

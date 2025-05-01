@@ -1,16 +1,21 @@
 package com.travel.to.travel_to.repository;
 
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu.FileMenu;
+import com.travel.to.travel_to.entity.attraction_feature.menu.menu_element.FileMenuElement;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface FileMenuRepository extends JpaRepository<FileMenu, Long> {
 
-    @Query(value = "SELECT * FROM file_menu WHERE attraction_id =: attractionId",
+    @Query(value = "SELECT * FROM file_menu_element WHERE attraction_id = :attractionId",
     nativeQuery = true)
-    FileMenu findFileMenuByAttractionId(@NotNull Long attractionId);
+    List<FileMenuElement> findFileMenuElementsByAttractionId(@NotNull Long attractionId);
+
+    FileMenu findByAttractionId(@NotNull Long attractionId);
 
 }

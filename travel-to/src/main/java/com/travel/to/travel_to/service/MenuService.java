@@ -18,12 +18,17 @@ public interface MenuService {
         @NotNull MultipartFile[] images
     ) throws IOException;
 
+    TextMenu findTextMenuByAttractionId(@NotNull Long attractionId);
+
     @NotNull
     FileMenu createFileMenu(
         @NotNull String attractionName,
         @NotNull MultipartFile[] files
     ) throws IOException;
 
+    FileMenu findFileMenuByAttractionId(@NotNull Long attractionId);
+
     @NotNull
     Menu getByMenuAttractionName(@NotNull String attractionName);
+
 }

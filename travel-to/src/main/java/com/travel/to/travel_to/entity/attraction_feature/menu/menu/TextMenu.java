@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.entity.attraction_feature.menu.menu;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu_element.TextMenuElement;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -17,6 +18,7 @@ public class TextMenu extends Menu implements Serializable {
     @Serial
     private static final long serialVersionUID = 7230751146591221829L;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<TextMenuElement> elements;
 

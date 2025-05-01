@@ -63,9 +63,15 @@ public class MenuServiceImpl implements MenuService {
             textMenuElements.add(element);
         }
 
-        textMenu.setElements(textMenuElements);
-
+        textMenu
+            .setElements(textMenuElements)
+            .setAttractionId(attractionId);
         return textMenuRepository.save(textMenu);
+    }
+
+    @Override
+    public TextMenu findTextMenuByAttractionId(@NotNull Long attractionId) {
+        return textMenuRepository.findByAttractionId(attractionId);
     }
 
     @Override
@@ -88,8 +94,15 @@ public class MenuServiceImpl implements MenuService {
                 .setMenu(fileMenu);
             fileMenuElements.add(fileMenuElement);
         }
-        fileMenu.setElements(fileMenuElements);
+        fileMenu
+            .setElements(fileMenuElements)
+            .setAttractionId(attractionId);
         return fileMenuRepository.save(fileMenu);
+    }
+
+    @Override
+    public FileMenu findFileMenuByAttractionId(@NotNull Long attractionId) {
+        return fileMenuRepository.findByAttractionId(attractionId);
     }
 
     @Override
@@ -99,17 +112,20 @@ public class MenuServiceImpl implements MenuService {
         String type = attractionService.getTypeByName(attractionName);
 
         if ("cafe".equals(type) || "restaurant".equals(type)) {
-            FileMenu fileMenu = fileMenuRepository.findFileMenuByAttractionId(attractionId);
-            if (Objects.nonNull(fileMenu)) {
+            List<FileMenuElement> fileMenuElements = fileMenuRepository.findFileMenuElementsByAttractionId(attractionId);
+            if (Objects.nonNull(fileMenuElements)) {
+                FileMenu fileMenu = findFileMenuByAttractionId(attractionId);
+                fileMenu.setElements(fileMenuElements);
                 return fileMenu;
             }
 
-            TextMenu textMenu = textMenuRepository.findTextMenuByAttractionId(attractionId);
-            if (Objects.nonNull(textMenu)) {
+            List<TextMenuElement> textMenuElements = textMenuRepository.findTextMenuElementsByAttractionId(attractionId);
+            if (Objects.nonNull(textMenuElements)) {
+                TextMenu textMenu = findTextMenuByAttractionId(attractionId);
+                textMenu.setElements(textMenuElements);
                 return textMenu;
             }
         }
-
         throw new EntityNotFoundException("No menu found for attraction: " + attractionName);
     }
 }
