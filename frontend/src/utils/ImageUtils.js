@@ -16,4 +16,3 @@ export const handleNextImage = (index, images) => {
 export const handlePrevImage = (index, images) => {
     return (index - 1 + images.length) % images.length
 }
-

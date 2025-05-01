@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom"
 import axios from "axios"
-import Header from "./Header"
+import Header from '../Header';
 import {MDBInput} from "mdb-react-ui-kit"
 import {MdDelete} from "react-icons/md"
 import {useEffect, useState} from "react"

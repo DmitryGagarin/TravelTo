@@ -317,6 +317,15 @@
   padding: 1rem;
 }
 
+.donation-main-container {
+  position: absolute;
+  margin: 12px;
+}
+
+.donation-qr-code {
+  max-width: 60%;
+}
+
 .register-business-container,
 .account-details-container,
 .my-attractions-container,

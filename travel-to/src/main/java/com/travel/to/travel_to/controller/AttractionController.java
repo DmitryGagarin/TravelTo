@@ -199,7 +199,7 @@ public class AttractionController {
         );
     }
 
-    @PreAuthorize("hasAuthority('ROLE_OWNER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN, ROLE_OWNER')")
     @PostMapping("/{attractionName}/features/create-text-menu")
     public TextMenu createTextMenu(
         @Validated @RequestPart("textMenuCreateForm") TextMenuCreateForm textMenuCreateForm,
@@ -213,7 +213,7 @@ public class AttractionController {
         return menuService.createTextMenu(attractionName, textMenuCreateForm, images);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_OWNER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN, ROLE_OWNER')")
     @PostMapping("/{attractionName}/features/create-file-menu")
     public FileMenu createFileMenu(
         @RequestPart(value = "files") MultipartFile[] files,

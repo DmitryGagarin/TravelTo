@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
-import Header from './Header'
+import Header from '../Header'
 import {MDBInput} from 'mdb-react-ui-kit'
 import {FaHeart} from 'react-icons/fa'
-import {getAttractionCardStyle, renderStars} from "../utils/StyleUtils"
-import {getImageFormat} from "../utils/ImageUtils"
+import {getAttractionCardStyle, renderStars} from "../../utils/StyleUtils"
+import {getImageFormat} from "../../utils/ImageUtils"
 
 function Attractions() {
     const BACKEND = process.env.REACT_APP_BACKEND_URL

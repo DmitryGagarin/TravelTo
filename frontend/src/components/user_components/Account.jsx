@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {MDBContainer, MDBInput} from "mdb-react-ui-kit"
 import {useNavigate} from "react-router-dom"
-import Settings from "./Settings"
+import Settings from "../Settings"
 import Inputmask from "inputmask"
 
 function Account() {

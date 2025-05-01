@@ -1,18 +1,20 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
-import Header from "./Header"
+import Header from "../Header"
 import {Link, useParams} from "react-router-dom"
 import {MDBInput, MDBTextArea} from "mdb-react-ui-kit"
 import {FaHeart} from "react-icons/fa"
-import {getAttractionCardStyle, renderStars} from '../utils/StyleUtils.js'
-import {getImageFormat, handleNextImage, handlePrevImage} from "../utils/ImageUtils"
+import {getAttractionCardStyle, renderStars} from '../../utils/StyleUtils.js'
+import {getImageFormat, handleNextImage, handlePrevImage} from "../../utils/ImageUtils"
 
 function Attraction() {
     const BACKEND = process.env.REACT_APP_BACKEND_URL
     const FRONTEND = process.env.REACT_APP_FRONTEND_URL
 
     const YANDEX_MAP_API_KEY = process.env.REACT_APP_YANDEX_MAP_API_KEY
-    const domain = "https://geocode-maps.yandex.ru/v1/"
+    const YANDEX_MAP_API_DOMAIN = "https://geocode-maps.yandex.ru/v1/"
+
+    const ACCESS_TOKEN = JSON.parse(localStorage.getItem('user'))?.accessToken
 
     const {name} = useParams()
 
@@ -20,6 +22,8 @@ function Attraction() {
 
     const [attraction, setAttraction] = useState('')
     const [discussions, setDiscussions] = useState([])
+    const [feature, setFeature] = useState(null)
+
     const [attractionUuid, setAttractionUuid] = useState('')
 
     const [showCreateDiscussionForm, setShowCreateDiscussionForm] = useState(false)
@@ -40,14 +44,14 @@ function Attraction() {
     const [latitude, setLatitude] = useState('')
     const [longitude, setLongitude] = useState('')
 
+
     useEffect(() => {
         const fetchAttraction = async () => {
             try {
-                const token = JSON.parse(localStorage.getItem('user')).accessToken
                 const response =
                     await axios.get(`${BACKEND}/attraction/${name}`, {
                         headers: {
-                            'Authorization': `Bearer ${token}`,
+                            'Authorization': `Bearer ${ACCESS_TOKEN}`,
                         },
                     })
                 setAttraction(response.data)
@@ -60,15 +64,12 @@ function Attraction() {
             }
         }
 
-        console.log(attraction)
-
         const fetchDiscussions = async () => {
             try {
-                const token = JSON.parse(localStorage.getItem('user')).accessToken
                 const response =
                     await axios.get(`${BACKEND}/attraction-discussion/${attractionUuid}`, {
                         headers: {
-                            'Authorization': `Bearer ${token}`
+                            'Authorization': `Bearer ${ACCESS_TOKEN}`
                         }
                     })
                 setDiscussions(response.data._embedded.attractionDiscussionModelList)
@@ -92,6 +93,26 @@ function Attraction() {
         fetchDiscussions()
         // fetchAddress()
     }, [attractionUuid, name])
+
+    useEffect(() => {
+        if (attraction.type === 'cafe' || attraction.type === 'restaurant') {
+            const fetchMenu = async () => {
+                try {
+                    const response = await axios.get(`${BACKEND}/attraction/${attraction.name}/get-menu`,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${ACCESS_TOKEN}`
+                            }
+                        }
+                    )
+                    setFeature(response)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            fetchMenu()
+        }
+    }, [attraction]);
 
     useEffect(() => {
         if (balloon) {
@@ -147,7 +168,7 @@ function Attraction() {
                 formData,
                 {
                     headers: {
-                        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`,
+                        'Authorization': `Bearer ${ACCESS_TOKEN}`,
                         'Content-Type': 'multipart/form-data'
                     }
                 }
@@ -178,7 +199,7 @@ function Attraction() {
     // TODO: arrow sliders broken
     return (
         <div>
-            <Header />
+            <Header/>
             <div className="attractions-main-container">
                 <div className="attractions-container">
                     <div className="cards-container">
@@ -223,7 +244,7 @@ function Attraction() {
                                         {attraction.type}
                                     </div>
                                     <div className="like">
-                                        <FaHeart color="pink" onClick={() => setLikedAttraction(attraction.name)} />
+                                        <FaHeart color="pink" onClick={() => setLikedAttraction(attraction.name)}/>
                                     </div>
                                     <div className="rating">{renderStars(attraction.rating)}</div>
                                     <div className="contact-info">
@@ -271,7 +292,7 @@ function Attraction() {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                     required
-                                    style={{ marginBottom: '10px' }}
+                                    style={{marginBottom: '10px'}}
                                 />
                                 <MDBInput
                                     placeholder="What you liked?"
@@ -279,7 +300,7 @@ function Attraction() {
                                     value={contentLike}
                                     onChange={(e) => setContentLike(e.target.value)}
                                     required
-                                    style={{ marginBottom: '10px' }}
+                                    style={{marginBottom: '10px'}}
                                 />
                                 <MDBInput
                                     placeholder="What you disliked?"
@@ -287,14 +308,14 @@ function Attraction() {
                                     value={contentDislike}
                                     onChange={(e) => setContentDislike(e.target.value)}
                                     required
-                                    style={{ marginBottom: '10px' }}
+                                    style={{marginBottom: '10px'}}
                                 />
                                 <MDBTextArea
                                     placeholder="Overall"
                                     value={content}
                                     onChange={(e) => setContent(e.target.value)}
                                     required
-                                    style={{ marginBottom: '10px' }}
+                                    style={{marginBottom: '10px'}}
                                 />
                                 <MDBInput
                                     wrapperClass="mb-4"
@@ -312,7 +333,7 @@ function Attraction() {
                                     value={rating}
                                     onChange={(e) => setRating(e.target.value)}
                                     required
-                                    style={{ marginBottom: '10px' }}
+                                    style={{marginBottom: '10px'}}
                                 />
                                 <button type="submit">Submit Comment</button>
                             </form>

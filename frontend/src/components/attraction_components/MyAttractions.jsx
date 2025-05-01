@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react"
 import axios from "axios"
 import {Link} from "react-router-dom"
-import Settings from "./Settings"
-import {getImageFormat} from "../utils/ImageUtils"
-import {getAttractionStatusStyle, renderStars} from "../utils/StyleUtils"
+import Settings from "../Settings"
+import {getImageFormat} from "../../utils/ImageUtils"
+import {getAttractionStatusStyle, renderStars} from "../../utils/StyleUtils"
 
 function MyAttractions() {
     const BACKEND = process.env.REACT_APP_BACKEND_URL

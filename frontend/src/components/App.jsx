@@ -3,22 +3,22 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react'
 import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom'
 
-import LoginPage from './SignIn'
-import SignUpStepOne from './SignUpStepOne'
-import SignUpStepTwo from './SignUpStepTwo'
-import MyAttractions from './MyAttractions'
-import Attractions from './Attractions'
-import Attraction from './Attraction'
+import LoginPage from './user_components/SignIn'
+import SignUpStepOne from './user_components/SignUpStepOne'
+import SignUpStepTwo from './user_components/SignUpStepTwo'
+import MyAttractions from './attraction_components/MyAttractions'
+import Attractions from './attraction_components/Attractions'
+import Attraction from './attraction_components/Attraction'
 import Settings from './Settings'
-import Account from './Account'
-import RegisterBusiness from './RegisterBusiness'
+import Account from './user_components/Account'
+import RegisterBusiness from './attraction_components/RegisterBusiness'
 import Liked from './Liked'
 import AdminModeration from './AdminModeration'
-import EditAttraction from "./EditAttraction.tsx"
-import ResetPassword from "./ResetPassword"
-import VerifyAccount from "./VerifyAccount"
-import VerificationCompleted from "./VerificationCompleted"
-import ResetPasswordCompletion from "./ResetPasswordCompletion"
+import EditAttraction from "./attraction_components/EditAttraction.tsx"
+import ResetPassword from "./user_components/ResetPassword"
+import VerifyAccount from "./user_components/VerifyAccount"
+import VerificationCompleted from "./user_components/VerificationCompleted"
+import ResetPasswordCompletion from "./user_components/ResetPasswordCompletion"
 import UsabilityQuestionnaire from "./UsabilityQuestionnaire";
 import Donate from "./Donate";
 
