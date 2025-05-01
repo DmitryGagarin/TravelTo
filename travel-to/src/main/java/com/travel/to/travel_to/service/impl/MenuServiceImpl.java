@@ -13,6 +13,7 @@ import com.travel.to.travel_to.service.MenuService;
 import jakarta.persistence.EntityNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -39,42 +40,54 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @NotNull
+    @Transactional
     public TextMenu createTextMenu(
         @NotNull String attractionName,
         @NotNull TextMenuCreateForm form,
         @NotNull MultipartFile[] images
     ) throws IOException {
-        List<TextMenuElement> textMenuElements = new ArrayList<>();
         Long attractionId = attractionService.getByName(attractionName).getId();
+
+        TextMenu textMenu = new TextMenu();
+        List<TextMenuElement> textMenuElements = new ArrayList<>();
+
         for (int i = 0; i < form.getNames().size(); i++) {
-            TextMenuElement textMenuElement = new TextMenuElement();
-            textMenuElement.setAttractionId(attractionId);
-            textMenuElement
+            TextMenuElement element = new TextMenuElement();
+            element.setAttractionId(attractionId);
+            element
                 .setDishName(form.getNames().get(i))
                 .setDishDescription(form.getDescriptions().get(i))
                 .setDishPrice(form.getPrices().get(i))
-                .setDishImage(images[i].getBytes());
+                .setDishImage(images[i].getBytes())
+                .setMenu(textMenu);
+            textMenuElements.add(element);
         }
-        TextMenu textMenu = new TextMenu();
+
         textMenu.setElements(textMenuElements);
+
         return textMenuRepository.save(textMenu);
     }
 
     @Override
     @NotNull
+    @Transactional
     public FileMenu createFileMenu(
         @NotNull String attractionName,
         @NotNull MultipartFile[] files
     ) throws IOException {
         List<FileMenuElement> fileMenuElements = new ArrayList<>();
+
+        FileMenu fileMenu = new FileMenu();
         Long attractionId = attractionService.getByName(attractionName).getId();
+
         for (MultipartFile file : files) {
             FileMenuElement fileMenuElement = new FileMenuElement();
             fileMenuElement.setAttractionId(attractionId);
-            fileMenuElement.setFile(file.getBytes());
-
+            fileMenuElement
+                .setFile(file.getBytes())
+                .setMenu(fileMenu);
+            fileMenuElements.add(fileMenuElement);
         }
-        FileMenu fileMenu = new FileMenu();
         fileMenu.setElements(fileMenuElements);
         return fileMenuRepository.save(fileMenu);
     }

@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.validator.attraction_feature;
 
+import com.travel.to.travel_to.form.attraction_feature.TextMenuCreateForm;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -10,7 +11,7 @@ public class TextMenuCreateFormValidator implements Validator {
 
     @Override
     public boolean supports(@NotNull Class<?> clazz) {
-        return false;
+        return TextMenuCreateForm.class.isAssignableFrom(clazz);
     }
 
     @Override

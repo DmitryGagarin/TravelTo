@@ -25,14 +25,11 @@ export const validateAttractionData = (
 }
 
 export const validationTextMenuData = (
-    names,
-    descriptions,
-    prices,
-    images
+    dishes
 ) => {
     return (
-        names.length === descriptions.length &&
-        descriptions.length === prices.length &&
-        prices.length === images.length
+        dishes.names.length === dishes.descriptions.length &&
+        dishes.descriptions.length === dishes.prices.length &&
+        dishes.prices.length === dishes.images.length
     )
 }

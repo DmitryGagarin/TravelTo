@@ -1,18 +1,41 @@
-import React from 'react';
-import {MDBContainer, MDBInput} from 'mdb-react-ui-kit';
+import {MDBContainer, MDBInput} from "mdb-react-ui-kit";
 
-const TextMenuCreateForm = ({ dishes, setTextMenuNames, setTextMenuDescriptions, setTextMenuPrices, setTextMenuImages, generateNewDishForm }) => (
+export const TextMenuCreateForm = ({ dishes, updateDish, generateNewDishForm }) => (
     <div>
-        {dishes.map((_, index) => (
+        {dishes.map((dish, index) => (
             <MDBContainer key={index}>
-                <MDBInput wrapperClass='mb-4' placeholder='Dish Name' id='dish-name' type='text' required onChange={(e) => setTextMenuNames(Array.from(e.target.value))} />
-                <MDBInput wrapperClass='mb-4' placeholder='Dish Description' id='dish-description' type='text' required onChange={(e) => setTextMenuDescriptions(Array.from(e.target.value))} />
-                <MDBInput wrapperClass='mb-4' placeholder='Dish Price' id='dish-price' type='text' required onChange={(e) => setTextMenuPrices(Array.from(e.target.value))} />
-                <MDBInput wrapperClass='mb-4' placeholder='Dish image' id='dish-image' type='file' onChange={(e) => setTextMenuImages(Array.from(e.target.files))} />
+                <MDBInput
+                    wrapperClass='mb-4'
+                    placeholder='Dish Name'
+                    value={dish.name}
+                    type='text'
+                    required
+                    onChange={(e) => updateDish(index, 'name', e.target.value)}
+                />
+                <MDBInput
+                    wrapperClass='mb-4'
+                    placeholder='Dish Description'
+                    value={dish.description}
+                    type='text'
+                    required
+                    onChange={(e) => updateDish(index, 'description', e.target.value)}
+                />
+                <MDBInput
+                    wrapperClass='mb-4'
+                    placeholder='Dish Price'
+                    value={dish.price}
+                    type='text'
+                    required
+                    onChange={(e) => updateDish(index, 'price', e.target.value)}
+                />
+                <MDBInput
+                    wrapperClass='mb-4'
+                    placeholder='Dish Image'
+                    type='file'
+                    onChange={(e) => updateDish(index, 'image', e.target.files[0])}
+                />
             </MDBContainer>
         ))}
-        <button onClick={generateNewDishForm}>Add dish</button>
+        <button type="button" onClick={generateNewDishForm}>Add dish</button>
     </div>
 );
-
-export default TextMenuCreateForm;

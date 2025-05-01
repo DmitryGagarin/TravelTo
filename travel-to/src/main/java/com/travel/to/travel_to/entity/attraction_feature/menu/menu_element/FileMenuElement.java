@@ -31,4 +31,13 @@ public class FileMenuElement extends MenuElement implements Serializable {
         this.file = files;
         return this;
     }
+
+    public FileMenu getMenu() {
+        return menu;
+    }
+
+    public FileMenuElement setMenu(FileMenu menu) {
+        this.menu = menu;
+        return this;
+    }
 }

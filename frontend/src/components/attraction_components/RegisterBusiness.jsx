@@ -10,7 +10,7 @@ import {catchError} from "../../utils/ErrorUtils"
 import AttractionCreateForm from "./AttractionCreateForm"
 import FileMenuCreateForm from "./FileMenuCreateForm"
 import AttractionPreview from "./AttractionPreview"
-import TextMenuCreateForm from "./TextMenuCreateForm"
+import {TextMenuCreateForm} from "./TextMenuCreateForm"
 
 // TODO: улетели настройки
 function RegisterBusiness() {
@@ -37,12 +37,9 @@ function RegisterBusiness() {
     const [fileMenuSelected, setFileMenuSelected] = useState(false)
     const [fileMenuFiles, setFileMenuFile] = useState('')
 
-    const [dishes, setDishes] = useState([0])
-
-    const [textMenuNames, setTextMenuNames] = useState([])
-    const [textMenuDescriptions, setTextMenuDescriptions] = useState([])
-    const [textMenuPrices, setTextMenuPrices] = useState([])
-    const [textMenuImages, setTextMenuImages] = useState([])
+    const [dishes, setDishes] = useState([
+        {name: '', description: '', price: '', image: null}
+    ]);
 
     const history = useNavigate()
 
@@ -64,34 +61,26 @@ function RegisterBusiness() {
 
     const handleMenuRegistration = async () => {
         if (!fileMenuSelected) {
-            if (!validationTextMenuData(
-                textMenuNames,
-                textMenuDescriptions,
-                textMenuPrices,
-                textMenuImages
-            )) {
-                setError('Check menu creation form')
-                return
-            }
-
             try {
-                const formData = new FormData()
-                const formJson = {
-                    names: textMenuNames,
-                    description: textMenuDescriptions,
-                    prices: textMenuPrices
-                }
+                const formData = new FormData();
+
                 formData.append(
                     'textMenuCreateForm',
                     new Blob(
-                        [JSON.stringify(formJson)],
+                        [JSON.stringify({
+                            names: dishes.map(d => d.name),
+                            descriptions: dishes.map(d => d.description),
+                            prices: dishes.map(d => d.price),
+                        })],
                         {type: 'application/json'}
                     )
-                )
+                );
 
-                images.forEach((image) => {
-                    formData.append('images', image)
-                })
+                dishes.forEach((dish) => {
+                    if (dish.image) {
+                        formData.append('images', dish.image);
+                    }
+                });
 
                 await axios.post(
                     `${BACKEND}/attraction/${attractionName}/features/create-text-menu`,
@@ -110,19 +99,24 @@ function RegisterBusiness() {
             }
         } else {
             try {
+                const fileFormData = new FormData();
+                fileMenuFiles.forEach((file) => {
+                    fileFormData.append('files', file);
+                });
+
                 await axios.post(
                     `${BACKEND}/attraction/${attractionName}/features/create-file-menu`,
-                    fileMenuFiles,
+                    fileFormData,
                     {
                         headers: {
-                            'Authorization': `Bearer ${ACCESS_TOKEN}`
+                            'Authorization': `Bearer ${ACCESS_TOKEN}`,
                         }
                     }
                 )
-                return true
+                return true;
             } catch (error) {
-                catchError(error, setError, FRONTEND, 'Problem in creating an attraction')
-                return false
+                catchError(error, setError, FRONTEND, 'Problem in creating a menu');
+                return false;
             }
         }
     }
@@ -201,43 +195,103 @@ function RegisterBusiness() {
         }))
     }
 
+    const updateDish = (index, field, value) => {
+        const updated = [...dishes]
+        updated[index][field] = value
+        setDishes(updated)
+    }
+
     const generateNewDishForm = () => {
-        setDishes([...dishes, dishes.length])
+        setDishes([...dishes, {name: '', description: '', price: '', image: null}])
     }
 
     const registerAttraction = async (e) => {
         e.preventDefault()
+        let correct = true;
 
         // First validate and register attraction
         const attractionValid = await handleAttractionRegistration(e)
         if (!attractionValid) {
             alert('impossible to create the attraction')
+            correct = false
         }
 
         // Then validate and register menu
         const menuValid = await handleMenuRegistration()
         if (!menuValid) {
             alert('impossible to create menu to the attraction')
+            correct = false
+
         }
 
-        // If both succeed, redirect
-        history('/settings/my')
+        if (correct) {
+            history('/settings/my')
+        }
     }
 
     return (
         <div className="register-business-main-container">
             <div className="register-business-container">
                 <MDBContainer>
-                    <AttractionCreateForm {...{ ownerTelegram, setOwnerTelegram, attractionName, setAttractionName, description, setDescription, city, setCity, street, setStreet, household, setHousehold, phone, setPhone, website, setWebsite, type, setType, openTime, setOpenTime, closeTime, setCloseTime, handleImageChange }} />
+                    <AttractionCreateForm {...{
+                        ownerTelegram, setOwnerTelegram,
+                        attractionName, setAttractionName,
+                        description, setDescription,
+                        city, setCity,
+                        street, setStreet,
+                        household, setHousehold,
+                        phone, setPhone,
+                        website, setWebsite,
+                        type, setType,
+                        openTime, setOpenTime,
+                        closeTime, setCloseTime,
+                        handleImageChange
+                    }} />
                     {error && <p className="text-danger">{error}</p>}
-                    <hr className="divider-vertical" />
-                    <MDBRadio name="file-menu-check" id="file-menu-check" value="file-menu" label="File Menu" inline checked={fileMenuSelected} onChange={() => setFileMenuSelected(true)} />
-                    <MDBRadio name="text-menu-check" id="text-menu-check" value="text-menu" label="Text Menu" inline checked={!fileMenuSelected} onChange={() => setFileMenuSelected(false)} />
-                    {fileMenuSelected ? <FileMenuCreateForm handleMenuFileChange={handleMenuFileChange} /> : <TextMenuCreateForm {...{ dishes, setTextMenuNames, setTextMenuDescriptions, setTextMenuPrices, setTextMenuImages, generateNewDishForm }} />}
+                    <hr className="divider-vertical"/>
+                    {(type === 'cafe' || type === 'restaurant') && (
+                        <>
+                            <MDBRadio name="file-menu-check"
+                                      id="file-menu-check"
+                                      value="file-menu"
+                                      label="File Menu"
+                                      inline
+                                      checked={fileMenuSelected} onChange={() => setFileMenuSelected(true)}/>
+                            <MDBRadio name="text-menu-check"
+                                      id="text-menu-check"
+                                      value="text-menu"
+                                      label="Text Menu"
+                                      inline
+                                      checked={!fileMenuSelected} onChange={() => setFileMenuSelected(false)}/>
+
+
+                            {fileMenuSelected ?
+                                <FileMenuCreateForm handleMenuFileChange={handleMenuFileChange}/>
+                                :
+                                <TextMenuCreateForm
+                                    dishes={dishes}
+                                    updateDish={updateDish}
+                                    generateNewDishForm={generateNewDishForm}
+                                />
+                            }
+                        </>
+                    )}
                 </MDBContainer>
                 <button onClick={registerAttraction} disabled={!validateAttractionData}>Register business</button>
             </div>
-            <AttractionPreview {...{ attractionName, type, phone, website, openTime, closeTime, description, images, currentImageIndexes, handlePrevImage, handleNextImage }} />
+            <AttractionPreview {...{
+                attractionName,
+                type,
+                phone,
+                website,
+                openTime,
+                closeTime,
+                description,
+                images,
+                currentImageIndexes,
+                handlePrevImage,
+                handleNextImage
+            }} />
             <Settings/>
         </div>
     )

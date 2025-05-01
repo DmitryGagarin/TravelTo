@@ -60,4 +60,13 @@ public class TextMenuElement extends MenuElement implements Serializable {
         this.dishImage = dishImage;
         return this;
     }
+
+    public TextMenu getMenu() {
+        return menu;
+    }
+
+    public TextMenuElement setMenu(TextMenu menu) {
+        this.menu = menu;
+        return this;
+    }
 }
