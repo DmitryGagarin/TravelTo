@@ -83,7 +83,7 @@ function RegisterBusiness() {
                 });
 
                 await axios.post(
-                    `${BACKEND}/attraction/${attractionName}/features/create-text-menu`,
+                    `${BACKEND}/attraction-feature/${attractionName}/create-text-menu`,
                     formData,
                     {
                         headers: {
@@ -105,7 +105,7 @@ function RegisterBusiness() {
                 });
 
                 await axios.post(
-                    `${BACKEND}/attraction/${attractionName}/features/create-file-menu`,
+                    `${BACKEND}/attraction-feature/${attractionName}/create-file-menu`,
                     fileFormData,
                     {
                         headers: {

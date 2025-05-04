@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TextMenuRepository extends JpaRepository<TextMenu, Long> {
@@ -16,5 +17,5 @@ public interface TextMenuRepository extends JpaRepository<TextMenu, Long> {
     nativeQuery = true)
     List<TextMenuElement> findTextMenuElementsByAttractionId(@NotNull Long attractionId);
 
-    TextMenu findByAttractionId(@NotNull Long attractionId);
+    Optional<TextMenu> findByAttractionId(@NotNull Long attractionId);
 }

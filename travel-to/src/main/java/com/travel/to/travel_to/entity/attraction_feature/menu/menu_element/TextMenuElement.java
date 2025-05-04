@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.entity.attraction_feature.menu.menu_element;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu.TextMenu;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -21,6 +22,7 @@ public class TextMenuElement extends MenuElement implements Serializable {
     private String dishPrice;
     private byte[] dishImage;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private TextMenu menu;

@@ -1,13 +1,14 @@
 package com.travel.to.travel_to.service;
 
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu.FileMenu;
-import com.travel.to.travel_to.entity.attraction_feature.menu.menu.Menu;
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu.TextMenu;
 import com.travel.to.travel_to.form.attraction_feature.TextMenuCreateForm;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public interface MenuService {
 
@@ -18,7 +19,7 @@ public interface MenuService {
         @NotNull MultipartFile[] images
     ) throws IOException;
 
-    TextMenu findTextMenuByAttractionId(@NotNull Long attractionId);
+    Optional<TextMenu> findTextMenuByAttractionId(@NotNull Long attractionId);
 
     @NotNull
     FileMenu createFileMenu(
@@ -26,9 +27,12 @@ public interface MenuService {
         @NotNull MultipartFile[] files
     ) throws IOException;
 
-    FileMenu findFileMenuByAttractionId(@NotNull Long attractionId);
+    Optional<FileMenu> findFileMenuByAttractionId(@NotNull Long attractionId);
 
-    @NotNull
-    Menu getByMenuAttractionName(@NotNull String attractionName);
+    @Nullable
+    Optional<TextMenu> getTextMenuByAttractionName(@NotNull String attractionName);
+
+    @Nullable
+    Optional<FileMenu> getFileMenuByAttractionName(@NotNull String attractionName);
 
 }

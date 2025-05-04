@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FileMenuRepository extends JpaRepository<FileMenu, Long> {
@@ -16,6 +17,6 @@ public interface FileMenuRepository extends JpaRepository<FileMenu, Long> {
     nativeQuery = true)
     List<FileMenuElement> findFileMenuElementsByAttractionId(@NotNull Long attractionId);
 
-    FileMenu findByAttractionId(@NotNull Long attractionId);
+    Optional<FileMenu> findByAttractionId(@NotNull Long attractionId);
 
 }

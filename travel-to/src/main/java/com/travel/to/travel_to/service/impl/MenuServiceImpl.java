@@ -1,7 +1,6 @@
 package com.travel.to.travel_to.service.impl;
 
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu.FileMenu;
-import com.travel.to.travel_to.entity.attraction_feature.menu.menu.Menu;
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu.TextMenu;
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu_element.FileMenuElement;
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu_element.TextMenuElement;
@@ -10,8 +9,8 @@ import com.travel.to.travel_to.repository.FileMenuRepository;
 import com.travel.to.travel_to.repository.TextMenuRepository;
 import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.service.MenuService;
-import jakarta.persistence.EntityNotFoundException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -70,7 +69,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public TextMenu findTextMenuByAttractionId(@NotNull Long attractionId) {
+    public Optional<TextMenu> findTextMenuByAttractionId(@NotNull Long attractionId) {
         return textMenuRepository.findByAttractionId(attractionId);
     }
 
@@ -101,31 +100,33 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public FileMenu findFileMenuByAttractionId(@NotNull Long attractionId) {
+    public Optional<FileMenu> findFileMenuByAttractionId(@NotNull Long attractionId) {
         return fileMenuRepository.findByAttractionId(attractionId);
     }
 
     @Override
-    @NotNull
-    public Menu getByMenuAttractionName(@NotNull String attractionName) {
+    @Nullable
+    public Optional<TextMenu> getTextMenuByAttractionName(@NotNull String attractionName) {
         Long attractionId = attractionService.getByName(attractionName).getId();
-        String type = attractionService.getTypeByName(attractionName);
-
-        if ("cafe".equals(type) || "restaurant".equals(type)) {
-            List<FileMenuElement> fileMenuElements = fileMenuRepository.findFileMenuElementsByAttractionId(attractionId);
-            if (Objects.nonNull(fileMenuElements)) {
-                FileMenu fileMenu = findFileMenuByAttractionId(attractionId);
-                fileMenu.setElements(fileMenuElements);
-                return fileMenu;
-            }
-
-            List<TextMenuElement> textMenuElements = textMenuRepository.findTextMenuElementsByAttractionId(attractionId);
-            if (Objects.nonNull(textMenuElements)) {
-                TextMenu textMenu = findTextMenuByAttractionId(attractionId);
-                textMenu.setElements(textMenuElements);
-                return textMenu;
-            }
+        List<TextMenuElement> textMenuElements = textMenuRepository.findTextMenuElementsByAttractionId(attractionId);
+        Optional<TextMenu> textMenu = findTextMenuByAttractionId(attractionId);
+        if (textMenu.isPresent()) {
+            textMenu.get().setElements(textMenuElements);
+            return textMenu;
         }
-        throw new EntityNotFoundException("No menu found for attraction: " + attractionName);
+        return Optional.empty();
+    }
+
+    @Override
+    @Nullable
+    public Optional<FileMenu> getFileMenuByAttractionName(@NotNull String attractionName) {
+        Long attractionId = attractionService.getByName(attractionName).getId();
+        List<FileMenuElement> fileMenuElements = fileMenuRepository.findFileMenuElementsByAttractionId(attractionId);
+        Optional<FileMenu> fileMenu = findFileMenuByAttractionId(attractionId);
+        if (fileMenu.isPresent()) {
+            fileMenu.get().setElements(fileMenuElements);
+            return fileMenu;
+        }
+        return Optional.empty();
     }
 }

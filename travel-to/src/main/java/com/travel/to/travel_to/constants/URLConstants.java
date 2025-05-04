@@ -7,6 +7,7 @@ public class URLConstants {
     public static final String LOGOUT = "/logout";
     public static final String RESET_PASSWORD = "/signin/reset-password";
     public static final String ATTRACTIONS = "/attraction/published";
+    public static final String ATTRACTION_FEATURES = "/attraction-feature";
     public static final String SWAGGER = "/swagger-ui";
     public static final String SWAGGER2 = "/v3";
     public static final String ACTUATOR = "/actuator";

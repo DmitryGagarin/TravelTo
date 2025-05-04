@@ -18,7 +18,6 @@ public class FileMenu extends Menu implements Serializable {
     @Serial
     private static final long serialVersionUID = 3782563102469735487L;
 
-    @JsonBackReference
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<FileMenuElement> elements;
 

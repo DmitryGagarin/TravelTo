@@ -35,9 +35,9 @@ export const renderStars = (rating) => {
     const stars = []
     for (let i = 1; i <= 5; i++) {
         if (i <= rating) {
-            stars.push(<FaStar key={i} class="yellow-rating-star star"/>)
+            stars.push(<FaStar key={i} className="yellow-rating-star star"/>)
         } else {
-            stars.push(<FaRegStar key={i} class="grey-rating-star star"/>)
+            stars.push(<FaRegStar key={i} className="grey-rating-star star"/>)
         }
     }
     return stars;

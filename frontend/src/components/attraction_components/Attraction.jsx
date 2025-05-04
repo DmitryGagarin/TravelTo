@@ -6,8 +6,8 @@ import {MDBContainer, MDBInput, MDBTextArea} from "mdb-react-ui-kit"
 import {FaHeart} from "react-icons/fa"
 import {getAttractionCardStyle, renderStars} from '../../utils/StyleUtils.js'
 import {getImageFormat, handleNextImage, handlePrevImage} from "../../utils/ImageUtils"
-import {catchError} from "../../utils/ErrorUtils";
-import {FaRotate} from "react-icons/fa6";
+import {catchError} from "../../utils/ErrorUtils"
+import {Spinner} from 'react-bootstrap'
 
 function Attraction() {
     const BACKEND = process.env.REACT_APP_BACKEND_URL
@@ -46,6 +46,7 @@ function Attraction() {
     const [latitude, setLatitude] = useState('')
     const [longitude, setLongitude] = useState('')
 
+    const [isLoadingFeature, setIsLoadingFeature] = useState(false);
 
     useEffect(() => {
         const fetchAttraction = async () => {
@@ -65,57 +66,84 @@ function Attraction() {
                 setError('Failed to fetch attraction data')
             }
         }
+        fetchAttraction()
+    }, [])
 
+    useEffect(() => {
         const fetchDiscussions = async () => {
             try {
-                const response =
-                    await axios.get(`${BACKEND}/attraction-discussion/${attractionUuid}`, {
-                        headers: {
-                            'Authorization': `Bearer ${ACCESS_TOKEN}`
-                        }
-                    })
-                setDiscussions(response.data._embedded.attractionDiscussionModelList)
+                const response = await axios.get(`${BACKEND}/attraction-discussion/${attractionUuid}`, {
+                    headers: {
+                        'Authorization': `Bearer ${ACCESS_TOKEN}`
+                    }
+                });
+
+                const embedded = response.data._embedded;
+                if (embedded && embedded.attractionDiscussionModelList) {
+                    setDiscussions(embedded.attractionDiscussionModelList);
+                } else {
+                    setDiscussions([]); // No discussions, empty list
+                }
             } catch (error) {
-                catchError(error, setError, FRONTEND, 'Impossible to fetch discussions')
+                // Only catch real errors here
+                catchError(error, setError, FRONTEND, 'Impossible to fetch discussions');
             }
         }
-
-        // const fetchAddress = async() => {
-        //     let coords = []
-        //     try {
-        //         coords = await axios.get(
-        //         `${domain}?apikey=${API_KEY}&geocode=Москва, улица Амурская, 1Ак1&format=json`
-        //         )
-        //     }
-        //     catch (err) {}
-        //     setBalloon(coords.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos)
-        // }
-
-        fetchAttraction()
         fetchDiscussions()
-        // fetchAddress()
-    }, [attractionUuid, name])
+    }, [attractionUuid])
+
+    // useEffect(() => {
+    //     const fetchAddress = async () => {
+    //         let coords = []
+    //         try {
+    //             coords = await axios.get(
+    //                 `${domain}?apikey=${API_KEY}&geocode=Москва, улица Амурская, 1Ак1&format=json`
+    //             )
+    //         } catch (err) {
+    //         }
+    //         setBalloon(coords.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos)
+    //     }
+    // }, [attraction])
 
     useEffect(() => {
         if (attraction.type === 'cafe' || attraction.type === 'restaurant') {
             const fetchMenu = async () => {
+                setIsLoadingFeature(true);
                 try {
-                    const response = await axios.get(`${BACKEND}/attraction/${attraction.name}/get-menu`,
+                    const textResponse = await axios.get(
+                        `${BACKEND}/attraction-feature/${attraction.name}/get-text-menu`,
                         {
                             headers: {
                                 'Authorization': `Bearer ${ACCESS_TOKEN}`
                             }
                         }
-                    )
-                    console.log('response', response)
-                    setFeature(response.data)
-                } catch (error) {
-                    catchError(error, setError, FRONTEND, 'Impossible to fetch menu')
+                    );
+                    if (textResponse.data !== null) {
+                        setFeature({type: 'text', data: textResponse.data})
+                    } else {
+                            const fileResponse = await axios.get(
+                                `${BACKEND}/attraction-feature/${attraction.name}/get-file-menu`,
+                                {
+                                    headers: {
+                                        'Authorization': `Bearer ${ACCESS_TOKEN}`
+                                    }
+                                }
+                            );
+                            setFeature({type: 'file', data: fileResponse.data});
+                    }
+                } catch (textError) {
+                   catchError()
+                } finally {
+                    setIsLoadingFeature(false);
                 }
             }
             fetchMenu()
         }
     }, [attraction]);
+
+
+    // console.log("feature", feature)
+
 
     useEffect(() => {
         if (balloon) {
@@ -125,8 +153,6 @@ function Attraction() {
             setLongitude(lon)
         }
     }, [balloon])
-
-    console.log("feature", feature)
 
     useEffect(() => {
         if (attraction && Array.isArray(attraction.images) && attraction.images.length > 0) {
@@ -178,6 +204,7 @@ function Attraction() {
                     }
                 }
             )
+            // TODO: это ломает nginx
             window.location.reload()
         } catch (error) {
             if (error.response && error.response.data) {
@@ -195,6 +222,8 @@ function Attraction() {
             }
         }
     }
+
+    console.log(feature)
 
     const handleImageChange = (e) => {
         setImages([...e.target.files])
@@ -276,17 +305,37 @@ function Attraction() {
                 </div>
             </div>
             <MDBContainer>
-                <div style={{height: '600px'}}>
-                    <iframe
-                        title="Menu"
-                        src={feature}
-                        width="100%"
-                        height="100%"
-                        style={{border: 'none'}}
-                    />
+                <div>
+                    {isLoadingFeature ? (
+                        <Spinner/> // Your loading indicator
+                    ) : feature?.type === 'text' ? (
+                        feature.data.elements.map((el, index) => (
+                            <div key={index}>
+                                <h5>{el.dishName}</h5>
+                                <p>{el.dishDescription}</p>
+                                <p>Price: {el.dishPrice}</p>
+                                {el.dishImage && (
+                                    <img
+                                        src={`data:image/jpeg;base64,${el.dishImage}`}
+                                        alt={el.dishName}
+                                        style={{maxWidth: '200px'}}
+                                    />
+                                )}
+                            </div>
+                        ))
+                    ) : feature?.type === 'file' ? (
+                        <iframe
+                            src={`data:application/pdf;base64,${feature.data.elements[0]?.file}`}
+                            width="100%"
+                            height="600px"
+                            style={{ border: 'none' }}
+                            title="Menu PDF"
+                        />
+                    ) : (
+                        <p>No menu available</p>
+                    )}
                 </div>
             </MDBContainer>
-
             {/* Comment Section */}
             <div className="discussion-main-container">
                 <div className="leave-discussion-container">
@@ -360,60 +409,64 @@ function Attraction() {
                 {/* Displaying Discussions */}
                 <div className="discussions-main-container">
                     <div className="discussion-container">
-                        {discussions.map((discussion) => (
-                            <div key={discussion.id} className="discussion-card">
-                                <div className="discussion-author discussion-part">
-                                    Author: {discussion.author}
+                        {discussions.length === 0 ? (
+                            <p>No discussions, be first</p>
+                        ) : (
+                            discussions.map((discussion) => (
+                                <div key={discussion.id} className="discussion-card">
+                                    <div className="discussion-author discussion-part">
+                                        Author: {discussion.author}
+                                    </div>
+                                    <div className="discussion-title discussion-part">
+                                        Title: {discussion.title}
+                                    </div>
+                                    <div className="discussion-like discussion-part">
+                                        Liked: {discussion.contentLike}
+                                    </div>
+                                    <div className="discussion-dislike discussion-part">
+                                        Disliked: {discussion.contentDislike}
+                                    </div>
+                                    <div className="discussion-content discussion-part">
+                                        Review: {discussion.content}
+                                    </div>
+                                    <div className="discussion-ration discussion-part">
+                                        Overall: {renderStars(discussion.rating)}
+                                    </div>
+                                    <img
+                                        src={`data:image/png;base64,${discussion.images[currentDiscussionImageIndex]}`}
+                                        alt={attraction.name}
+                                        className="card-image"
+                                    />
+                                    <div className="image-navigation">
+                                        <button
+                                            className="image-nav-button left"
+                                            onClick={() =>
+                                                setCurrentAttractionImageIndex(
+                                                    handlePrevImage(currentDiscussionImageIndex, discussion.images)
+                                                )
+                                            }
+                                            disabled={discussion.images.length <= 1}
+                                        >
+                                            ←
+                                        </button>
+                                        <button
+                                            className="image-nav-button right"
+                                            onClick={() =>
+                                                setCurrentAttractionImageIndex(
+                                                    handleNextImage(currentDiscussionImageIndex, discussion.images)
+                                                )
+                                            }
+                                            disabled={discussion.images.length <= 1}
+                                        >
+                                            →
+                                        </button>
+                                    </div>
+                                    <div className="discussion-created_at discussion-part">
+                                        Created at: {discussion.createdAt}
+                                    </div>
                                 </div>
-                                <div className="discussion-title discussion-part">
-                                    Title: {discussion.title}
-                                </div>
-                                <div className="discussion-like discussion-part">
-                                    Liked: {discussion.contentLike}
-                                </div>
-                                <div className="discussion-dislike discussion-part">
-                                    Disliked: {discussion.contentDislike}
-                                </div>
-                                <div className="discussion-content discussion-part">
-                                    Review: {discussion.content}
-                                </div>
-                                <div className="discussion-ration discussion-part">
-                                    Overall: {renderStars(discussion.rating)}
-                                </div>
-                                <img
-                                    src={`data:image/png;base64,${discussion.images[currentDiscussionImageIndex]}`}
-                                    alt={attraction.name}
-                                    className="card-image"
-                                />
-                                <div className="image-navigation">
-                                    <button
-                                        className="image-nav-button left"
-                                        onClick={() =>
-                                            setCurrentAttractionImageIndex(
-                                                handlePrevImage(currentDiscussionImageIndex, discussion.images)
-                                            )
-                                        }
-                                        disabled={discussion.images.length <= 1}
-                                    >
-                                        ←
-                                    </button>
-                                    <button
-                                        className="image-nav-button right"
-                                        onClick={() =>
-                                            setCurrentAttractionImageIndex(
-                                                handleNextImage(currentDiscussionImageIndex, discussion.images)
-                                            )
-                                        }
-                                        disabled={discussion.images.length <= 1}
-                                    >
-                                        →
-                                    </button>
-                                </div>
-                                <div className="discussion-created_at discussion-part">
-                                    Created at: {discussion.createdAt}
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                 </div>
             </div>

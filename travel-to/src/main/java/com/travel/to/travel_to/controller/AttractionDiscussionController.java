@@ -57,6 +57,7 @@ public class AttractionDiscussionController {
         binder.addValidators(attractionDiscussionCreateFormValidator);
     }
 
+    // TODO: переделать на name
     @GetMapping("/{attractionUuid}")
     public PagedModel<AttractionDiscussionModel> list(
         @PathVariable String attractionUuid

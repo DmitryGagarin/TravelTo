@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.entity.attraction_feature.menu.menu_element;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu.FileMenu;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -18,6 +19,7 @@ public class FileMenuElement extends MenuElement implements Serializable {
 
     private byte[] file;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private FileMenu menu;
