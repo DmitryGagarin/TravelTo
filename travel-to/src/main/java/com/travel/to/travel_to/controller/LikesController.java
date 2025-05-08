@@ -78,4 +78,12 @@ public class LikesController {
         return likesModelAssembler.toModel(likesService.addLike(attractionName, authUser));
     }
 
+    @PostMapping("/delete/{attractionName}")
+    public void delete(
+        @PathVariable String attractionName,
+        @AuthenticationPrincipal AuthUser authUser
+    ) {
+        likesService.deleteLike(attractionName, authUser);
+    }
+
 }

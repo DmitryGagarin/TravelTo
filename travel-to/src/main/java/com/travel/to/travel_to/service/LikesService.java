@@ -19,4 +19,9 @@ public interface LikesService {
         @NotNull AuthUser authUser
     );
 
+    void deleteLike(
+        @NotNull String attractionName,
+        @NotNull AuthUser authUser
+    );
+
 }

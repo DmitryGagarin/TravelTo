@@ -53,4 +53,12 @@ public class LikesServiceImpl implements LikesService {
         Long id = userService.getByUuid(authUser.getUuid()).getId();
         return likesRepository.findAllByUserId(id);
     }
+
+    @Override
+    public void deleteLike(@NotNull String attractionName, @NotNull AuthUser authUser) {
+        likesRepository.deleteLikeByUserIdAndAttractionId(
+            attractionService.getByName(attractionName).getId(),
+            userService.getByUuid(authUser.getUuid()).getId()
+        );
+    }
 }

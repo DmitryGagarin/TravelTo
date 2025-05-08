@@ -3,7 +3,7 @@ import axios from 'axios'
 import {Link} from 'react-router-dom'
 import Header from '../Header'
 import {MDBInput} from 'mdb-react-ui-kit'
-import {FaHeart} from 'react-icons/fa'
+import {FaHeart, FaHeartBroken} from 'react-icons/fa'
 import {getAttractionCardStyle, renderStars} from "../../utils/StyleUtils"
 import {getImageFormat} from "../../utils/ImageUtils"
 
@@ -13,7 +13,11 @@ function Attractions() {
 
     const [attractions, setAttractions] = useState([])
     const [types, setTypes] = useState([])
+
     const [likedAttraction, setLikedAttraction] = useState(null)
+    const [dislikedAttraction, setDislikedAttraction] = useState(null)
+    const [likedAttractionNames, setLikedAttractionNames] = useState([])
+    const [hoveringLiked, setHoveringLiked] = useState({});
 
     const [selectedTypes, setSelectedTypes] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
@@ -43,6 +47,27 @@ function Attractions() {
     }, [TOKEN])
 
     useEffect(() => {
+        const fetchUserLikedAttraction = async () => {
+            try {
+                const response = await axios.get(`${BACKEND}/like`, {
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`
+                    }
+                })
+                const likedAttraction = response.data._embedded.attractionModelList || []
+                const likedAttractionNames = []
+                likedAttraction.forEach(e => {
+                    likedAttractionNames.push(e.name)
+                })
+                setLikedAttractionNames(likedAttractionNames)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchUserLikedAttraction()
+    }, []);
+
+    useEffect(() => {
         if (likedAttraction) {
             const handleLike = async (name) => {
                 try {
@@ -59,8 +84,25 @@ function Attractions() {
                     console.error('Error liking attraction:', error)
                 }
             }
-
             handleLike(likedAttraction)
+        }
+
+        if (dislikedAttraction) {
+            const handleDislike = async (name) => {
+                try {
+                    await axios.post(`${BACKEND}/like/delete/${name}`, {}, {
+                        headers: {
+                            'Authorization': `Bearer ${TOKEN}`
+                        }
+                    })
+                } catch (error) {
+                    if (error.response.status === 401) {
+                        window.location.href = `${FRONTEND}/signin`
+                    }
+                    console.log(error)
+                }
+            }
+            handleDislike()
         }
     }, [likedAttraction])
 
@@ -114,7 +156,8 @@ function Attractions() {
                         {filteredAttractions.map((attraction) => {
                             const currentImageIndex = currentImageIndexes[attraction.name] || 0
                             return (
-                                <div key={attraction.name} className="attraction-card attractions-attraction-card attractions">
+                                <div key={attraction.name}
+                                     className="attraction-card attractions-attraction-card attractions">
                                     <div className="image-container">
                                         <img
                                             src={`data:image/${getImageFormat(attraction.imagesFormats[currentImageIndex])};base64,${attraction.images[currentImageIndex]}`}
@@ -141,39 +184,74 @@ function Attractions() {
                                             </button>
                                         </div>
                                     </div>
-                                    {/*<div className="attraction-data">*/}
-                                        <div
-                                            className="attraction-type"
-                                            style={getAttractionCardStyle(attraction.type)}
-                                        >
-                                            {attraction.type}
-                                        </div>
-                                        <div className="like">
-                                            <FaHeart color="pink" size={36} onClick={() => setLikedAttraction(attraction.name)}/>
-                                        </div>
-                                        <div className="contact-info">
-                                            <p>
-                                                Website:{" "}
-                                                <Link to={attraction.website} target="_blank" rel="noopener noreferrer">
-                                                    {attraction.website}
-                                                </Link>
-                                            </p>
-                                            <p>Phone: {attraction.phone}</p>
-                                        </div>
+                                    <div
+                                        className="attraction-type"
+                                        style={getAttractionCardStyle(attraction.type)}
+                                    >
+                                        {attraction.type}
+                                    </div>
+                                    <div className="like">
+                                        {likedAttractionNames.includes(attraction.name) ? (
+                                            hoveringLiked[attraction.name] ? (
+                                                <FaHeartBroken
+                                                    className="like-button-heart liked hover-break"
+                                                    style={{background : "red", color : "black"}}
+                                                    size={36}
+                                                    onClick={() => setDislikedAttraction(attraction.name)}
+                                                    title="Are you sure you want to remove your like?"
+                                                    onMouseEnter={() =>
+                                                        setHoveringLiked(prev => ({...prev, [attraction.name]: true}))
+                                                    }
+                                                    onMouseLeave={() =>
+                                                        setHoveringLiked(prev => ({...prev, [attraction.name]: false}))
+                                                    }
+                                                />
+                                            ) : (
+                                                <FaHeart
+                                                    className="like-button-heart liked"
+                                                    size={36}
+                                                    onClick={() => setDislikedAttraction(attraction.name)}
+                                                    title="You have liked this attraction"
+                                                    onMouseEnter={() =>
+                                                        setHoveringLiked(prev => ({...prev, [attraction.name]: true}))
+                                                    }
+                                                    onMouseLeave={() =>
+                                                        setHoveringLiked(prev => ({...prev, [attraction.name]: false}))
+                                                    }
+                                                />
+                                            )
+                                        ) : (
+                                            <FaHeart
+                                                className="like-button-heart not-liked"
+                                                size={36}
+                                                onClick={() => setLikedAttraction(attraction.name)}
+                                                title="Click to like this attraction"
+                                            />
+                                        )}
+                                    </div>
+                                    <div className="contact-info">
+                                        <p>
+                                            Website:{" "}
+                                            <Link to={attraction.website} target="_blank" rel="noopener noreferrer">
+                                                {attraction.website}
+                                            </Link>
+                                        </p>
+                                        <p>Phone: {attraction.phone}</p>
+                                    </div>
                                     <div className="rating">{renderStars(attraction.rating)}</div>
                                     <div className="name-description">
-                                            <h5>{attraction.name}</h5>
-                                            <p>{attraction.description}</p>
-                                        </div>
-                                        <div className="learn-more">
-                                            <button className="learn-more-button">
-                                                <Link to={`/attraction/${attraction.name}`}>Visit</Link>
-                                            </button>
-                                        </div>
-                                        <div className="time">
-                                            <p>From: {attraction.openTime}</p>
-                                            <p>To: {attraction.closeTime}</p>
-                                        </div>
+                                        <h5>{attraction.name}</h5>
+                                        <p>{attraction.description}</p>
+                                    </div>
+                                    <div className="learn-more">
+                                        <button className="learn-more-button">
+                                            <Link to={`/attraction/${attraction.name}`}>Visit</Link>
+                                        </button>
+                                    </div>
+                                    <div className="time">
+                                        <p>From: {attraction.openTime}</p>
+                                        <p>To: {attraction.closeTime}</p>
+                                    </div>
                                     {/*</div>*/}
                                 </div>
                             )
