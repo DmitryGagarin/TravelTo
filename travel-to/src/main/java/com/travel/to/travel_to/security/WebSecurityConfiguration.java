@@ -65,6 +65,7 @@ public class WebSecurityConfiguration {
                     "/signup/**",
                     "/logout",
                     "/attraction/published",
+                    "/attraction-discussion/*",
                     "/attraction-feature/get-text-menu",
                     "/attraction-feature/get-file-menu",
                     // TODO: как то настроить роли для допуска

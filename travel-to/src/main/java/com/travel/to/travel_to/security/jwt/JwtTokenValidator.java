@@ -46,6 +46,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             || requestURI.equals(URLConstants.RESET_PASSWORD)
             || requestURI.startsWith(URLConstants.ACCOUNT_VERIFICATION)
             || requestURI.equals(URLConstants.ATTRACTIONS)
+            || requestURI.equals(URLConstants.ATTRACTION_DISCUSSIONS)
             || requestURI.equals(URLConstants.ATTRACTION_FEATURES)
             || requestURI.startsWith(URLConstants.SWAGGER)
             || requestURI.startsWith(URLConstants.SWAGGER2)

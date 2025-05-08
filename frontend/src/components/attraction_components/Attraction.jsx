@@ -46,7 +46,7 @@ function Attraction() {
     const [latitude, setLatitude] = useState('')
     const [longitude, setLongitude] = useState('')
 
-    const [isLoadingFeature, setIsLoadingFeature] = useState(false);
+    const [isLoadingFeature, setIsLoadingFeature] = useState(false)
 
     useEffect(() => {
         const fetchAttraction = async () => {
@@ -70,23 +70,22 @@ function Attraction() {
     }, [])
 
     useEffect(() => {
+        if (!attractionUuid) return
         const fetchDiscussions = async () => {
             try {
                 const response = await axios.get(`${BACKEND}/attraction-discussion/${attractionUuid}`, {
                     headers: {
                         'Authorization': `Bearer ${ACCESS_TOKEN}`
                     }
-                });
-
-                const embedded = response.data._embedded;
+                })
+                const embedded = response.data._embedded
                 if (embedded && embedded.attractionDiscussionModelList) {
-                    setDiscussions(embedded.attractionDiscussionModelList);
+                    setDiscussions(embedded.attractionDiscussionModelList)
                 } else {
-                    setDiscussions([]); // No discussions, empty list
+                    setDiscussions([])
                 }
             } catch (error) {
-                // Only catch real errors here
-                catchError(error, setError, FRONTEND, 'Impossible to fetch discussions');
+                catchError(error, setError, FRONTEND, 'Impossible to fetch discussions')
             }
         }
         fetchDiscussions()
@@ -108,7 +107,7 @@ function Attraction() {
     useEffect(() => {
         if (attraction.type === 'cafe' || attraction.type === 'restaurant') {
             const fetchMenu = async () => {
-                setIsLoadingFeature(true);
+                setIsLoadingFeature(true)
                 try {
                     const textResponse = await axios.get(
                         `${BACKEND}/attraction-feature/${attraction.name}/get-text-menu`,
@@ -117,7 +116,7 @@ function Attraction() {
                                 'Authorization': `Bearer ${ACCESS_TOKEN}`
                             }
                         }
-                    );
+                    )
                     if (textResponse.data !== null) {
                         setFeature({type: 'text', data: textResponse.data})
                     } else {
@@ -128,22 +127,18 @@ function Attraction() {
                                         'Authorization': `Bearer ${ACCESS_TOKEN}`
                                     }
                                 }
-                            );
-                            setFeature({type: 'file', data: fileResponse.data});
+                            )
+                            setFeature({type: 'file', data: fileResponse.data})
                     }
                 } catch (textError) {
                    catchError()
                 } finally {
-                    setIsLoadingFeature(false);
+                    setIsLoadingFeature(false)
                 }
             }
             fetchMenu()
         }
-    }, [attraction]);
-
-
-    // console.log("feature", feature)
-
+    }, [attraction])
 
     useEffect(() => {
         if (balloon) {
@@ -332,7 +327,7 @@ function Attraction() {
                             title="Menu PDF"
                         />
                     ) : (
-                        <p>No menu available</p>
+                        <></>
                     )}
                 </div>
             </MDBContainer>
