@@ -7,10 +7,11 @@ import {getImageFormat} from "../utils/ImageUtils"
 function Liked() {
     const [likes, setLikes] = useState([])
     const [error, setError] = useState('')
+    const [currentImageIndexes, setCurrentImageIndexes] = useState({})
 
     // TODO: TypeError: Cannot read properties of undefined (reading 'status')
     useEffect(() => {
-    const token = JSON.parse(localStorage.getItem('user')).accessToken
+        const token = JSON.parse(localStorage.getItem('user')).accessToken
         const fetchLikes = async () => {
             try {
                 const response = await axios.get("http://localhost:8080/like", {
@@ -18,7 +19,11 @@ function Liked() {
                         'Authorization': `Bearer ${token}`
                     }
                 })
-                setLikes(response.data._embedded.likesModelList || [])
+                if (response) {
+                    setLikes(response.data._embedded.attractionModelList)
+                } else {
+                    setLikes([])
+                }
             } catch (error) {
                 if (error.response && error.response.data) {
                     const errorMessages = error.response.data
@@ -49,7 +54,21 @@ function Liked() {
         )
     }
 
-    console.log(likes)
+    const handleNextImage = (index, images, attractionName) => {
+        const newIndex = (index + 1) % images.length
+        setCurrentImageIndexes((prev) => ({
+            ...prev,
+            [attractionName]: newIndex,
+        }))
+    }
+
+    const handlePrevImage = (index, images, attractionName) => {
+        const newIndex = (index - 1 + images.length) % images.length
+        setCurrentImageIndexes((prev) => ({
+            ...prev,
+            [attractionName]: newIndex,
+        }))
+    }
 
     // TODO: add image slider
     return (
@@ -58,15 +77,35 @@ function Liked() {
             <div className="attractions-main-container">
                 <div className="attractions-container">
                     <div className="cards-container">
-                        {likes.map((like, index) => (
-                            like.attraction.map((attraction) => (
+                        {likes.map((attraction, index) => {
+                            const currentImageIndex = currentImageIndexes[attraction.name] || 0
+                            return (
                                 <div key={attraction.name || index} className="attraction-card">
                                     <div className="image-container">
                                         <img
-                                            src={`data:image/${getImageFormat(attraction.imagesFormat[0])};base64,${attraction.images[0]}`}
+                                            src={`data:image/${getImageFormat(attraction.imagesFormats[currentImageIndex])};base64,${attraction.images[currentImageIndex]}`}
                                             alt={attraction.name}
                                             className="card-image"
                                         />
+                                        <div className="image-navigation">
+                                            <button
+                                                className="image-nav-button left"
+                                                onClick={() =>
+                                                    handlePrevImage(currentImageIndex, attraction.images, attraction.name)
+                                                }
+                                            >
+                                                ←
+                                            </button>
+
+                                            <button
+                                                className="image-nav-button right"
+                                                onClick={() =>
+                                                    handleNextImage(currentImageIndex, attraction.images, attraction.name)
+                                                }
+                                            >
+                                                →
+                                            </button>
+                                        </div>
                                         <div className="attraction-type">{attraction.type}</div>
                                     </div>
                                     <div className="rating">
@@ -99,8 +138,8 @@ function Liked() {
                                         <p>Closing Time: {attraction.closeTime}</p>
                                     </div>
                                 </div>
-                            ))
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>
             </div>

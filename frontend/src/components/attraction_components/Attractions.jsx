@@ -20,7 +20,7 @@ function Attractions() {
 
     const [currentImageIndexes, setCurrentImageIndexes] = useState({})
 
-    const token = JSON.parse(localStorage.getItem('user'))?.accessToken
+    const TOKEN = JSON.parse(localStorage.getItem('user'))?.accessToken
 
     useEffect(() => {
         const fetchAttractions = async () => {
@@ -40,7 +40,7 @@ function Attractions() {
             }
         }
         fetchAttractions()
-    }, [token])
+    }, [TOKEN])
 
     useEffect(() => {
         if (likedAttraction) {
@@ -49,7 +49,7 @@ function Attractions() {
                     await axios.post(`${BACKEND}/like/add/${name}`, {}, {
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
+                            'Authorization': `Bearer ${TOKEN}`
                         },
                     })
                 } catch (error) {

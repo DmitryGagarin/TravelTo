@@ -209,19 +209,18 @@ function RegisterBusiness() {
         e.preventDefault()
         let correct = true;
 
-        // First validate and register attraction
         const attractionValid = await handleAttractionRegistration(e)
         if (!attractionValid) {
             alert('impossible to create the attraction')
             correct = false
         }
 
-        // Then validate and register menu
-        const menuValid = await handleMenuRegistration()
-        if (!menuValid) {
-            alert('impossible to create menu to the attraction')
-            correct = false
-
+        if (type === 'cafe' || type === 'restaurant') {
+            const menuValid = await handleMenuRegistration()
+            if (!menuValid) {
+                alert('impossible to create menu to the attraction')
+                correct = false
+            }
         }
 
         if (correct) {
@@ -263,8 +262,6 @@ function RegisterBusiness() {
                                       label="Text Menu"
                                       inline
                                       checked={!fileMenuSelected} onChange={() => setFileMenuSelected(false)}/>
-
-
                             {fileMenuSelected ?
                                 <FileMenuCreateForm handleMenuFileChange={handleMenuFileChange}/>
                                 :

@@ -176,6 +176,12 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     @NotNull
+    public Attraction getById(@NotNull Long attractionId) {
+        return attractionRepository.getById(attractionId);
+    }
+
+    @Override
+    @NotNull
     public Attraction getByName(@NotNull String attractionName) {
         return attractionRepository.getByName(attractionName);
     }

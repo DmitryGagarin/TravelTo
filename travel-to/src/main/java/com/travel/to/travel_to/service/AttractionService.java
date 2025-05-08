@@ -58,6 +58,9 @@ public interface AttractionService {
     Attraction getByUuid(@NotNull String uuid);
 
     @NotNull
+    Attraction getById(@NotNull Long attractionId);
+
+    @NotNull
     Attraction getByName(@NotNull String name);
 
     Optional<Attraction> findByName(@NotNull String name);
