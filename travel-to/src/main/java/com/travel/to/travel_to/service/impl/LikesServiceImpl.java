@@ -6,6 +6,7 @@ import com.travel.to.travel_to.repository.LikesRepository;
 import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.service.LikesService;
 import com.travel.to.travel_to.service.UserService;
+import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,10 +56,13 @@ public class LikesServiceImpl implements LikesService {
     }
 
     @Override
+    @Transactional
     public void deleteLike(@NotNull String attractionName, @NotNull AuthUser authUser) {
-        likesRepository.deleteLikeByUserIdAndAttractionId(
+        Likes like = likesRepository.findOneByUserIdAndAttractionId(
             attractionService.getByName(attractionName).getId(),
             userService.getByUuid(authUser.getUuid()).getId()
         );
+
+        likesRepository.delete(like);
     }
 }

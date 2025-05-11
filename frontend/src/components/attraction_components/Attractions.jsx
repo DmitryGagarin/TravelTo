@@ -92,6 +92,7 @@ function Attractions() {
                 try {
                     await axios.post(`${BACKEND}/like/delete/${name}`, {}, {
                         headers: {
+                            'Content-Type': 'application/json',
                             'Authorization': `Bearer ${TOKEN}`
                         }
                     })
@@ -99,12 +100,13 @@ function Attractions() {
                     if (error.response.status === 401) {
                         window.location.href = `${FRONTEND}/signin`
                     }
+                    alert("Impossible to delete like")
                     console.log(error)
                 }
             }
-            handleDislike()
+            handleDislike(dislikedAttraction)
         }
-    }, [likedAttraction])
+    }, [likedAttraction, dislikedAttraction])
 
     const handleSearch = (event) => {
         setSearchQuery(event.target.value)
