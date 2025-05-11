@@ -3,12 +3,13 @@ import axios from 'axios'
 import Header from "../Header"
 import {Link, useParams} from "react-router-dom"
 import {MDBContainer, MDBInput, MDBTextArea} from "mdb-react-ui-kit"
-import {FaHeart} from "react-icons/fa"
+import {FaHeart, FaHeartBroken} from "react-icons/fa"
 import {getAttractionCardStyle, renderStars} from '../../utils/StyleUtils.js'
 import {getImageFormat, handleNextImage, handlePrevImage} from "../../utils/ImageUtils"
 import {catchError} from "../../utils/ErrorUtils"
 import {Spinner} from 'react-bootstrap'
 
+// TODO: нужна проверка на is_liked когда парсим
 function Attraction() {
     const BACKEND = process.env.REACT_APP_BACKEND_URL
     const FRONTEND = process.env.REACT_APP_FRONTEND_URL
@@ -34,6 +35,8 @@ function Attraction() {
     const [currentImageIndexes, setCurrentImageIndexes] = useState({})
 
     const [likedAttraction, setLikedAttraction] = useState(null)
+    const [hoveringLiked, setHoveringLiked] = useState(false)
+    const [dislikedAttraction, setDislikedAttraction] = useState(null)
 
     const [title, setTitle] = useState('')
     const [contentLike, setContentLike] = useState('')
@@ -120,18 +123,18 @@ function Attraction() {
                     if (textResponse.data !== null) {
                         setFeature({type: 'text', data: textResponse.data})
                     } else {
-                            const fileResponse = await axios.get(
-                                `${BACKEND}/attraction-feature/${attraction.name}/get-file-menu`,
-                                {
-                                    headers: {
-                                        'Authorization': `Bearer ${ACCESS_TOKEN}`
-                                    }
+                        const fileResponse = await axios.get(
+                            `${BACKEND}/attraction-feature/${attraction.name}/get-file-menu`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${ACCESS_TOKEN}`
                                 }
-                            )
-                            setFeature({type: 'file', data: fileResponse.data})
+                            }
+                        )
+                        setFeature({type: 'file', data: fileResponse.data})
                     }
                 } catch (textError) {
-                   catchError()
+                    catchError()
                 } finally {
                     setIsLoadingFeature(false)
                 }
@@ -162,6 +165,24 @@ function Attraction() {
             setShowCreateDiscussionForm(true)
         }
     }
+
+    useEffect(() => {
+        if (dislikedAttraction) {
+            const handleDeleteLike = async (name) => {
+                try {
+                    await axios.post(`${BACKEND}/like/delete/${name}`, {}, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${ACCESS_TOKEN}`
+                        }
+                    })
+                } catch (error) {
+                    alert("Impossible to delete like")
+                }
+            }
+            handleDeleteLike(dislikedAttraction)
+        }
+    }, [dislikedAttraction]);
 
     const handleSendDiscussion = async (e) => {
         e.preventDefault()
@@ -199,7 +220,7 @@ function Attraction() {
                     }
                 }
             )
-            // TODO: это ломает nginx
+            // TODO: это ломает nginx (не может понять куда редикретить)
             window.location.reload()
         } catch (error) {
             if (error.response && error.response.data) {
@@ -273,7 +294,26 @@ function Attraction() {
                                         {attraction.type}
                                     </div>
                                     <div className="like">
-                                        <FaHeart color="pink" onClick={() => setLikedAttraction(attraction.name)}/>
+                                        {hoveringLiked ? (
+                                            <FaHeartBroken
+                                                className="like-button-heart liked hover-break"
+                                                style={{background : "red", color : "black"}}
+                                                size={36}
+                                                onClick={() => setDislikedAttraction(attraction.name)}
+                                                title="You have liked this attraction"
+                                                onMouseEnter={() => setHoveringLiked(true)}
+                                                onMouseLeave={() => setHoveringLiked(false)}
+                                            />
+                                        ) : (
+                                            <FaHeart
+                                                className="like-button-heart liked"
+                                                size={36}
+                                                onClick={() => setDislikedAttraction(attraction.name)}
+                                                title="You have liked this attraction"
+                                                onMouseEnter={() => setHoveringLiked(true)}
+                                                onMouseLeave={() => setHoveringLiked(false)}
+                                            />
+                                        )}
                                     </div>
                                     <div className="rating">{renderStars(attraction.rating)}</div>
                                     <div className="contact-info">
@@ -323,7 +363,7 @@ function Attraction() {
                             src={`data:application/pdf;base64,${feature.data.elements[0]?.file}`}
                             width="100%"
                             height="600px"
-                            style={{ border: 'none' }}
+                            style={{border: 'none'}}
                             title="Menu PDF"
                         />
                     ) : (

@@ -3,20 +3,27 @@ import axios from "axios"
 import Header from "./Header"
 import {Link} from "react-router-dom"
 import {getImageFormat} from "../utils/ImageUtils"
+import {FaHeart, FaHeartBroken} from "react-icons/fa";
 
 function Liked() {
+    const BACKEND = process.env.REACT_APP_BACKEND_URL
+    const TOKEN = JSON.parse(localStorage.getItem('user')).accessToken
+
     const [likes, setLikes] = useState([])
+
+    const [dislikeAttraction, setDislikeAttraction] = useState(null)
+    const [hoveringLikeButton, setHoveringLikeButton] = useState(false)
+
     const [error, setError] = useState('')
     const [currentImageIndexes, setCurrentImageIndexes] = useState({})
 
     // TODO: TypeError: Cannot read properties of undefined (reading 'status')
     useEffect(() => {
-        const token = JSON.parse(localStorage.getItem('user')).accessToken
         const fetchLikes = async () => {
             try {
                 const response = await axios.get("http://localhost:8080/like", {
                     headers: {
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${TOKEN}`
                     }
                 })
                 if (response) {
@@ -42,6 +49,24 @@ function Liked() {
         }
         fetchLikes()
     }, [])
+
+    useEffect(() => {
+        if (dislikeAttraction) {
+            const deleteLike = async (name) => {
+                try {
+                    await axios.post(`${BACKEND}/like/delete/${name}`, {},
+                        {
+                            headers: {
+                                'Authorization' : `Bearer ${TOKEN}`
+                            }
+                        })
+                } catch (error) {
+                    alert("impossible to delete like")
+                }
+            }
+            deleteLike(dislikeAttraction)
+        }
+    }, [dislikeAttraction])
 
     if (!likes) {
         return (
@@ -124,6 +149,29 @@ function Liked() {
                                         </p>
                                         <p>Phone: {attraction.phone}</p>
                                     </div>
+                                    <div className="like">
+                                        {hoveringLikeButton ? (
+                                            <FaHeartBroken
+                                                className="like-button-heart liked hover-break"
+                                                style={{background : "red", color : "black"}}
+                                                size={36}
+                                                onClick={() => setDislikeAttraction(attraction.name)}
+                                                title="You have liked this attraction"
+                                                onMouseEnter={() => setHoveringLikeButton(true)}
+                                                onMouseLeave={() => setHoveringLikeButton(false)}
+                                            />
+                                        ) : (
+                                            <FaHeart
+                                                className="like-button-heart liked"
+                                                size={36}
+                                                onClick={() => setDislikeAttraction(attraction.name)}
+                                                title="You have liked this attraction"
+                                                onMouseEnter={() => setHoveringLikeButton(true)}
+                                                onMouseLeave={() => setHoveringLikeButton(false)}
+                                            />
+                                            )
+                                        }
+                                    </div>
                                     <div className="learn-more">
                                         <button className="learn-more-button">
                                             <Link to={`/attraction/${attraction.name}`}>Learn More</Link>
@@ -133,7 +181,7 @@ function Liked() {
                                         <h5>{attraction.name}</h5>
                                         <p>{attraction.description}</p>
                                     </div>
-                                    <div className="opening-time">
+                                    <div className="opening-time" style={{alignItems: "left"}}>
                                         <p>Opening Time: {attraction.openTime}</p>
                                         <p>Closing Time: {attraction.closeTime}</p>
                                     </div>
