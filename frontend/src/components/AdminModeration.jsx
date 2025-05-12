@@ -10,6 +10,7 @@ const AdminModeration = () => {
     const GRAFANA_URL = process.env.REACT_APP_GRAFANA_URL
     const BACKEND = process.env.REACT_APP_BACKEND_URL
     const FRONTEND = process.env.REACT_APP_FRONTEND_URL
+    const TOKEN = JSON.parse(localStorage.getItem('user'))?.accessToken
 
     const [attractions, setAttractions] = useState([])
     const [attractionStatus, setAttractionStatus] = useState('on_moderation')
@@ -24,7 +25,7 @@ const AdminModeration = () => {
                 const response = await axios.get(`${BACKEND}/admin/moderation/${attractionStatus}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`
+                            'Authorization': `Bearer ${TOKEN}`
                         }
                     })
                 setAttractions(response?.data?._embedded?.attractionModelList || [])
@@ -53,14 +54,29 @@ const AdminModeration = () => {
                     console.log(error.response?.status)
                 }
             }
-
-
-
             setAttractionName('')
         }
 
         if (attractionName) {
             applyModeration()
+        }
+    }, [attractionName])
+
+    useEffect(() => {
+        if (attractionName) {
+            const deleteAttraction = async (name) => {
+                try {
+                    await axios.post(`${BACKEND}/attraction/delete/${name}`, {},
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${TOKEN}`
+                            }
+                        })
+                } catch (error) {
+                    alert("Impossible to delete attraction")
+                }
+            }
+            deleteAttraction(attractionName)
         }
     }, [attractionName])
 
@@ -136,6 +152,13 @@ const AdminModeration = () => {
                                                 </>
                                             )
                                             }
+                                        </div>
+                                        <div className="delete-button">
+                                            <button
+                                                className="btn btn-danger"
+                                                onClick={() => setAttractionName(attraction.name)}>
+                                                DELETE ATTRACTION
+                                            </button>
                                         </div>
                                         <div className="rating">
                                             Rating: {attraction.rating}

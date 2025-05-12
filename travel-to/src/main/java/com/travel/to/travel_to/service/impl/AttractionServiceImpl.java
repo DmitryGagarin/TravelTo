@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -198,15 +199,19 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
+    @Transactional
     public void deleteAttractionByName(
         @NotNull String name,
         @NotNull AuthUser authUser
     ) {
-        attractionRepository.delete(getByName(name));
-        attractionCacheUtil.deleteById(getByName(name).getId());
-        if (findAllByOwner(authUser).isEmpty()) {
-            User user = userService.getByUuid(authUser.getUuid());
-            userService.updateUserRole(authUser, Roles.USER);
+        if (findByName(name).isPresent()) {
+            Long attractionId = findByName(name).get().getId(); 
+            attractionRepository.delete(findByName(name).get());
+            attractionCacheUtil.deleteById(attractionId);
+            if (findAllByOwner(authUser).isEmpty()) {
+                User user = userService.getByUuid(authUser.getUuid());
+                userService.updateUserRole(authUser, Roles.USER);
+            }
         }
     }
 }
