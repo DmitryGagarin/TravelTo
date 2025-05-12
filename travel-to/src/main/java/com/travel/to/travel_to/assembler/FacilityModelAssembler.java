@@ -8,9 +8,23 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class FacilityModelAssembler implements RepresentationModelAssembler<Facility, FacilityModel> {
+
+    public Optional<List<FacilityModel>> toOptionalModels(
+        Optional<List<Facility>> facilities
+    ) {
+        if (facilities.isEmpty()) {
+            return Optional.empty();
+        }
+        List<FacilityModel> facilityModels = new ArrayList<>();
+        for (Facility facility : facilities.get()) {
+            facilityModels.add(toModel(facility));
+        }
+        return Optional.of(facilityModels);
+    }
 
     public List<FacilityModel> toModels(List<Facility> facilities) {
         List<FacilityModel> facilityModels = new ArrayList<>();

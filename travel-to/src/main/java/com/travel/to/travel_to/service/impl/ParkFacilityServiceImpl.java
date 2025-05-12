@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.travel.to.travel_to.utils.ImageUtils.getImageFormat;
+
 @Service
 public class ParkFacilityServiceImpl implements ParkFacilityService {
 
@@ -62,13 +64,6 @@ public class ParkFacilityServiceImpl implements ParkFacilityService {
     public Optional<List<Facility>> getFacilityByAttractionName(@NotNull String attractionName) {
         return parkFacilityRepository.findAllByAttractionId(
             attractionService.getByName(attractionName).getId()
-        );
-    }
-
-    private String getImageFormat(MultipartFile image) {
-        return (
-            Objects.requireNonNull(image.getOriginalFilename())
-                .substring(1 + image.getOriginalFilename().lastIndexOf("."))
         );
     }
 }
