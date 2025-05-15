@@ -1,6 +1,6 @@
 package com.travel.to.travel_to.service.impl;
 
-import com.travel.to.travel_to.entity.attraction_feature.poster.TheaterPoster;
+import com.travel.to.travel_to.entity.attraction_feature.poster.Poster;
 import com.travel.to.travel_to.repository.TheaterPosterRepository;
 import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.service.PosterService;
@@ -32,19 +32,19 @@ public class PosterServiceImpl implements PosterService {
 
     @Override
     @NotNull
-    public List<TheaterPoster> createTheaterPoster(
+    public List<Poster> createPoster(
         @NotNull MultipartFile[] images,
         @NotNull String attractionName
     ) throws IOException {
-        List<TheaterPoster> theaterPosters = new ArrayList<>();
+        List<Poster> posters = new ArrayList<>();
         for (MultipartFile image : images) {
-            TheaterPoster theaterPoster = new TheaterPoster();
-            theaterPoster
+            Poster poster = new Poster();
+            poster
                 .setImage(image.getBytes())
                 .setAttractionId(attractionService.getByName(attractionName).getId())
                 .setImageFormat(getImageFormat(image));
-            theaterPosters.add(theaterPoster);
+            posters.add(poster);
         }
-        return theaterPosterRepository.saveAll(theaterPosters);
+        return theaterPosterRepository.saveAll(posters);
     }
 }

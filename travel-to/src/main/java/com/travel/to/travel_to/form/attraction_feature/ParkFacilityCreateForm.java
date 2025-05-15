@@ -3,29 +3,24 @@ package com.travel.to.travel_to.form.attraction_feature;
 import java.util.List;
 
 public class ParkFacilityCreateForm {
-    private List<String> name;
-    private List<String> description;
-    private List<byte[]> image;
-    private List<String> openTime;
-    private List<String> closeTime;
+    private List<String> names;
+    private List<String> descriptions;
+    private List<String> openTimes;
+    private List<String> closeTimes;
 
-    public List<String> getName() {
-        return name;
+    public List<String> getNames() {
+        return names;
     }
 
-    public List<String> getDescription() {
-        return description;
+    public List<String> getDescriptions() {
+        return descriptions;
     }
 
-    public List<byte[]> getImage() {
-        return image;
+    public List<String> getOpenTimes() {
+        return openTimes;
     }
 
-    public List<String> getOpenTime() {
-        return openTime;
-    }
-
-    public List<String> getCloseTime() {
-        return closeTime;
+    public List<String> getCloseTimes() {
+        return closeTimes;
     }
 }

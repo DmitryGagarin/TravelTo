@@ -8,8 +8,8 @@ import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "theater_poster")
-public class TheaterPoster extends UuidAbleEntity implements Serializable {
+@Table(name = "poster")
+public class Poster extends UuidAbleEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = -2494290782905924595L;
 
@@ -21,7 +21,7 @@ public class TheaterPoster extends UuidAbleEntity implements Serializable {
         return image;
     }
 
-    public TheaterPoster setImage(byte[] image) {
+    public Poster setImage(byte[] image) {
         this.image = image;
         return this;
     }
@@ -30,7 +30,7 @@ public class TheaterPoster extends UuidAbleEntity implements Serializable {
         return imageFormat;
     }
 
-    public TheaterPoster setImageFormat(String imageFormat) {
+    public Poster setImageFormat(String imageFormat) {
         this.imageFormat = imageFormat;
         return this;
     }
@@ -39,7 +39,7 @@ public class TheaterPoster extends UuidAbleEntity implements Serializable {
         return attractionId;
     }
 
-    public TheaterPoster setAttractionId(Long attractionId) {
+    public Poster setAttractionId(Long attractionId) {
         this.attractionId = attractionId;
         return this;
 

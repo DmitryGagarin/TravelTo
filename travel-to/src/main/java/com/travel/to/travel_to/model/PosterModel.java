@@ -2,7 +2,7 @@ package com.travel.to.travel_to.model;
 
 import org.springframework.hateoas.RepresentationModel;
 
-public class TheaterPosterModel extends RepresentationModel<TheaterPosterModel> {
+public class PosterModel extends RepresentationModel<PosterModel> {
     private byte[] image;
     private String imageFormat;
 
@@ -10,7 +10,7 @@ public class TheaterPosterModel extends RepresentationModel<TheaterPosterModel> 
         return image;
     }
 
-    public TheaterPosterModel setImage(byte[] image) {
+    public PosterModel setImage(byte[] image) {
         this.image = image;
         return this;
     }
@@ -19,7 +19,7 @@ public class TheaterPosterModel extends RepresentationModel<TheaterPosterModel> 
         return imageFormat;
     }
 
-    public TheaterPosterModel setImageFormat(String imageFormat) {
+    public PosterModel setImageFormat(String imageFormat) {
         this.imageFormat = imageFormat;
         return this;
     }

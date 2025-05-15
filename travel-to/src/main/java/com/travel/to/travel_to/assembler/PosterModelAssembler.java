@@ -1,7 +1,7 @@
 package com.travel.to.travel_to.assembler;
 
-import com.travel.to.travel_to.entity.attraction_feature.poster.TheaterPoster;
-import com.travel.to.travel_to.model.TheaterPosterModel;
+import com.travel.to.travel_to.entity.attraction_feature.poster.Poster;
+import com.travel.to.travel_to.model.PosterModel;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
@@ -10,20 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class PosterModelAssembler implements RepresentationModelAssembler<TheaterPoster, TheaterPosterModel> {
+public class PosterModelAssembler implements RepresentationModelAssembler<Poster, PosterModel> {
 
-    public List<TheaterPosterModel> toModels(List<TheaterPoster> theaterPosters) {
-        List<TheaterPosterModel> theaterPosterModels = new ArrayList<>();
-        for (TheaterPoster theaterPoster : theaterPosters) {
-            theaterPosterModels.add(toModel(theaterPoster));
+    public List<PosterModel> toModels(List<Poster> posters) {
+        List<PosterModel> posterModels = new ArrayList<>();
+        for (Poster poster : posters) {
+            posterModels.add(toModel(poster));
         }
-        return theaterPosterModels;
+        return posterModels;
     }
 
     @Override
     @NotNull
-    public TheaterPosterModel toModel(@NotNull TheaterPoster entity) {
-        return new TheaterPosterModel()
+    public PosterModel toModel(@NotNull Poster entity) {
+        return new PosterModel()
             .setImage(entity.getImage())
             .setImageFormat(entity.getImageFormat());
     }

@@ -5,12 +5,14 @@ import {useNavigate} from "react-router-dom"
 import Settings from "../Settings"
 import Inputmask from "inputmask"
 import "react-phone-number-input/style.css"
-import {validateAttractionData, validationTextMenuData} from "../../utils/AttractionUtils"
+import {validateAttractionData} from "../../utils/AttractionUtils"
 import {catchError} from "../../utils/ErrorUtils"
-import AttractionCreateForm from "./AttractionCreateForm"
-import FileMenuCreateForm from "./FileMenuCreateForm"
+import AttractionCreateForm from "./create_forms/AttractionCreateForm"
+import FileMenuCreateForm from "./create_forms/FileMenuCreateForm"
 import AttractionPreview from "./AttractionPreview"
-import {TextMenuCreateForm} from "./TextMenuCreateForm"
+import {TextMenuCreateForm} from "./create_forms/TextMenuCreateForm"
+import {ParkFacilityCreateForm} from "./create_forms/ParkFacilityCreateForm";
+import {PosterCreateForm} from "./create_forms/PosterCreateForm";
 
 // TODO: улетели настройки
 function RegisterBusiness() {
@@ -36,10 +38,15 @@ function RegisterBusiness() {
 
     const [fileMenuSelected, setFileMenuSelected] = useState(false)
     const [fileMenuFiles, setFileMenuFile] = useState('')
+    const [posterImages, setPosterImages] = useState('')
 
     const [dishes, setDishes] = useState([
         {name: '', description: '', price: '', image: null}
     ]);
+
+    const [facilities, setFacilities] = useState([
+        {name: '', description: '', openTime: '', closeTime: '', image: null}
+    ])
 
     const history = useNavigate()
 
@@ -58,6 +65,12 @@ function RegisterBusiness() {
         const filesArray = Array.from(e.target.files)
         setFileMenuFile(filesArray)
     }
+
+    const handlePosterFileChange = (e) => {
+        const filesArray = Array.from(e.target.files)
+        setPosterImages(filesArray)
+    }
+
 
     const handleMenuRegistration = async () => {
         if (!fileMenuSelected) {
@@ -119,6 +132,64 @@ function RegisterBusiness() {
                 return false;
             }
         }
+    }
+
+    const handleParkFacilityRegistration = async () => {
+        try {
+            const formData = new FormData();
+
+            formData.append(
+                'parkFacilityCreateForm',
+                new Blob(
+                    [JSON.stringify({
+                        names: facilities.map(d => d.name),
+                        descriptions: facilities.map(d => d.description),
+                        openTimes: facilities.map(d => d.openTime),
+                        closeTimes: facilities.map(d => d.closeTime)
+                    })],
+                    {type: 'application/json'}
+                )
+            )
+
+            facilities.forEach((facility) => {
+                if (facility.image) {
+                    formData.append('images', facility.image);
+                }
+            })
+
+            await axios.post(
+                `${BACKEND}/attraction-feature/${attractionName}/create-park-facility`,
+                formData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            )
+            return true
+        } catch (error) {
+            catchError(error, setError, FRONTEND, 'Problem in creating park facilities')
+            return false
+        }
+    }
+
+    const handlePosterRegistration = async() => {
+        const fileFormData = new FormData();
+        posterImages.forEach((image) => {
+            fileFormData.append('images', image);
+        });
+
+        await axios.post(
+            `${BACKEND}/attraction-feature/${attractionName}/create-poster`,
+            fileFormData,
+            {
+                headers: {
+                    'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                }
+            }
+        )
+        return true;
     }
 
     const handleAttractionRegistration = async (e) => {
@@ -201,8 +272,18 @@ function RegisterBusiness() {
         setDishes(updated)
     }
 
+    const updateFacility = (index, field, value) => {
+        const updated = [...facilities]
+        updated[index][field] = value
+        setFacilities(updated)
+    }
+
     const generateNewDishForm = () => {
         setDishes([...dishes, {name: '', description: '', price: '', image: null}])
+    }
+
+    const generateNewFacilityForm = () => {
+        setFacilities([...facilities, {name: '', description: '', openTime: '', closeTime: '', image: null}])
     }
 
     const registerAttraction = async (e) => {
@@ -210,6 +291,7 @@ function RegisterBusiness() {
         let correct = true;
 
         const attractionValid = await handleAttractionRegistration(e)
+
         if (!attractionValid) {
             alert('impossible to create the attraction')
             correct = false
@@ -219,6 +301,22 @@ function RegisterBusiness() {
             const menuValid = await handleMenuRegistration()
             if (!menuValid) {
                 alert('impossible to create menu to the attraction')
+                correct = false
+            }
+        }
+
+        if (type === 'park') {
+            const parkValid = await handleParkFacilityRegistration()
+            if (!parkValid) {
+                alert('impossible to create list of facilities to the attraction')
+                correct = false
+            }
+        }
+
+        if (type === 'theater' || type === 'gallery' || type === 'museum') {
+            const posterValid = await handlePosterRegistration()
+            if (!posterValid) {
+                alert('impossible to create poster to the attraction')
                 correct = false
             }
         }
@@ -248,6 +346,7 @@ function RegisterBusiness() {
                     }} />
                     {error && <p className="text-danger">{error}</p>}
                     <hr className="divider-vertical"/>
+
                     {(type === 'cafe' || type === 'restaurant') && (
                         <>
                             <MDBRadio name="file-menu-check"
@@ -262,15 +361,31 @@ function RegisterBusiness() {
                                       label="Text Menu"
                                       inline
                                       checked={!fileMenuSelected} onChange={() => setFileMenuSelected(false)}/>
-                            {fileMenuSelected ?
+                            {fileMenuSelected ? (
                                 <FileMenuCreateForm handleMenuFileChange={handleMenuFileChange}/>
-                                :
+                            ) : (
                                 <TextMenuCreateForm
                                     dishes={dishes}
                                     updateDish={updateDish}
                                     generateNewDishForm={generateNewDishForm}
                                 />
-                            }
+                            )}
+                        </>
+                    )}
+                    {type === 'park' && (
+                        <>
+                            <ParkFacilityCreateForm
+                                facilities={facilities}
+                                updateFacility={updateFacility}
+                                generateNewFacilityForm={generateNewFacilityForm}
+                            />
+                        </>
+                    )}
+                    {(type === 'theater' || type === 'gallery' || type === 'museum') && (
+                        <>
+                            <PosterCreateForm
+                                handlePosterFileChange={handlePosterFileChange}
+                            />
                         </>
                     )}
                 </MDBContainer>

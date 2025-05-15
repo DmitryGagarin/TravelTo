@@ -41,13 +41,13 @@ public class ParkFacilityServiceImpl implements ParkFacilityService {
         @NotNull ParkFacilityCreateForm parkFacilityCreateForm
     ) throws IOException {
         List<Facility> facilities = new ArrayList<>();
-        for (int i = 0; i < parkFacilityCreateForm.getName().size(); i++) {
+        for (int i = 0; i < parkFacilityCreateForm.getNames().size(); i++) {
             Facility facility = new Facility();
             facility
-                .setName(parkFacilityCreateForm.getName().get(i))
-                .setDescription(parkFacilityCreateForm.getDescription().get(i))
-                .setOpenTime(parkFacilityCreateForm.getOpenTime().get(i))
-                .setCloseTime(parkFacilityCreateForm.getCloseTime().get(i))
+                .setName(parkFacilityCreateForm.getNames().get(i))
+                .setDescription(parkFacilityCreateForm.getDescriptions().get(i))
+                .setOpenTime(parkFacilityCreateForm.getOpenTimes().get(i))
+                .setCloseTime(parkFacilityCreateForm.getCloseTimes().get(i))
                 .setAttractionId(attractionService.getByName(attractionName).getId());
             if (Objects.nonNull(images)) {
                 facility

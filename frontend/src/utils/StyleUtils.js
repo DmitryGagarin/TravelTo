@@ -15,6 +15,8 @@ export const getAttractionCardStyle = (type) => {
             return {backgroundColor: 'wheat', color: 'black'}
         case 'restaurant':
             return {backgroundColor: 'pink', color: 'black'}
+        case 'theater':
+            return {backgroundColor: 'lime', color: 'black'}
         default:
             return {backgroundColor: 'lightgray', color: 'black'}
     }

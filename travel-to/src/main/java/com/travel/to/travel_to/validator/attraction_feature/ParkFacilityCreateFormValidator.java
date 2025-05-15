@@ -18,9 +18,9 @@ public class ParkFacilityCreateFormValidator implements Validator {
     public void validate(@NotNull Object target, @NotNull Errors errors) {
         ParkFacilityCreateForm form = (ParkFacilityCreateForm) target;
         if (
-            form.getName().size() != form.getDescription().size()
-            || form.getName().size() != form.getOpenTime().size()
-            || form.getOpenTime().size() != form.getCloseTime().size()
+            form.getNames().size() != form.getDescriptions().size()
+            || form.getNames().size() != form.getOpenTimes().size()
+            || form.getOpenTimes().size() != form.getCloseTimes().size()
         ) {
             errors.rejectValue("", "");
         }

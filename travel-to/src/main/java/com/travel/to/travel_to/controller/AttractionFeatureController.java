@@ -7,7 +7,7 @@ import com.travel.to.travel_to.exception.exception.TextMenuImpossibleToCreate;
 import com.travel.to.travel_to.form.attraction_feature.ParkFacilityCreateForm;
 import com.travel.to.travel_to.form.attraction_feature.TextMenuCreateForm;
 import com.travel.to.travel_to.model.FacilityModel;
-import com.travel.to.travel_to.model.TheaterPosterModel;
+import com.travel.to.travel_to.model.PosterModel;
 import com.travel.to.travel_to.assembler.PosterModelAssembler;
 import com.travel.to.travel_to.service.MenuService;
 import com.travel.to.travel_to.service.ParkFacilityService;
@@ -139,13 +139,13 @@ public class AttractionFeatureController {
         );
     }
 
-    @PostMapping("/create-theatre-poster")
-    public List<TheaterPosterModel> createTheatrePoster(
+    @PostMapping("/create-poster")
+    public List<PosterModel> createPoster(
         @RequestPart(value = "images") MultipartFile[] images,
         @PathVariable String attractionName
     ) throws IOException {
         return posterModelAssembler.toModels(
-            posterService.createTheaterPoster(images, attractionName)
+            posterService.createPoster(images, attractionName)
         );
     }
 

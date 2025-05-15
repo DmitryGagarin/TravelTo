@@ -1,4 +1,4 @@
-create table theater_poster
+create table poster
 (
     id serial not null,
     uuid varchar not null default gen_random_uuid(),

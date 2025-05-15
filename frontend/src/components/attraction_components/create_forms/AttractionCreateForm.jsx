@@ -91,6 +91,7 @@ const AttractionCreateForm = ({
             <option value="religious">Religious</option>
             <option value="cafe">Cafe</option>
             <option value="restaurant">Restaurant</option>
+            <option value="theater">Theatre</option>
         </select>
         <MDBInput
             wrapperClass='mb-4'
