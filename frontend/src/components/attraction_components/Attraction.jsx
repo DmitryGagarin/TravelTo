@@ -141,6 +141,40 @@ function Attraction() {
             }
             fetchMenu()
         }
+        if (attraction.type === 'park') {
+            const fetchParkFacilities = async () => {
+                try {
+                    const response = await axios.get(`${BACKEND}/attraction-feature/${attraction.name}/get-park-facility`,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${ACCESS_TOKEN}`
+                            }
+                        })
+                    setFeature({type: 'park', data: response.data})
+                } catch (error) {
+                    catchError(error, setError, FRONTEND, 'impossible to fetch park facilities')
+                }
+            }
+            fetchParkFacilities()
+        }
+
+        if (attraction.type === 'theater' || attraction.type === 'gallery' || attraction.type === 'museum') {
+            const fetchPosters = async () => {
+                try {
+                    const response = await axios.get(`${BACKEND}/attraction-feature/${attraction.name}/get-posters`,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${ACCESS_TOKEN}`
+                            }
+                        })
+                    setFeature({type: 'poster', data: response.data})
+                } catch (error) {
+                    catchError(error, setError, FRONTEND, 'impossible to fetch posters')
+                }
+            }
+            fetchPosters()
+        }
+
     }, [attraction])
 
     useEffect(() => {
@@ -297,7 +331,7 @@ function Attraction() {
                                         {hoveringLiked ? (
                                             <FaHeartBroken
                                                 className="like-button-heart liked hover-break"
-                                                style={{background : "red", color : "black"}}
+                                                style={{background: "red", color: "black"}}
                                                 size={36}
                                                 onClick={() => setDislikedAttraction(attraction.name)}
                                                 title="You have liked this attraction"
@@ -341,9 +375,10 @@ function Attraction() {
             </div>
             <MDBContainer>
                 <div>
-                    {isLoadingFeature ? (
-                        <Spinner/> // Your loading indicator
-                    ) : feature?.type === 'text' ? (
+                    {isLoadingFeature && (
+                        <Spinner/>
+                    )}
+                    {feature?.type === 'text' && (
                         feature.data.elements.map((el, index) => (
                             <div key={index}>
                                 <h5>{el.dishName}</h5>
@@ -358,7 +393,8 @@ function Attraction() {
                                 )}
                             </div>
                         ))
-                    ) : feature?.type === 'file' ? (
+                    )}
+                    {feature?.type === 'file' && (
                         <iframe
                             src={`data:application/pdf;base64,${feature.data.elements[0]?.file}`}
                             width="100%"
@@ -366,9 +402,36 @@ function Attraction() {
                             style={{border: 'none'}}
                             title="Menu PDF"
                         />
-                    ) : (
-                        <></>
                     )}
+                    {feature?.type === 'park' && (
+                        feature.data.map((el, index) => (
+                            <div key={index}>
+                                <h5>{el.name}</h5>
+                                <p>{el.description}</p>
+                                <p>Open time: {el.openTime}</p>
+                                <p>Close time: {el.closeTime}</p>
+                                {el.image && (
+                                    <img
+                                        src={`data:image/${el.imageFormat};base64,${el.image}`}
+                                        alt={el.name}
+                                        style={{maxWidth: '200px'}}
+                                    />
+                                )}
+                            </div>
+                        ))
+                    )}
+                    {(feature?.type === 'poster') && (
+                        feature.data.map((image, index) => (
+                            <iframe
+                                src={`data:application/pdf;base64,${feature.data[0]}`}
+                                width="100%"
+                                height="600px"
+                                style={{border: 'none'}}
+                                title="Menu PDF"
+                            />
+                        ))
+                    )}
+
                 </div>
             </MDBContainer>
             {/* Comment Section */}

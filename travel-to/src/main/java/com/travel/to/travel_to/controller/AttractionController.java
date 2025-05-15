@@ -151,6 +151,7 @@ public class AttractionController {
         );
     }
 
+    // TODO: also delete features
     @PreAuthorize("hasAnyAuthority('ROLE_OWNER', 'ROLE_ADMIN')")
     @PostMapping("/delete/{name}")
     public void deleteAttraction(

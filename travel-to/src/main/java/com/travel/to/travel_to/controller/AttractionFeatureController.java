@@ -1,6 +1,7 @@
 package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.assembler.FacilityModelAssembler;
+import com.travel.to.travel_to.assembler.PosterModelAssembler;
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu.FileMenu;
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu.TextMenu;
 import com.travel.to.travel_to.exception.exception.TextMenuImpossibleToCreate;
@@ -8,7 +9,6 @@ import com.travel.to.travel_to.form.attraction_feature.ParkFacilityCreateForm;
 import com.travel.to.travel_to.form.attraction_feature.TextMenuCreateForm;
 import com.travel.to.travel_to.model.FacilityModel;
 import com.travel.to.travel_to.model.PosterModel;
-import com.travel.to.travel_to.assembler.PosterModelAssembler;
 import com.travel.to.travel_to.service.MenuService;
 import com.travel.to.travel_to.service.ParkFacilityService;
 import com.travel.to.travel_to.service.PosterService;
@@ -98,6 +98,15 @@ public class AttractionFeatureController {
     ) {
         return facilityModelAssembler.toOptionalModels(
             parkFacilityService.getFacilityByAttractionName(attractionName)
+        );
+    }
+
+    @GetMapping("/get-posters")
+    public Optional<List<PosterModel>> getPosterFeature (
+        @PathVariable String attractionName
+    ) {
+        return posterModelAssembler.toOptionalModels(
+            posterService.getPostersByAttractionName(attractionName)
         );
     }
 

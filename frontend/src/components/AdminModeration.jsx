@@ -62,23 +62,18 @@ const AdminModeration = () => {
         }
     }, [attractionName])
 
-    useEffect(() => {
-        if (attractionName) {
-            const deleteAttraction = async (name) => {
-                try {
-                    await axios.post(`${BACKEND}/attraction/delete/${name}`, {},
-                        {
-                            headers: {
-                                'Authorization': `Bearer ${TOKEN}`
-                            }
-                        })
-                } catch (error) {
-                    alert("Impossible to delete attraction")
-                }
-            }
-            deleteAttraction(attractionName)
+    const deleteAttraction = async (name) => {
+        try {
+            await axios.post(`${BACKEND}/attraction/delete/${name}`, {},
+                {
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`
+                    }
+                })
+        } catch (error) {
+            alert("Impossible to delete attraction")
         }
-    }, [attractionName])
+    }
 
     const handleNextImage = (index, images) => {
         if (images && images.length > 0) {
@@ -156,7 +151,7 @@ const AdminModeration = () => {
                                         <div className="delete-button">
                                             <button
                                                 className="btn btn-danger"
-                                                onClick={() => setAttractionName(attraction.name)}>
+                                                onClick={() => deleteAttraction(attraction.name)}>
                                                 DELETE ATTRACTION
                                             </button>
                                         </div>

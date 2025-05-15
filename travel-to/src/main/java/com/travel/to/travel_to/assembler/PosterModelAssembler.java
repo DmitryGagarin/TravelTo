@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PosterModelAssembler implements RepresentationModelAssembler<Poster, PosterModel> {
@@ -18,6 +19,17 @@ public class PosterModelAssembler implements RepresentationModelAssembler<Poster
             posterModels.add(toModel(poster));
         }
         return posterModels;
+    }
+
+    public Optional<List<PosterModel>> toOptionalModels(Optional<List<Poster>> posters) {
+        if (posters.isEmpty()) {
+            return Optional.empty();
+        }
+        List<PosterModel> posterModels = new ArrayList<>();
+        for (Poster poster : posters.get()) {
+            posterModels.add(toModel(poster));
+        }
+        return Optional.of(posterModels);
     }
 
     @Override
