@@ -14,7 +14,6 @@ import {TextMenuCreateForm} from "./create_forms/TextMenuCreateForm"
 import {ParkFacilityCreateForm} from "./create_forms/ParkFacilityCreateForm";
 import {PosterCreateForm} from "./create_forms/PosterCreateForm";
 
-// TODO: улетели настройки
 function RegisterBusiness() {
     const BACKEND = process.env.REACT_APP_BACKEND_URL
     const FRONTEND = process.env.REACT_APP_FRONTEND_URL
@@ -174,7 +173,7 @@ function RegisterBusiness() {
         }
     }
 
-    const handlePosterRegistration = async() => {
+    const handlePosterRegistration = async () => {
         const fileFormData = new FormData();
         posterImages.forEach((image) => {
             fileFormData.append('images', image);
@@ -390,20 +389,20 @@ function RegisterBusiness() {
                     )}
                 </MDBContainer>
                 <button onClick={registerAttraction} disabled={!validateAttractionData}>Register business</button>
+                <AttractionPreview {...{
+                    attractionName,
+                    type,
+                    phone,
+                    website,
+                    openTime,
+                    closeTime,
+                    description,
+                    images,
+                    currentImageIndexes,
+                    handlePrevImage,
+                    handleNextImage
+                }} />
             </div>
-            <AttractionPreview {...{
-                attractionName,
-                type,
-                phone,
-                website,
-                openTime,
-                closeTime,
-                description,
-                images,
-                currentImageIndexes,
-                handlePrevImage,
-                handleNextImage
-            }} />
             <Settings/>
         </div>
     )

@@ -61,10 +61,10 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
     public AttractionDiscussion create(
         @NotNull AttractionDiscussionCreateForm attractionDiscussionCreateForm,
         @NotNull AuthUser authUser,
-        @NotNull String attractionUuid,
+        @NotNull String attractionName,
         @NotNull MultipartFile[] images
     ) throws IOException {
-        Long attractionId = attractionService.getByUuid(attractionUuid).getId();
+        Long attractionId = attractionService.getByName(attractionName).getId();
 
         AttractionDiscussion attractionDiscussion = new AttractionDiscussion();
         attractionDiscussion
@@ -105,13 +105,15 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
         double averageRating = totalRating / attractionDiscussionRepository.findAll().size();
         String formattedAverageRating = FormatConstants.ONE_FLOATING_POINT_FORMATTER.format(averageRating);
 
-        attractionService.updateRating(attractionUuid, Double.parseDouble(formattedAverageRating.replace(',','.')));
+        attractionService.updateRating(attractionName, Double.parseDouble(formattedAverageRating.replace(',','.')));
 
         return attractionDiscussion;
     }
 
     @Override
-    public void delete(AuthUser authUser, String attractionUuid) {
+    public void delete(
+        @NotNull AuthUser authUser,
+        @NotNull String attractionUuid) {
         AttractionDiscussion attractionDiscussion = getByUuid(attractionUuid);
         attractionDiscussionRepository.delete(attractionDiscussion);
     }
@@ -124,9 +126,9 @@ public class AttractionDiscussionServiceImpl implements AttractionDiscussionServ
 
     @Override
     @NotNull
-    public List<AttractionDiscussion> findAllByAttractionUuid(String attractionUuid) {
+    public List<AttractionDiscussion> findAllByAttractionName(String attractionName) {
         return attractionDiscussionRepository.findAllByAttractionId(
-            attractionService.getByUuid(attractionUuid).getId()
+            attractionService.getByName(attractionName).getId()
         );
     }
 

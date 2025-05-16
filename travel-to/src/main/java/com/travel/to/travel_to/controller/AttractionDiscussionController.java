@@ -57,12 +57,11 @@ public class AttractionDiscussionController {
         binder.addValidators(attractionDiscussionCreateFormValidator);
     }
 
-    // TODO: переделать на name
-    @GetMapping("/{attractionUuid}")
+    @GetMapping("/{attractionName}")
     public PagedModel<AttractionDiscussionModel> list(
-        @PathVariable String attractionUuid
+        @PathVariable String attractionName
     ) {
-        List<AttractionDiscussion> attractionDiscussions = attractionDiscussionService.findAllByAttractionUuid(attractionUuid);
+        List<AttractionDiscussion> attractionDiscussions = attractionDiscussionService.findAllByAttractionName(attractionName);
         List<AttractionDiscussionModel> attractionDiscussionModels = attractionDiscussions.stream()
             .map(attractionDiscussionModelAssembler::toModel)
             .collect(Collectors.toList());
@@ -76,7 +75,7 @@ public class AttractionDiscussionController {
         return PagedModel.of(attractionDiscussionModels, pageMetadata);
     }
 
-    @PostMapping("/create/{attractionUuid}")
+    @PostMapping("/create/{attractionName}")
     public AttractionDiscussionModel createAttractionDiscussion(
         @Validated @RequestPart("attractionDiscussionCreateForm")
         AttractionDiscussionCreateForm attractionDiscussionCreateForm,
@@ -84,16 +83,17 @@ public class AttractionDiscussionController {
         @RequestPart(value = "images", required = false)
         MultipartFile[] images,
         @AuthenticationPrincipal AuthUser authUser,
-        @PathVariable String attractionUuid
+        @PathVariable String attractionName
     ) throws BindException, IOException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
         return attractionDiscussionModelAssembler.toModel(
-            attractionDiscussionService.create(attractionDiscussionCreateForm, authUser, attractionUuid, images)
+            attractionDiscussionService.create(attractionDiscussionCreateForm, authUser, attractionName, images)
         );
     }
 
+    // TODO: some sort of super cringe moment i don't understand what the hell it is
     @PreAuthorize("hasAnyAuthority('ROLE_DISCUSSION_OWNER', 'ROLE_ADMIN')")
     @PostMapping("/delete/{attractionUuid}")
     public void deleteAttractionDiscussion(

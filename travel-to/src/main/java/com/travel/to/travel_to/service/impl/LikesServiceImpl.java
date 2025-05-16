@@ -1,7 +1,9 @@
 package com.travel.to.travel_to.service.impl;
 
+import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.user.AuthUser;
 import com.travel.to.travel_to.entity.Likes;
+import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.repository.LikesRepository;
 import com.travel.to.travel_to.service.AttractionService;
 import com.travel.to.travel_to.service.LikesService;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class LikesServiceImpl implements LikesService {
@@ -56,11 +59,24 @@ public class LikesServiceImpl implements LikesService {
     }
 
     @Override
+    public boolean isLikedByUser(@NotNull String attractionName, @NotNull AuthUser authUser) {
+        User user = userService.getByUuid(authUser.getUuid());
+        Attraction attraction = attractionService.getByName(attractionName);
+        return (
+            Objects.nonNull(
+                likesRepository.findOneByUserIdAndAttractionId(
+                    user.getId(), attraction.getId()
+                )
+            )
+        );
+    }
+
+    @Override
     @Transactional
     public void deleteLike(@NotNull String attractionName, @NotNull AuthUser authUser) {
         Likes like = likesRepository.findOneByUserIdAndAttractionId(
-            attractionService.getByName(attractionName).getId(),
-            userService.getByUuid(authUser.getUuid()).getId()
+            userService.getByUuid(authUser.getUuid()).getId(),
+            attractionService.getByName(attractionName).getId()
         );
 
         likesRepository.delete(like);

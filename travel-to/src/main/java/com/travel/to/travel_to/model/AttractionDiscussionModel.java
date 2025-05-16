@@ -13,6 +13,7 @@ public class AttractionDiscussionModel extends RepresentationModel<AttractionDis
     private String author;
     private String createdAt;
     private List<byte[]> images;
+    private List<String> imageFormats;
 
     public String getTitle() {
         return title;
@@ -83,6 +84,15 @@ public class AttractionDiscussionModel extends RepresentationModel<AttractionDis
 
     public AttractionDiscussionModel setImages(List<byte[]> images) {
         this.images = images;
+        return this;
+    }
+
+    public List<String> getImageFormats() {
+        return imageFormats;
+    }
+
+    public AttractionDiscussionModel setImageFormats(List<String> imageFormats) {
+        this.imageFormats = imageFormats;
         return this;
     }
 }

@@ -20,4 +20,9 @@ public interface AttractionDiscussionImageService {
         @NotNull Long discussionId
     );
 
+    @NotNull
+    List<String> getAllImageFormatByDiscussionId(
+        @NotNull Long discussionId
+    );
+
 }

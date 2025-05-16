@@ -47,7 +47,8 @@ public class AttractionDiscussionModelAssembler implements RepresentationModelAs
             .setRating(entity.getRating())
             .setAuthor(authorName)
             .setCreatedAt(FormatConstants.DAY_MONTH_YEAR_FORMATTER.format(entity.getCreatedAt()))
-            .setImages(attractionDiscussionImageService.getAllImagesByDiscussionId(entity.getId()));
+            .setImages(attractionDiscussionImageService.getAllImagesByDiscussionId(entity.getId()))
+            .setImageFormats(attractionDiscussionImageService.getAllImageFormatByDiscussionId(entity.getId()));
         return attractionDiscussionModel;
     }
 }

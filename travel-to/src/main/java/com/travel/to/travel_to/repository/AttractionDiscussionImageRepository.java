@@ -16,4 +16,6 @@ public interface AttractionDiscussionImageRepository extends JpaRepository<Attra
     nativeQuery = true)
     List<byte[]> getAllImagesByDiscussionId(Long discussionId);
 
+    @NotNull
+    List<String> getAllImageFormatByAttractionDiscussionId(Long attractionDiscussionId);
 }

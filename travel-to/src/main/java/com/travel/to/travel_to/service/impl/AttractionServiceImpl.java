@@ -11,11 +11,12 @@ import com.travel.to.travel_to.entity.user.User;
 import com.travel.to.travel_to.form.attraction.AttractionCreateForm;
 import com.travel.to.travel_to.form.attraction.AttractionEditForm;
 import com.travel.to.travel_to.repository.AttractionRepository;
+import com.travel.to.travel_to.repository.FileMenuRepository;
+import com.travel.to.travel_to.repository.ParkFacilityRepository;
+import com.travel.to.travel_to.repository.PosterRepository;
+import com.travel.to.travel_to.repository.TextMenuRepository;
 import com.travel.to.travel_to.service.AttractionImageService;
 import com.travel.to.travel_to.service.AttractionService;
-import com.travel.to.travel_to.service.MenuService;
-import com.travel.to.travel_to.service.ParkFacilityService;
-import com.travel.to.travel_to.service.PosterService;
 import com.travel.to.travel_to.service.UserService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,10 @@ public class AttractionServiceImpl implements AttractionService {
     private final UserService userService;
     private final AttractionImageService attractionImageService;
     private final AttractionCacheUtil attractionCacheUtil;
-    private final ParkFacilityService parkFacilityService;
-    private final MenuService menuService;
-    private final PosterService posterService;
+    private final ParkFacilityRepository parkFacilityRepository;
+    private final FileMenuRepository fileMenuRepository;
+    private final TextMenuRepository textMenuRepository;
+    private final PosterRepository posterRepository;
 
     @Autowired
     public AttractionServiceImpl(
@@ -46,17 +48,19 @@ public class AttractionServiceImpl implements AttractionService {
         UserService userService,
         AttractionImageService attractionImageService,
         AttractionCacheUtil attractionCacheUtil,
-        ParkFacilityService parkFacilityService,
-        MenuService menuService,
-        PosterService posterService
+        ParkFacilityRepository parkFacilityRepository,
+        FileMenuRepository fileMenuRepository,
+        TextMenuRepository textMenuRepository,
+        PosterRepository posterRepository
     ) {
         this.attractionRepository = attractionRepository;
         this.userService = userService;
         this.attractionImageService = attractionImageService;
         this.attractionCacheUtil = attractionCacheUtil;
-        this.parkFacilityService = parkFacilityService;
-        this.menuService = menuService;
-        this.posterService = posterService;
+        this.fileMenuRepository = fileMenuRepository;
+        this.textMenuRepository = textMenuRepository;
+        this.posterRepository = posterRepository;
+        this.parkFacilityRepository = parkFacilityRepository;
     }
 
     @Override
@@ -164,10 +168,10 @@ public class AttractionServiceImpl implements AttractionService {
     @Override
     @NotNull
     public Attraction updateRating(
-        @NotNull String attractionUuid,
+        @NotNull String attractionName,
         @NotNull Double totalRating
     ) {
-        Attraction attraction = getByUuid(attractionUuid);
+        Attraction attraction = getByName(attractionName);
         attraction.setRating(totalRating);
         attractionCacheUtil.updateById(attraction.getId(), attraction, CacheKeys.ATTRACTIONS);
         return attractionRepository.save(attraction);
@@ -233,20 +237,26 @@ public class AttractionServiceImpl implements AttractionService {
         }
     }
 
+    // FIXME: вообще обращаться к репозиторию с сервисного уровня чужой ентити такое себе
     @Transactional
     protected void deleteAttractionFeatures(
         @NotNull Attraction attraction
     ) {
         if (attraction.getType().equals("park")) {
-            parkFacilityService.deleteByAttractionId(attraction.getId());
+            parkFacilityRepository.deleteByAttractionId(attraction.getId());
         }
         if (attraction.getType().equals("restaurant") || attraction.getType().equals("cafe")) {
-            menuService.deleteByAttractionId(attraction.getId());
+            if (fileMenuRepository.findByAttractionId(attraction.getId()).isPresent()) {
+                fileMenuRepository.deleteByAttractionId(attraction.getId());
+            }
+            if (textMenuRepository.findByAttractionId(attraction.getId()).isPresent()) {
+                textMenuRepository.deleteByAttractionId(attraction.getId());
+            }
         }
         if (attraction.getType().equals("gallery")
             || attraction.getType().equals("poster")
             || attraction.getType().equals("museum")) {
-            posterService.deleteByAttractionId(attraction.getId());
+            posterRepository.deleteByAttractionId(attraction.getId());
         }
     }
 }

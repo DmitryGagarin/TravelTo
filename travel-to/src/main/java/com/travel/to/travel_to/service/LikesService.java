@@ -19,6 +19,8 @@ public interface LikesService {
         @NotNull AuthUser authUser
     );
 
+    boolean isLikedByUser(@NotNull String attractionName, @NotNull AuthUser authUser);
+
     void deleteLike(
         @NotNull String attractionName,
         @NotNull AuthUser authUser

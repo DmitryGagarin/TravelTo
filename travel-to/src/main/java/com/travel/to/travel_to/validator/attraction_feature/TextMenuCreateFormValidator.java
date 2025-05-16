@@ -16,6 +16,14 @@ public class TextMenuCreateFormValidator implements Validator {
 
     @Override
     public void validate(@NotNull Object target, @NotNull Errors errors) {
+        TextMenuCreateForm form = (TextMenuCreateForm) target;
 
+        if (
+            form.getNames().size() != form.getDescriptions().size()
+                || form.getNames().size() != form.getPrices().size()
+                || form.getDescriptions().size() != form.getPrices().size()
+        ) {
+            errors.rejectValue("", "");
+        }
     }
 }

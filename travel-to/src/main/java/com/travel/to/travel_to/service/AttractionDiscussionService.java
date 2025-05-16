@@ -15,7 +15,7 @@ public interface AttractionDiscussionService {
     AttractionDiscussion create(
         @NotNull AttractionDiscussionCreateForm attractionDiscussionCreateForm,
         @NotNull AuthUser authuser,
-        @NotNull String attractionUuid,
+        @NotNull String attractionName,
         @NotNull MultipartFile[] images
     ) throws IOException;
 
@@ -23,7 +23,7 @@ public interface AttractionDiscussionService {
     AttractionDiscussion getByUuid(String attractionUuid);
 
     @NotNull
-    List<AttractionDiscussion> findAllByAttractionUuid(String attractionUuid);
+    List<AttractionDiscussion> findAllByAttractionName(String attractionName);
 
     void delete(
         AuthUser authUser,

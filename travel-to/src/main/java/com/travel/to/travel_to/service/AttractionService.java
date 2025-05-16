@@ -44,7 +44,7 @@ public interface AttractionService {
 
     @NotNull
     Attraction updateRating(
-        @NotNull String attractionUuid,
+        @NotNull String attractionName,
         @NotNull Double totalRating
     );
 

@@ -3,6 +3,7 @@ package com.travel.to.travel_to.service.impl;
 import com.travel.to.travel_to.entity.attraction.AttractionDiscussionImage;
 import com.travel.to.travel_to.repository.AttractionDiscussionImageRepository;
 import com.travel.to.travel_to.service.AttractionDiscussionImageService;
+import com.travel.to.travel_to.utils.ImageUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class AttractionDiscussionImageServiceImpl implements AttractionDiscussio
                 new AttractionDiscussionImage()
                     .setAttractionDiscussionId(discussionId)
                     .setImage(image.getBytes())
+                    .setImageFormat(ImageUtils.getImageFormat(image))
             );
         }
         return attractionDiscussionImageRepository.saveAll(attractionDiscussionImages);
@@ -47,6 +49,11 @@ public class AttractionDiscussionImageServiceImpl implements AttractionDiscussio
         @NotNull Long discussionId
     ) {
         return attractionDiscussionImageRepository.getAllImagesByDiscussionId(discussionId);
+    }
+
+    @Override
+    public @NotNull List<String> getAllImageFormatByDiscussionId(@NotNull Long discussionId) {
+        return attractionDiscussionImageRepository.getAllImageFormatByAttractionDiscussionId(discussionId);
     }
 
 }

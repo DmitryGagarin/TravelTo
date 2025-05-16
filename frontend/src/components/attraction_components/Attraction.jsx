@@ -24,6 +24,7 @@ function Attraction() {
     const [error, setError] = useState('')
 
     const [attraction, setAttraction] = useState('')
+    const [isLiked, setIsLiked] = useState(false)
     const [discussions, setDiscussions] = useState([])
     const [feature, setFeature] = useState(null)
 
@@ -73,10 +74,10 @@ function Attraction() {
     }, [])
 
     useEffect(() => {
-        if (!attractionUuid) return
+        if (!attraction.name) return
         const fetchDiscussions = async () => {
             try {
-                const response = await axios.get(`${BACKEND}/attraction-discussion/${attractionUuid}`, {
+                const response = await axios.get(`${BACKEND}/attraction-discussion/${attraction.name}`, {
                     headers: {
                         'Authorization': `Bearer ${ACCESS_TOKEN}`
                     }
@@ -92,7 +93,7 @@ function Attraction() {
             }
         }
         fetchDiscussions()
-    }, [attractionUuid])
+    }, [attraction])
 
     // useEffect(() => {
     //     const fetchAddress = async () => {
@@ -192,15 +193,25 @@ function Attraction() {
         }
     }, [attraction])
 
-    const handleLeaveDiscussion = () => {
-        if (showCreateDiscussionForm) {
-            setShowCreateDiscussionForm(false)
-        } else {
-            setShowCreateDiscussionForm(true)
-        }
-    }
-
     useEffect(() => {
+        if (likedAttraction) {
+            const handleLike = async (name) => {
+                try {
+                    await axios.post(`${BACKEND}/like/add/${name}`, {}, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${ACCESS_TOKEN}`
+                        },
+                    })
+                } catch (error) {
+                    if (error.response.status === 401) {
+                        window.location.href = `${FRONTEND}/signin`
+                    }
+                    console.error('Error liking attraction:', error)
+                }
+            }
+            handleLike(likedAttraction)
+        }
         if (dislikedAttraction) {
             const handleDeleteLike = async (name) => {
                 try {
@@ -216,7 +227,35 @@ function Attraction() {
             }
             handleDeleteLike(dislikedAttraction)
         }
-    }, [dislikedAttraction]);
+    }, [likedAttraction, dislikedAttraction]);
+
+    useEffect(() => {
+        if (!attraction.name) return
+        const fetchIsLiked = async () => {
+            try {
+                const response = await axios.get(
+                    `${BACKEND}/like/is-liked/${attraction.name}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${ACCESS_TOKEN}`
+                        }
+                    }
+                )
+                setIsLiked(response)
+            } catch (error) {
+                catchError(error, setError, FRONTEND, 'impossible to parse whether liked')
+            }
+        }
+        fetchIsLiked()
+    }, [attraction]);
+
+    const handleLeaveDiscussion = () => {
+        if (showCreateDiscussionForm) {
+            setShowCreateDiscussionForm(false)
+        } else {
+            setShowCreateDiscussionForm(true)
+        }
+    }
 
     const handleSendDiscussion = async (e) => {
         e.preventDefault()
@@ -239,13 +278,13 @@ function Attraction() {
             )
 
             if (images.length > 0) {
-                images.forEach((image, index) => {
-                    formData.append('images', image) // Each file gets appended as 'images' with a unique key
+                images.forEach((image) => {
+                    formData.append('images', image)
                 })
             }
 
             await axios.post(
-                `${BACKEND}/attraction-discussion/create/${attractionUuid}`,
+                `${BACKEND}/attraction-discussion/create/${attraction.name}`,
                 formData,
                 {
                     headers: {
@@ -272,8 +311,6 @@ function Attraction() {
             }
         }
     }
-
-    console.log(feature)
 
     const handleImageChange = (e) => {
         setImages([...e.target.files])
@@ -328,24 +365,33 @@ function Attraction() {
                                         {attraction.type}
                                     </div>
                                     <div className="like">
-                                        {hoveringLiked ? (
-                                            <FaHeartBroken
-                                                className="like-button-heart liked hover-break"
-                                                style={{background: "red", color: "black"}}
-                                                size={36}
-                                                onClick={() => setDislikedAttraction(attraction.name)}
-                                                title="You have liked this attraction"
-                                                onMouseEnter={() => setHoveringLiked(true)}
-                                                onMouseLeave={() => setHoveringLiked(false)}
-                                            />
+                                        {isLiked.data === true ? (
+                                                hoveringLiked ? (
+                                                    <FaHeartBroken
+                                                        className="like-button-heart liked hover-break"
+                                                        style={{background: "red", color: "black"}}
+                                                        size={36}
+                                                        onClick={() => setDislikedAttraction(attraction.name)}
+                                                        title="You have liked this attraction"
+                                                        onMouseEnter={() => setHoveringLiked(true)}
+                                                        onMouseLeave={() => setHoveringLiked(false)}
+                                                    />
+                                                ) : (
+                                                    <FaHeart
+                                                        className="like-button-heart liked"
+                                                        size={36}
+                                                        onClick={() => setDislikedAttraction(attraction.name)}
+                                                        title="You have liked this attraction"
+                                                        onMouseEnter={() => setHoveringLiked(true)}
+                                                        onMouseLeave={() => setHoveringLiked(false)}
+                                                    />
+                                                )
                                         ) : (
                                             <FaHeart
-                                                className="like-button-heart liked"
+                                                className="like-button-heart not-liked"
                                                 size={36}
-                                                onClick={() => setDislikedAttraction(attraction.name)}
-                                                title="You have liked this attraction"
-                                                onMouseEnter={() => setHoveringLiked(true)}
-                                                onMouseLeave={() => setHoveringLiked(false)}
+                                                onClick={() => setLikedAttraction(attraction.name)}
+                                                title="Click to like this attraction"
                                             />
                                         )}
                                     </div>
@@ -532,7 +578,7 @@ function Attraction() {
                                         Overall: {renderStars(discussion.rating)}
                                     </div>
                                     <img
-                                        src={`data:image/png;base64,${discussion.images[currentDiscussionImageIndex]}`}
+                                        src={`data:image/${discussion.imageFormats[currentDiscussionImageIndex]};base64,${discussion.images[currentDiscussionImageIndex]}`}
                                         alt={attraction.name}
                                         className="card-image"
                                     />

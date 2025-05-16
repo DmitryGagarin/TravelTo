@@ -310,11 +310,13 @@
   justify-content: space-between; /* This places the items side by side */
 }
 
+.register-business-container {
+  flex-direction: column;
+}
+
 .register-business-main-container {
   display: flex;
-  flex-direction: column;
   gap: 2rem;
-  padding: 1rem;
 }
 
 .donation-main-container {

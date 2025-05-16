@@ -29,7 +29,7 @@ const AttractionCreateForm = ({
             value={attractionName}
             type='text'
             required
-            onChange={(e) => setAttractionName(e.target.value)} />
+            onChange={(e) => setAttractionName(e.target.value)}/>
         <MDBInput
             wrapperClass='mb-4'
             placeholder='Description'
@@ -37,7 +37,7 @@ const AttractionCreateForm = ({
             value={description}
             type='text'
             required
-            onChange={(e) => setDescription(e.target.value)} />
+            onChange={(e) => setDescription(e.target.value)}/>
         <MDBInput
             wrapperClass='mb-4'
             placeholder='City'
@@ -45,14 +45,14 @@ const AttractionCreateForm = ({
             value={city}
             type='text'
             required
-            onChange={(e) => setCity(e.target.value)} />
+            onChange={(e) => setCity(e.target.value)}/>
         <MDBInput
             wrapperClass='mb-4'
             placeholder='Street'
             id='street'
             value={street} type='text'
             required
-            onChange={(e) => setStreet(e.target.value)} />
+            onChange={(e) => setStreet(e.target.value)}/>
         <MDBInput
             wrapperClass='mb-4'
             placeholder='Household'
@@ -60,14 +60,14 @@ const AttractionCreateForm = ({
             value={household}
             type='text'
             required
-            onChange={(e) => setHousehold(e.target.value)} />
+            onChange={(e) => setHousehold(e.target.value)}/>
         <MDBInput
             wrapperClass='mb-4'
             placeholder='Choose images'
             id='images'
             type='file'
             multiple
-            onChange={handleImageChange} />
+            onChange={handleImageChange}/>
         <MDBInput
             wrapperClass='mb-4'
             placeholder='Phone'
@@ -75,14 +75,14 @@ const AttractionCreateForm = ({
             value={phone}
             type='tel'
             required
-            onChange={(e) => setPhone(e.target.value)} />
+            onChange={(e) => setPhone(e.target.value)}/>
         <MDBInput
             wrapperClass='mb-4'
             placeholder='Website'
             id='website'
             value={website}
             type='url'
-            onChange={(e) => setWebsite(e.target.value)} />
+            onChange={(e) => setWebsite(e.target.value)}/>
         <select className='mb-4' id='type' value={type} required onChange={(e) => setType(e.target.value)}>
             <option value="" disabled>Type</option>
             <option value="museum">Museum</option>
@@ -100,7 +100,7 @@ const AttractionCreateForm = ({
             value={openTime}
             type='time'
             required
-            onChange={(e) => setOpenTime(e.target.value)} />
+            onChange={(e) => setOpenTime(e.target.value)}/>
         <MDBInput
             wrapperClass='mb-4'
             placeholder='CloseTime'
@@ -108,7 +108,7 @@ const AttractionCreateForm = ({
             value={closeTime}
             type='time'
             required
-            onChange={(e) => setCloseTime(e.target.value)} />
+            onChange={(e) => setCloseTime(e.target.value)}/>
     </>
 );
 

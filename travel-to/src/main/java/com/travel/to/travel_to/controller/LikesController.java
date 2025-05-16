@@ -70,6 +70,14 @@ public class LikesController {
         return PagedModel.of(Collections.singleton(likedAttractionModels), pageMetadata);
     }
 
+    @GetMapping("/is-liked/{attractionName}")
+    public boolean isAttractionLiked(
+        @PathVariable String attractionName,
+        @AuthenticationPrincipal AuthUser authUser
+    ) {
+        return likesService.isLikedByUser(attractionName, authUser);
+    }
+
     @PostMapping("/add/{attractionName}")
     public LikesModel like(
         @PathVariable String attractionName,
