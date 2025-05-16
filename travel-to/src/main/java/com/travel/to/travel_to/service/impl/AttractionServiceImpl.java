@@ -1,5 +1,7 @@
 package com.travel.to.travel_to.service.impl;
 
+import com.travel.to.travel_to.cache.AttractionCacheUtil;
+import com.travel.to.travel_to.constants.CacheKeys;
 import com.travel.to.travel_to.constants.DefaultInitialValues;
 import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.attraction.AttractionStatus;
@@ -11,8 +13,10 @@ import com.travel.to.travel_to.form.attraction.AttractionEditForm;
 import com.travel.to.travel_to.repository.AttractionRepository;
 import com.travel.to.travel_to.service.AttractionImageService;
 import com.travel.to.travel_to.service.AttractionService;
+import com.travel.to.travel_to.service.MenuService;
+import com.travel.to.travel_to.service.ParkFacilityService;
+import com.travel.to.travel_to.service.PosterService;
 import com.travel.to.travel_to.service.UserService;
-import com.travel.to.travel_to.cache.AttractionCacheUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,18 +36,27 @@ public class AttractionServiceImpl implements AttractionService {
     private final UserService userService;
     private final AttractionImageService attractionImageService;
     private final AttractionCacheUtil attractionCacheUtil;
+    private final ParkFacilityService parkFacilityService;
+    private final MenuService menuService;
+    private final PosterService posterService;
 
     @Autowired
     public AttractionServiceImpl(
         AttractionRepository attractionRepository,
         UserService userService,
         AttractionImageService attractionImageService,
-        AttractionCacheUtil attractionCacheUtil
+        AttractionCacheUtil attractionCacheUtil,
+        ParkFacilityService parkFacilityService,
+        MenuService menuService,
+        PosterService posterService
     ) {
         this.attractionRepository = attractionRepository;
         this.userService = userService;
         this.attractionImageService = attractionImageService;
         this.attractionCacheUtil = attractionCacheUtil;
+        this.parkFacilityService = parkFacilityService;
+        this.menuService = menuService;
+        this.posterService = posterService;
     }
 
     @Override
@@ -103,8 +116,10 @@ public class AttractionServiceImpl implements AttractionService {
             .setOwner(userService.getByUuid(authUser.getUuid()))
             .setStatus(AttractionStatus.on_moderation.name())
             .setPriority(DefaultInitialValues.INITIAL_ATTRACTION_PRIORITY);
+
         attractionRepository.save(attraction);
-        attractionCacheUtil.save(attraction);
+        attractionCacheUtil.save(attraction, CacheKeys.ATTRACTIONS);
+        attractionCacheUtil.save(attraction, CacheKeys.ATTRACTIONS_MY);
 
         try {
             attractionImageService.save(images, attraction.getId());
@@ -134,7 +149,8 @@ public class AttractionServiceImpl implements AttractionService {
             .setOpenTime(attractionEditForm.getOpenTime())
             .setCloseTime(attractionEditForm.getCloseTime());
 
-        attractionCacheUtil.updateById(attraction.getId(), attraction);
+        attractionCacheUtil.updateById(attraction.getId(), attraction, CacheKeys.ATTRACTIONS);
+        attractionCacheUtil.updateById(attraction.getId(), attraction, CacheKeys.ATTRACTIONS_MY);
 
         try {
             attractionImageService.edit(images, attraction.getId());
@@ -153,7 +169,7 @@ public class AttractionServiceImpl implements AttractionService {
     ) {
         Attraction attraction = getByUuid(attractionUuid);
         attraction.setRating(totalRating);
-        attractionCacheUtil.updateById(attraction.getId(), attraction);
+        attractionCacheUtil.updateById(attraction.getId(), attraction, CacheKeys.ATTRACTIONS);
         return attractionRepository.save(attraction);
     }
 
@@ -165,7 +181,7 @@ public class AttractionServiceImpl implements AttractionService {
     ) {
         Attraction attraction = getByName(attractionName);
         attraction.setStatus(attractionStatus.name());
-        attractionCacheUtil.updateById(attraction.getId(), attraction);
+        attractionCacheUtil.updateById(attraction.getId(), attraction, CacheKeys.ATTRACTIONS);
         return attractionRepository.save(attraction);
     }
 
@@ -178,7 +194,7 @@ public class AttractionServiceImpl implements AttractionService {
     @Override
     @NotNull
     public Attraction getById(@NotNull Long attractionId) {
-        return attractionRepository.getById(attractionId);
+        return Objects.requireNonNull(attractionRepository.findById(attractionId).orElse(null));
     }
 
     @Override
@@ -207,11 +223,30 @@ public class AttractionServiceImpl implements AttractionService {
         if (findByName(name).isPresent()) {
             Long attractionId = findByName(name).get().getId(); 
             attractionRepository.delete(findByName(name).get());
-            attractionCacheUtil.deleteById(attractionId);
+            deleteAttractionFeatures(findByName(name).get());
+            attractionCacheUtil.deleteById(attractionId, CacheKeys.ATTRACTIONS);
+            attractionCacheUtil.deleteById(attractionId, CacheKeys.ATTRACTIONS_MY);
             if (findAllByOwner(authUser).isEmpty()) {
                 User user = userService.getByUuid(authUser.getUuid());
                 userService.updateUserRole(authUser, Roles.USER);
             }
+        }
+    }
+
+    @Transactional
+    protected void deleteAttractionFeatures(
+        @NotNull Attraction attraction
+    ) {
+        if (attraction.getType().equals("park")) {
+            parkFacilityService.deleteByAttractionId(attraction.getId());
+        }
+        if (attraction.getType().equals("restaurant") || attraction.getType().equals("cafe")) {
+            menuService.deleteByAttractionId(attraction.getId());
+        }
+        if (attraction.getType().equals("gallery")
+            || attraction.getType().equals("poster")
+            || attraction.getType().equals("museum")) {
+            posterService.deleteByAttractionId(attraction.getId());
         }
     }
 }

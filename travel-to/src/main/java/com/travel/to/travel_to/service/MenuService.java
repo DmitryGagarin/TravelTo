@@ -35,4 +35,6 @@ public interface MenuService {
     @Nullable
     Optional<FileMenu> getFileMenuByAttractionName(@NotNull String attractionName);
 
+    void deleteByAttractionId(@NotNull Long attractionId);
+
 }

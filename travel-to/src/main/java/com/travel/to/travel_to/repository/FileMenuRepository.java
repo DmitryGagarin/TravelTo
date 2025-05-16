@@ -19,4 +19,5 @@ public interface FileMenuRepository extends JpaRepository<FileMenu, Long> {
 
     Optional<FileMenu> findByAttractionId(@NotNull Long attractionId);
 
+    void deleteByAttractionId(Long attractionId);
 }

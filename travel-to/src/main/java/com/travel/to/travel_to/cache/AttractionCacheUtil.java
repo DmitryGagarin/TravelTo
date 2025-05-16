@@ -1,6 +1,5 @@
 package com.travel.to.travel_to.cache;
 
-import com.travel.to.travel_to.constants.CacheKeys;
 import com.travel.to.travel_to.entity.attraction.Attraction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,22 +24,22 @@ public class AttractionCacheUtil extends CacheUtilBase<Attraction> {
     }
 
     @Override
-    public Attraction save(Attraction attraction) {
-        hashOperations.put(CacheKeys.ATTRACTIONS, String.valueOf(attraction.getId()), attraction);
+    public Attraction save(Attraction attraction, String key) {
+        hashOperations.put(key, String.valueOf(attraction.getId()), attraction);
         return attraction;
     }
 
     @Override
-    public List<Attraction> saveAll(List<Attraction> attractions) {
+    public List<Attraction> saveAll(List<Attraction> attractions, String key) {
         attractions.forEach(attraction ->
-            hashOperations.put(CacheKeys.ATTRACTIONS, String.valueOf(attraction.getId()), attraction)
+            hashOperations.put(key, String.valueOf(attraction.getId()), attraction)
         );
         return attractions;
     }
 
     @Override
-    public List<Attraction> findAll() {
-        List<Attraction> attractions = hashOperations.values(CacheKeys.ATTRACTIONS);
+    public List<Attraction> findAll(String key) {
+        List<Attraction> attractions = hashOperations.values(key);
         attractions.sort(
             Comparator.comparing(Attraction::getPriority, Comparator.nullsLast(Comparator.naturalOrder())).reversed()
         );
@@ -48,19 +47,19 @@ public class AttractionCacheUtil extends CacheUtilBase<Attraction> {
     }
 
     @Override
-    public Attraction findById(long id) {
-        return hashOperations.get(CacheKeys.ATTRACTIONS, String.valueOf(id));
+    public Attraction findById(long id, String key) {
+        return hashOperations.get(key, String.valueOf(id));
     }
 
     @Override
-    public Attraction updateById(long id, Attraction attraction) {
-        deleteById(id);
-        return save(attraction);
+    public Attraction updateById(long id, Attraction attraction, String key) {
+        deleteById(id, key);
+        return save(attraction, key);
     }
 
     @Override
-    public void deleteById(long id) {
-        hashOperations.delete(CacheKeys.ATTRACTIONS, String.valueOf(id));
+    public void deleteById(long id, String key) {
+        hashOperations.delete(key, String.valueOf(id));
     }
 
 }

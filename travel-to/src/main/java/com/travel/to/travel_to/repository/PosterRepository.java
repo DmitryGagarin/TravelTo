@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface PosterRepository extends JpaRepository<Poster, Long> {
     Optional<List<Poster>> findAllByAttractionId(Long attractionId);
+
+    void deleteByAttractionId(Long attractionId);
 }

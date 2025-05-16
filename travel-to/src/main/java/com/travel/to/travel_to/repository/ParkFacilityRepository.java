@@ -12,4 +12,5 @@ public interface ParkFacilityRepository extends JpaRepository<Facility, Long> {
 
     Optional<List<Facility>> findAllByAttractionId(Long attractionId);
 
+    void deleteByAttractionId(Long attractionId);
 }

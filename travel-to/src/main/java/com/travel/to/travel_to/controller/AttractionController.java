@@ -2,6 +2,7 @@ package com.travel.to.travel_to.controller;
 
 import com.travel.to.travel_to.assembler.AttractionModelAssembler;
 import com.travel.to.travel_to.cache.AttractionCacheUtil;
+import com.travel.to.travel_to.constants.CacheKeys;
 import com.travel.to.travel_to.constants.ValidationConstants;
 import com.travel.to.travel_to.entity.attraction.Attraction;
 import com.travel.to.travel_to.entity.user.AuthUser;
@@ -80,12 +81,13 @@ public class AttractionController {
     @GetMapping("/published")
     public PagedModel<AttractionModel> getPublishedAttractions() {
         List<Attraction> attractions;
+        String cacheKey = CacheKeys.ATTRACTIONS;
 
-        if (Objects.isNull(attractionCacheUtil.findAll()) || attractionCacheUtil.findAll().isEmpty()) {
+        if (Objects.isNull(attractionCacheUtil.findAll(cacheKey)) || attractionCacheUtil.findAll(cacheKey).isEmpty()) {
             attractions = attractionService.findAllByPriorityDesc();
-            attractionCacheUtil.saveAll(attractions);
+            attractionCacheUtil.saveAll(attractions, cacheKey);
         } else {
-            attractions = attractionCacheUtil.findAll();
+            attractions = attractionCacheUtil.findAll(cacheKey);
         }
 
         List<AttractionModel> attractionModels = attractions.stream()
@@ -109,13 +111,20 @@ public class AttractionController {
         return attractionModelAssembler.toModel(attractionService.getByName(name));
     }
 
-    // TODO: add cache
     @PreAuthorize("hasAnyAuthority('ROLE_OWNER', 'ROLE_ADMIN')")
     @GetMapping("/my")
     public PagedModel<AttractionModel> getAttractionsByOwner(
         @AuthenticationPrincipal AuthUser authUser
     ) {
-        List<Attraction> attractions = attractionService.findAllByOwner(authUser);
+        String cacheKey = CacheKeys.ATTRACTIONS_MY;
+        List<Attraction> attractions;
+
+        if (Objects.isNull(attractionCacheUtil.findAll(cacheKey)) || attractionCacheUtil.findAll(cacheKey).isEmpty()) {
+            attractions = attractionService.findAllByOwner(authUser);
+            attractionCacheUtil.saveAll(attractions, cacheKey);
+        } else {
+            attractions = attractionCacheUtil.findAll(cacheKey);
+        }
         List<AttractionModel> attractionModels = attractions.stream()
             .map(attractionModelAssembler::toModel)
             .collect(Collectors.toList());
@@ -151,7 +160,6 @@ public class AttractionController {
         );
     }
 
-    // TODO: also delete features
     @PreAuthorize("hasAnyAuthority('ROLE_OWNER', 'ROLE_ADMIN')")
     @PostMapping("/delete/{name}")
     public void deleteAttraction(

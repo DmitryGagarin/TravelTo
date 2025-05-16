@@ -422,16 +422,17 @@ function Attraction() {
                     )}
                     {(feature?.type === 'poster') && (
                         feature.data.map((image, index) => (
-                            <iframe
-                                src={`data:application/pdf;base64,${feature.data[0]}`}
-                                width="100%"
-                                height="600px"
-                                style={{border: 'none'}}
-                                title="Menu PDF"
-                            />
+                            <div key={index}>
+                                <iframe
+                                    src={`data:application/pdf;base64,${image}`}
+                                    width="100%"
+                                    height="600px"
+                                    style={{border: 'none'}}
+                                    title="Menu PDF"
+                                />
+                            </div>
                         ))
                     )}
-
                 </div>
             </MDBContainer>
             {/* Comment Section */}

@@ -129,4 +129,14 @@ public class MenuServiceImpl implements MenuService {
         }
         return Optional.empty();
     }
+
+    @Override
+    public void deleteByAttractionId(@NotNull Long attractionId) {
+        if (fileMenuRepository.findByAttractionId(attractionId).isPresent()) {
+            fileMenuRepository.deleteByAttractionId(attractionId);
+        }
+        if (textMenuRepository.findByAttractionId(attractionId).isPresent()) {
+            textMenuRepository.deleteByAttractionId(attractionId);
+        }
+    }
 }

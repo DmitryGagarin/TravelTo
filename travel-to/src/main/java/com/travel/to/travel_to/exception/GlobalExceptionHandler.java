@@ -1,5 +1,6 @@
 package com.travel.to.travel_to.exception;
 
+import com.sun.jdi.InvocationException;
 import com.travel.to.travel_to.exception.exception.FileExtensionException;
 import com.travel.to.travel_to.exception.exception.InvalidEmailOrPasswordException;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -42,6 +43,25 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     @ExceptionHandler(FileExtensionException.class)
     public ResponseEntity<Map<String, String>> handleFileExtensionException(FileExtensionException ex) {
+        Map<String, String> errorMessages = new HashMap<>();
+        errorMessages.put("error", ex.getMessage());
+        return ResponseEntity.badRequest().body(errorMessages);
+    }
+
+    // 503
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    @ExceptionHandler({
+        InvocationException.class,
+        NullPointerException.class,
+        IllegalArgumentException.class,
+        IllegalStateException.class,
+        ArrayIndexOutOfBoundsException.class,
+        StringIndexOutOfBoundsException.class,
+        NumberFormatException.class,
+    })
+    public ResponseEntity<Map<String, String>> handleCommonException(
+        RuntimeException ex
+    ) {
         Map<String, String> errorMessages = new HashMap<>();
         errorMessages.put("error", ex.getMessage());
         return ResponseEntity.badRequest().body(errorMessages);

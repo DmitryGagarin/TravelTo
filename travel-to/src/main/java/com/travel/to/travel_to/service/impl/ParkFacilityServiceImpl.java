@@ -66,4 +66,9 @@ public class ParkFacilityServiceImpl implements ParkFacilityService {
             attractionService.getByName(attractionName).getId()
         );
     }
+
+    @Override
+    public void deleteByAttractionId(@NotNull Long attractionId) {
+        parkFacilityRepository.deleteByAttractionId(attractionId);
+    }
 }

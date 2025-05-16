@@ -1,8 +1,5 @@
 package com.travel.to.travel_to.entity.attraction_feature.menu.menu;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.travel.to.travel_to.entity.attraction_feature.menu.menu_element.TextMenuElement;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

@@ -53,4 +53,9 @@ public class PosterServiceImpl implements PosterService {
     public Optional<List<Poster>> getPostersByAttractionName(@NotNull String attractionName) {
        return posterRepository.findAllByAttractionId(attractionService.getByName(attractionName).getId());
     }
+
+    @Override
+    public void deleteByAttractionId(@NotNull Long attractionId) {
+        posterRepository.deleteByAttractionId(attractionId);
+    }
 }

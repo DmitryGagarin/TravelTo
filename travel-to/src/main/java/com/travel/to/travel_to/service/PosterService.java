@@ -19,4 +19,6 @@ public interface PosterService {
     Optional<List<Poster>> getPostersByAttractionName(
         @NotNull String attractionName
     );
+
+    void deleteByAttractionId(@NotNull Long attractionId);
 }

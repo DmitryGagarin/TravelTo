@@ -18,4 +18,6 @@ public interface TextMenuRepository extends JpaRepository<TextMenu, Long> {
     List<TextMenuElement> findTextMenuElementsByAttractionId(@NotNull Long attractionId);
 
     Optional<TextMenu> findByAttractionId(@NotNull Long attractionId);
+
+    void deleteByAttractionId(@NotNull Long attractionId);
 }

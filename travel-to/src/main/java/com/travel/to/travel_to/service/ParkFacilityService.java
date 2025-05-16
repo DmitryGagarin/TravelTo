@@ -22,4 +22,6 @@ public interface ParkFacilityService {
         @NotNull String attractionName
     );
 
+    void deleteByAttractionId(@NotNull Long attractionId);
+
 }
