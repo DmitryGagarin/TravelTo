@@ -1,5 +1,5 @@
-import React from 'react';
-import {MDBInput} from 'mdb-react-ui-kit';
+import React from 'react'
+import {MDBInput} from 'mdb-react-ui-kit'
 
 const FileMenuCreateForm = ({ handleMenuFileChange }) => (
     <MDBInput
@@ -9,6 +9,7 @@ const FileMenuCreateForm = ({ handleMenuFileChange }) => (
         type='file'
         multiple
         onChange={handleMenuFileChange}
+        accept=".pdf,.jpg,.png,.pdf"
     />
 );
 

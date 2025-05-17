@@ -8,6 +8,7 @@ export const PosterCreateForm = ({ handlePosterFileChange }) => (
         id='poster-images'
         type='file'
         multiple
+        accept=".pdf,.jpg,.png,.pdf"
         onChange={handlePosterFileChange}
     />
 );

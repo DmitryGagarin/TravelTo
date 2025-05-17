@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {getAttractionCardStyle} from '../../utils/StyleUtils';
+import {getAttractionCardStyle} from '../../../utils/StyleUtils';
 
 const AttractionPreview = ({
                                attractionName, type, phone, website, openTime, closeTime,

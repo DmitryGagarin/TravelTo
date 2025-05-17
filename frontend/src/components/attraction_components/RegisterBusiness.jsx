@@ -9,10 +9,14 @@ import {validateAttractionData} from "../../utils/AttractionUtils"
 import {catchError} from "../../utils/ErrorUtils"
 import AttractionCreateForm from "./create_forms/AttractionCreateForm"
 import FileMenuCreateForm from "./create_forms/FileMenuCreateForm"
-import AttractionPreview from "./AttractionPreview"
+import AttractionPreview from "./preview_componenets/AttractionPreview"
 import {TextMenuCreateForm} from "./create_forms/TextMenuCreateForm"
-import {ParkFacilityCreateForm} from "./create_forms/ParkFacilityCreateForm";
-import {PosterCreateForm} from "./create_forms/PosterCreateForm";
+import {ParkFacilityCreateForm} from "./create_forms/ParkFacilityCreateForm"
+import {PosterCreateForm} from "./create_forms/PosterCreateForm"
+import AttractionPreviewPoster from "./preview_componenets/AttractionPreviewPoster"
+import AttractionPreviewFileMenu from "./preview_componenets/AttractionPreviewFileMenu"
+import AttractionPreviewPark from "./preview_componenets/AttractionPreviewPark"
+import AttractionPreviewTextMenu from "./preview_componenets/AttractionPreviewTextMenu"
 
 function RegisterBusiness() {
     const BACKEND = process.env.REACT_APP_BACKEND_URL
@@ -36,12 +40,12 @@ function RegisterBusiness() {
     const [currentImageIndexes, setCurrentImageIndexes] = useState({})
 
     const [fileMenuSelected, setFileMenuSelected] = useState(false)
-    const [fileMenuFiles, setFileMenuFile] = useState('')
-    const [posterImages, setPosterImages] = useState('')
+    const [fileMenuFiles, setFileMenuFiles] = useState([])
+    const [posterImages, setPosterImages] = useState([])
 
     const [dishes, setDishes] = useState([
         {name: '', description: '', price: '', image: null}
-    ]);
+    ])
 
     const [facilities, setFacilities] = useState([
         {name: '', description: '', openTime: '', closeTime: '', image: null}
@@ -62,7 +66,7 @@ function RegisterBusiness() {
 
     const handleMenuFileChange = (e) => {
         const filesArray = Array.from(e.target.files)
-        setFileMenuFile(filesArray)
+        setFileMenuFiles(filesArray)
     }
 
     const handlePosterFileChange = (e) => {
@@ -70,11 +74,10 @@ function RegisterBusiness() {
         setPosterImages(filesArray)
     }
 
-
     const handleMenuRegistration = async () => {
         if (!fileMenuSelected) {
             try {
-                const formData = new FormData();
+                const formData = new FormData()
 
                 formData.append(
                     'textMenuCreateForm',
@@ -86,13 +89,13 @@ function RegisterBusiness() {
                         })],
                         {type: 'application/json'}
                     )
-                );
+                )
 
                 dishes.forEach((dish) => {
                     if (dish.image) {
-                        formData.append('images', dish.image);
+                        formData.append('images', dish.image)
                     }
-                });
+                })
 
                 await axios.post(
                     `${BACKEND}/attraction-feature/${attractionName}/create-text-menu`,
@@ -111,10 +114,10 @@ function RegisterBusiness() {
             }
         } else {
             try {
-                const fileFormData = new FormData();
+                const fileFormData = new FormData()
                 fileMenuFiles.forEach((file) => {
-                    fileFormData.append('files', file);
-                });
+                    fileFormData.append('files', file)
+                })
 
                 await axios.post(
                     `${BACKEND}/attraction-feature/${attractionName}/create-file-menu`,
@@ -125,17 +128,17 @@ function RegisterBusiness() {
                         }
                     }
                 )
-                return true;
+                return true
             } catch (error) {
-                catchError(error, setError, FRONTEND, 'Problem in creating a menu');
-                return false;
+                catchError(error, setError, FRONTEND, 'Problem in creating a menu')
+                return false
             }
         }
     }
 
     const handleParkFacilityRegistration = async () => {
         try {
-            const formData = new FormData();
+            const formData = new FormData()
 
             formData.append(
                 'parkFacilityCreateForm',
@@ -152,7 +155,7 @@ function RegisterBusiness() {
 
             facilities.forEach((facility) => {
                 if (facility.image) {
-                    formData.append('images', facility.image);
+                    formData.append('images', facility.image)
                 }
             })
 
@@ -174,10 +177,10 @@ function RegisterBusiness() {
     }
 
     const handlePosterRegistration = async () => {
-        const fileFormData = new FormData();
+        const fileFormData = new FormData()
         posterImages.forEach((image) => {
-            fileFormData.append('images', image);
-        });
+            fileFormData.append('images', image)
+        })
 
         await axios.post(
             `${BACKEND}/attraction-feature/${attractionName}/create-poster`,
@@ -188,7 +191,7 @@ function RegisterBusiness() {
                 }
             }
         )
-        return true;
+        return true
     }
 
     const handleAttractionRegistration = async (e) => {
@@ -287,7 +290,7 @@ function RegisterBusiness() {
 
     const registerAttraction = async (e) => {
         e.preventDefault()
-        let correct = true;
+        let correct = true
 
         const attractionValid = await handleAttractionRegistration(e)
 
@@ -382,26 +385,37 @@ function RegisterBusiness() {
                     )}
                     {(type === 'theater' || type === 'gallery' || type === 'museum') && (
                         <>
-                            <PosterCreateForm
-                                handlePosterFileChange={handlePosterFileChange}
-                            />
+                            <PosterCreateForm handlePosterFileChange={handlePosterFileChange}/>
                         </>
                     )}
+                    <button onClick={registerAttraction} disabled={!validateAttractionData}>Register business</button>
+                    <AttractionPreview {...{
+                        attractionName,
+                        type,
+                        phone,
+                        website,
+                        openTime,
+                        closeTime,
+                        description,
+                        images,
+                        currentImageIndexes,
+                        handlePrevImage,
+                        handleNextImage
+                    }} />
+                    {(type === 'cafe' || type === 'restaurant') && (
+                        (fileMenuFiles ? (
+                            <AttractionPreviewFileMenu files={fileMenuFiles}/>
+                        ) : (
+                            <AttractionPreviewTextMenu {...{dishes}}/>
+                        ))
+                    )}
+                    {type === 'park' && (
+                        <AttractionPreviewPark {...{facilities}}/>
+                    )}
+                    {(type === 'theater' || type === 'gallery' || type === 'museum') && (
+                        <AttractionPreviewPoster posterImages={posterImages}/>
+                    )}
                 </MDBContainer>
-                <button onClick={registerAttraction} disabled={!validateAttractionData}>Register business</button>
-                <AttractionPreview {...{
-                    attractionName,
-                    type,
-                    phone,
-                    website,
-                    openTime,
-                    closeTime,
-                    description,
-                    images,
-                    currentImageIndexes,
-                    handlePrevImage,
-                    handleNextImage
-                }} />
             </div>
             <Settings/>
         </div>
